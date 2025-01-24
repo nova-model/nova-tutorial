@@ -1,0 +1,46 @@
+stages:
+  - test
+  - deploy
+
+variables:
+  GIT_STRATEGY: clone
+
+before_script:
+  - curl https://code.ornl.gov/rse-deployment/rse-sharables/raw/master/rse-bash-modules.sh -O
+  - docker login -u $NDIP_DOCKER_USER -p $NDIP_DOCKER_PASSWORD $NDIP_DOCKER_REPOSITORY
+  - source rse-bash-modules.sh
+  - func_rse_docker_cleanup
+
+after_script:
+  - curl https://code.ornl.gov/rse-deployment/rse-sharables/raw/master/rse-bash-modules.sh -O
+  - source rse-bash-modules.sh
+  - func_rse_docker_cleanup
+  - sudo chown -R gitlab-runner .
+
+test:
+  stage: test
+  script:
+    - docker build -f dockerfiles/Dockerfile -t tutorial .
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  tags:
+    - rse-multi-builder
+
+pages:
+  stage: deploy
+  script:
+    - docker build -t tutorial -f dockerfiles/Dockerfile .
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+      when: manual
+    - when: on_success
+
+  tags:
+    - rse-multi-builder
