@@ -77,22 +77,26 @@ Let's see how to implement the MVVM pattern using `nova-mvvm` and incorporate Py
 
     ```python
     class FractalViewModel():
-        def __init__(self, binding: BindingInterface):
-            super().__init__()
-            self._fractal_type = "mandelbrot"  # Default fractal type
-            self.galaxy_url = os.getenv("GALAXY_URL")
-            self.galaxy_key = os.getenv("GALAXY_API_KEY")
-            self._run_button_disabled = False
-            self._message = ""
-            self.run_button_disabled_bind = binding.new_bind(
-                linked_object=self,
-                linked_object_arguments=["_run_button_disabled"],
-            )
-            self.message_bind = binding.new_bind(
-                linked_object=self,
-                linked_object_arguments=["_message"],
-            )
-            self.fractal_type_bind = binding.new_bind(linked_object=self, linked_object_arguments=["_fractal_type"])
+    def __init__(self, binding: BindingInterface):
+        super().__init__()
+        self.fractal = Fractal()
+
+        self._fractal_type = "mandelbrot"
+        self._run_button_disabled = True
+        self._message = ""
+
+        self.run_button_disabled_bind = binding.new_bind(
+            linked_object=self,
+            linked_object_arguments=["run_button_disabled"],
+        )
+        self.message_bind = binding.new_bind(
+            linked_object=self,
+            linked_object_arguments=["message"],
+        )
+        self.fractal_type_bind = binding.new_bind(
+            linked_object=self, 
+            linked_object_arguments=["fractal_type"]
+        )
     ```
     The `binding.new_bind(...)` calls are crucial for setting up the MVVM pattern. They create `Communicator` objects that will manage the synchronization of state between the ViewModel and the View (UI).
 
@@ -114,22 +118,18 @@ Let's see how to implement the MVVM pattern using `nova-mvvm` and incorporate Py
 *   **`run_fractal_tool` method**:  In `run_fractal_tool`, we now also use the `message_bind` and `run_button_disabled_bind` to update the UI state (even though we don't have a UI yet, this demonstrates good MVVM practice):
 
     ```python
-        def run_fractal_tool(self):
-            # ... (Credential check - no changes) ...
-
-            self._run_button_disabled = True
-            self.run_button_disabled_bind.update_in_view(self._run_button_disabled) # Disable button state
-            try:
-                # ... (nova-galaxy tool execution - no changes) ...
-                self._message = "Fractal tool finished successfully."
-            except Exception as e:
-                self._message = f"Error running fractal tool: {e}"
-            finally:
-                self.message_bind.update_in_view(self._message) # Update message state
-                self._run_button_disabled = False
-                self.run_button_disabled_bind.update_in_view(self._run_button_disabled) # Re-enable button state
+    def run_fractal_tool(self):
+        self._job_status["fractal"] = "Starting"
+        try:
+            self.fractal.set_fractal_type(self._fractal_type.fractal_type)
+            self.fractal.run_fractal_tool()
+            self._message = "Fractal tool finished successfully."
+        except Exception as e:
+            self._message = f"Error running fractal tool: {e}"
+            raise e
+        self._job_status["fractal"] = "Completed"
     ```
-    Even without a View, we are now correctly using `update_in_view` to signal state changes for `_message` and `_run_button_disabled`, adhering to MVVM principles.
+    Even without a View, we are already considering what the functionality that we'll need to support. We've already created the bindings to server as our communicators between our future view and our new view model.
 
 **2. `main.py` - Wiring up TrameBinding (`src/nova_tutorial/main.py`):**
 
@@ -144,9 +144,8 @@ Let's see how to implement the MVVM pattern using `nova-mvvm` and incorporate Py
     ```python
     def main():
         server = get_server(None, client_type="vue3") # Trame server (not yet used for UI in this episode)
-        binding = TrameBinding(server.state) # Instantiate TrameBinding
-        fractal_vm = FractalViewModel(binding) # Pass binding to ViewModel
-        # ... (rest of main function - no changes) ...
+        binding = TrameBinding(server.state)
+        fractal_vm = FractalViewModel(binding)
     ```
     This is the crucial step that "wires up" the ViewModel to the Trame binding, making it ready to interact with a Trame-based View in later episodes.
 
@@ -176,12 +175,12 @@ You should see `Fractal tool finished successfully.` printed to the console, alt
         ```
     *   Run the application (`poetry run app`). Observe the console output. Verify that:
         *   The message "Attempted to set fractal type programmatically to: invalid-fractal-type" is printed.
-        *   The "Current fractal type (after attempt):" is still "mandelbrot" (or whatever the default was), indicating the invalid update was rejected.
+        *   The "Current fractal type (after attempt):" is still "mandelbrot" indicating the invalid update was rejected.
         *   The "Current message:" now contains a "Validation Error" message from Pydantic.
 
 2.  **Inspect ViewModel State:**
-    *   In `src/nova_tutorial/view_models/fractal_view_model.py`, add `print` statements within the `FractalViewModel.__init__` method to print the initial values of `self._fractal_type`, `self._run_button_disabled`, and `self._message`.
-    *   Run the application (`poetry run app`). Observe the output in the console. Verify that the initial values are printed as expected ("mandelbrot", `False`, and "").
+    *   In `src/nova_tutorial/view_models/fractal_view_model.py`, add `print` statements within the `FractalViewModel.__init__` method to print the initial values of `self._fractal_type`, `self._job_status`, and `self._message`.
+    *   Run the application (`poetry run app`). Observe the output in the console. Verify that the initial values are printed as expected.
     *   Now, modify the `FractalViewModel.__init__` method to change the initial value of `self._message` to "Application starting...". Run the application again and confirm that the printed initial message has changed.
 
 3.  **Programmatic State Update and Binding:**
@@ -200,4 +199,10 @@ You should see `Fractal tool finished successfully.` printed to the console, alt
         *   The initial fractal type is printed as "mandelbrot".
         *   The message "Fractal type updated programmatically to: julia" is printed.
         *   The final fractal type (after programmatic update) is printed as "julia".
-        *   *(Optional): You could add print statements in the `fractal_type.setter` to further observe the update process.*
+
+## References
+
+*   **Nova Documentation**: https://nova-application-development.readthedocs.io/en/latest/
+*   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
+*   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
+*   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/

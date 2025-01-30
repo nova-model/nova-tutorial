@@ -15,3 +15,11 @@ Time resolve viz?
 ## VTK?
 
 Focus on how these connect in trame
+
+
+## References
+
+*   **Nova Documentation**: https://nova-application-development.readthedocs.io/en/latest/
+*   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
+*   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
+*   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/

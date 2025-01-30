@@ -202,3 +202,10 @@ You should now see a UI with a text field, checkbox, slider, radio buttons, and 
 1.  **Explore Vuetify Components:**  Visit the Vuetify 3 component documentation ([https://vuetifyjs.com/en/components/all/](https://vuetifyjs.com/en/components/all/)). Browse through the list of available components. Identify at least three new components that you think could be useful in a scientific application UI and briefly describe their purpose.
 2.  **Add a `VSelect` (Dropdown):** Add a `VSelect` component to the UI in `fractal_view.py` within the `VCard`. Make it offer a dropdown of color options (e.g., "Red", "Green", "Blue"). *(You don't need to connect it to the viewmodel.)*
 3.  **Customize Component Appearance:**  Experiment with customizing the appearance of the `VBtn` component. Try changing its color, adding an icon *after* the text (e.g., using the `append-icon` prop and a Material Design Icon name), and modifying its size using Vuetify props (refer to the Vuetify documentation for `VBtn`).
+
+## References
+
+*   **Nova Documentation**: https://nova-application-development.readthedocs.io/en/latest/
+*   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
+*   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
+*   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/

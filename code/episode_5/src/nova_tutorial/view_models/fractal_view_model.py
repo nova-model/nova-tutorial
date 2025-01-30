@@ -1,5 +1,4 @@
 import os
-from nova.galaxy import Nova, Parameters, Tool
 from nova.mvvm.interface import BindingInterface
 from pydantic import BaseModel, Field,ValidationError
 from typing import Literal
@@ -19,7 +18,6 @@ class FractalViewModel():
         self._fractal_type = FractalToolInput()
         self._job_status:dict[str, Any] = {}
         self._message: str = ""
-
 
         self.job_status_bind = binding.new_bind(
             linked_object=self._job_status

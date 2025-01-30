@@ -155,3 +155,10 @@ This will still run the application, but now Pydantic models with nested structu
 1.  **Trigger Nested Model Validation:**  Modify the `set_fractal_type` method to also set a value for `appearance.color_palette` when the `fractal_type` is set.  Try setting an invalid `color_palette` value (e.g., `"invalid_palette"`). What validation error do you observe?
 2.  **Trigger Custom Validator:** Modify the `set_fractal_type` method to set `fractal_type` to `"julia"` and `appearance.color_palette` to `"viridis"`. Run the application. What validation error do you see now? Why?
 3.  **Explore Pydantic Validators:** Refer to the Pydantic documentation on validators ([https://docs.pydantic.dev/latest/usage/validators/](https://docs.pydantic.dev/latest/usage/validators/)). Identify at least two other types of validators (e.g., `@field_validator`, `@root_validator`).  Briefly describe their purpose and how they differ from `@model_validator`.
+
+## References
+
+*   **Nova Documentation**: https://nova-application-development.readthedocs.io/en/latest/
+*   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
+*   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
+*   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/

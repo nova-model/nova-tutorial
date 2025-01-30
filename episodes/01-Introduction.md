@@ -45,7 +45,7 @@ In essence, you will build your **User Application** using the **NOVA Libraries*
 In this tutorial, you will learn how to use these three core NOVA libraries to build a web-based user interface that allows you to:
 
 *   Connect to NDIP.
-*   **Reference job definitions from tool XML files.**
+*   Reference job definitions from tool XML files.
 *   Set parameters for those tools.
 *   Submit jobs to NDIP.
 *   Monitor the progress of your submitted jobs.
@@ -75,10 +75,15 @@ Before starting this tutorial, you will need to have the following:
 *   **Basic Python Knowledge:** A basic understanding of Python programming concepts is required.
 *   **Python Installation:** You must have Python 3.8 or higher installed on your system.
 *   **Python's `copier` Library** We will be using this library to copy generate a starting application from a template. Can likely be installed using `pip install copier`
+*   **Poetry:** The code samples provided in this tutorial leverage poetry for dependency management. 
 *   **NDIP Access:** You should have access to a working NDIP system. (Specific details about NDIP access will need to be provided by the instructor.)
-*   **NOVA Libraries:** The following NOVA libraries should be installed using pip:
-    ```bash
-    pip install nova-galaxy nova-trame nova-mvvm
-    ```
+*   **NOVA Libraries:** The NOVA libraries will be used extensively throughout this tutorial. Poetry should manage these dependencies for you could also checkout the git repositories and look at the documentaion on readthedocs.
 *   **A Text Editor or IDE:** You will need a text editor or IDE (such as VS Code, Sublime Text, or Atom) for writing code.
 *   **Familiarity with the Command Line:** You will need to be comfortable using the command line or terminal.
+
+## References
+
+*   **Nova Documentation**: https://nova-application-development.readthedocs.io/en/latest/
+*   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
+*   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
+*   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/

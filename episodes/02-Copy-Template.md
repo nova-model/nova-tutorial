@@ -63,3 +63,10 @@ In the following sections, we will start adding code to this structure to build 
 1.  **List Project Files:** Use the command line to navigate into the `nova_tutorial` directory and list all the files and folders created by the template.
 2.  **Explore `pyproject.toml`:** Open the `pyproject.toml` file in your text editor. Identify the sections that define project dependencies and project scripts.
 3.  **Install Dependencies:** If you haven't already, run `poetry install` in the `nova_tutorial` directory. Explain in your own words what this command does in terms of dependency management and virtual environments.
+
+## References
+
+*   **Nova Documentation**: https://nova-application-development.readthedocs.io/en/latest/
+*   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
+*   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
+*   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/

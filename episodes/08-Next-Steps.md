@@ -57,9 +57,13 @@ After performing these steps, your application will be available to NDIP users.
 
 ## Additional Resources
 
-*   NDIP GitHub Repository: [https://code.ornl.gov/ndip](https://code.ornl.gov/ndip)
-*   Galaxy Tool XML Examples: [https://code.ornl.gov/ndip/galaxy-tools](https://code.ornl.gov/ndip/galaxy-tools)
-*   Calvera Documentation: [calvera.ornl.gov/docs/dev](calvera.ornl.gov/docs/dev)
+*   **NDIP GitHub Repository**: [https://code.ornl.gov/ndip](https://code.ornl.gov/ndip)
+*   **Galaxy Tool XML Examples**: [https://code.ornl.gov/ndip/galaxy-tools](https://code.ornl.gov/ndip/galaxy-tools)
+*   **Calvera Documentation**: [calvera.ornl.gov/docs/dev](calvera.ornl.gov/docs/dev)
+*   **Nova Documentation**: https://nova-application-development.readthedocs.io/en/latest/
+*   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
+*   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
+*   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
 
 By following the steps outlined in this section, you can deploy your own applications to the NOVA/NDIP platform and make them available to the wider scientific community.
 ```
