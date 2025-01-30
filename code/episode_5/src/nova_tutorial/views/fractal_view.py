@@ -10,6 +10,10 @@ class FractalApp(ThemedApp): # Inherits from nova.trame.ThemedApp for consistent
         super().__init__()
         self.server = get_server(None, client_type="vue3")
         self.fractal_vm = FractalViewModel(TrameBinding(self.server.state))
+        self.fractal_vm.fractal_type_bind.connect("fractal_type")
+        self.fractal_vm.message_bind.connect("fractal_message")
+        self.fractal_vm.job_status_bind.connect("job_status")
+        #self.fractal_vm.init_view()
         self.create_ui()
 
     def create_ui(self) -> None:
@@ -19,8 +23,9 @@ class FractalApp(ThemedApp): # Inherits from nova.trame.ThemedApp for consistent
                 with layouts.VBoxLayout(classes="ma-2"):
                     with vuetify.VCard(classes="pa-2"):
                         with vuetify.VRadioGroup(
-                            v_model=("fractal_vm.fractal_type", "mandelbrot"),
+                            v_model=("fractal_type"),
                             classes="mb-2",
+                            #update_modelValue=self.fractal_vm.set_fractal_type(model_value)
                         ):
                             vuetify.VRadio(label="Mandelbrot", value="mandelbrot")
                             vuetify.VRadio(label="Julia", value="julia")
@@ -28,9 +33,10 @@ class FractalApp(ThemedApp): # Inherits from nova.trame.ThemedApp for consistent
                             vuetify.VRadio(label="Markus", value="markus")
                         vuetify.VBtn(
                             "Run Fractal Tool",
+                            v_model="job_status",
                             click=self.fractal_vm.run_fractal_tool,
-                            disabled=("fractal_vm.run_button_disabled"),
+                            #disabled=("job_status['fractal'] == 'Starting'"),
                             classes="mb-2"
                         )
-                        vuetify.VCardText(("fractal_vm.message"))
+                        vuetify.VCardText(v_model=("fractal_message"))
             return layout

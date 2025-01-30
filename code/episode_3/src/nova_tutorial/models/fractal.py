@@ -2,7 +2,7 @@ import os
 from nova.galaxy import Nova, Parameters, Tool
 
 
-class FractalViewModel:
+class Fractal:
     def __init__(self):
         self.fractal_type = "mandelbrot"  # Default fractal type
         self.galaxy_url = os.getenv("GALAXY_URL")
@@ -25,6 +25,7 @@ class FractalViewModel:
 
         with nova.connect() as galaxy_connection:
             data_store = galaxy_connection.create_data_store(name="fractal_store")
+            data_store.persist()
             tool.run(data_store, params)
 
         print("Fractal tool finished successfully.")
