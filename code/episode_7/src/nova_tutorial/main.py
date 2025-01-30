@@ -1,0 +1,12 @@
+"""Loads the main view and starts the Trame server."""
+
+from nova_tutorial.views.visualization import VisualizationApp
+
+
+def main():
+    app = VisualizationApp()
+    app.server.start()
+
+
+if __name__ == "__main__":
+    main()
