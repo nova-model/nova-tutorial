@@ -3,7 +3,7 @@
 from nova_tutorial.views.visualization import VisualizationApp
 
 
-def main():
+def main() -> None:
     app = VisualizationApp()
     app.server.start()
 

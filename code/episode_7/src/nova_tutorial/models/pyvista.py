@@ -1,7 +1,5 @@
 """Configuration for the PyVista example."""
 
-from typing import Optional
-
 from pydantic import BaseModel, Field
 from pyvista import Plotter, examples
 
@@ -16,12 +14,11 @@ class PyVistaConfig(BaseModel):
     colormap: str = Field(default="viridis", title="Color Transfer Function")
     opacity: str = Field(default="linear", title="Opacity Transfer Function")
 
-    def update(self, plotter: Optional[Plotter]) -> None:
-        # TODO: This should not need to fully re-render each time. However, something about this setup is making
-        # view.update() not work.
-        if plotter:
-            plotter.clear()
-            plotter.add_volume(KNEE_DATA, cmap=self.colormap, opacity=self.opacity, show_scalar_bar=False)
+    def render(self, plotter: Plotter) -> None:
+        # If re-rendering the volume on changes isn't acceptable, then you may need to switch to using VTK directly due
+        # limitations of the PyVista volume rendering engine.
+        plotter.clear()
+        plotter.add_volume(KNEE_DATA, cmap=self.colormap, opacity=self.opacity, show_scalar_bar=False)
 
-            plotter.render()
-            plotter.view_isometric()  # type: ignore
+        plotter.render()
+        plotter.view_isometric()

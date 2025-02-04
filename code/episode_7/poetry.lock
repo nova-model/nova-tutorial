@@ -1410,12 +1410,12 @@ tomli = ">=2.0.2,<3.0.0"
 
 [[package]]
 name = "nova-mvvm"
-version = "0.8.0"
+version = "0.9.0"
 description = "A Python Package for Model-View-ViewModel pattern"
 optional = false
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "nova_mvvm-0.8.0-py3-none-any.whl", hash = "sha256:494e87915785dee46f01d06bc723dd29fba1724042fdf7fa102789a2e524d055"},
+    {file = "nova_mvvm-0.9.0-py3-none-any.whl", hash = "sha256:60c70f8579b155e7081548e8aec9e77de497fa33ac569096015cffe27ef0f796"},
 ]
 
 [package.dependencies]
@@ -3003,4 +3003,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f9931d7baca4d3cc5354430155449d43e5364af4fa95648bd39137bb8b05f375"
+content-hash = "5cb22adddafd5b2416c7533855cfdaac1ca49f636272dcf41713f76fceb65da1"

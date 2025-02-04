@@ -2,36 +2,37 @@
 
 import numpy as np
 from pyvista import examples
-from vtk import vtkSLCReader  # type: ignore
+from vtk import vtkSLCReader
 from vtkmodules.vtkCommonDataModel import vtkPiecewiseFunction
 from vtkmodules.vtkRenderingCore import vtkColorTransferFunction, vtkVolume, vtkVolumeProperty
 from vtkmodules.vtkRenderingVolume import vtkFixedPointVolumeRayCastMapper
+
+KNEE_DATA = examples.download_knee_full()
+KNEE_DATAFILE = examples.download_knee_full(load=False)
 
 
 class VTKConfig:
     """Configuration class for the VTK example."""
 
-    # The min/max here are somewhat arbitrary values that work well with this dataset.
-    max: float = 200.0
-    min: float = 75.0
+    max: float = KNEE_DATA.get_data_range()[1]
+    min: float = KNEE_DATA.get_data_range()[0]
 
     def __init__(self) -> None:
-        datafile = examples.download_knee_full(load=False)
         reader = vtkSLCReader()
-        reader.SetFileName(datafile)
+        reader.SetFileName(KNEE_DATAFILE)
 
         mapper = vtkFixedPointVolumeRayCastMapper()
         mapper.SetInputConnection(reader.GetOutputPort())
 
         lut = self.init_lut()
         pwf = self.init_pwf()
-        volume_props = vtkVolumeProperty()  # type: ignore
+        volume_props = vtkVolumeProperty()
         volume_props.SetColor(lut)
         volume_props.SetScalarOpacity(pwf)
         volume_props.SetShade(0)
         volume_props.SetInterpolationTypeToLinear()
 
-        self.volume = vtkVolume()  # type: ignore
+        self.volume = vtkVolume()
         self.volume.SetMapper(mapper)
         self.volume.SetProperty(volume_props)
         self.volume.SetVisibility(1)
@@ -89,7 +90,7 @@ class VTKConfig:
             ]
         )
 
-        for arr in np.split(srgb, len(srgb) / 4):  # type: ignore
+        for arr in np.split(srgb, len(srgb) / 4):
             lut.AddRGBPoint(arr[0], arr[1], arr[2], arr[3])
 
         prev_min, prev_max = lut.GetRange()
