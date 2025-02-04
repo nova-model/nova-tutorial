@@ -2,15 +2,15 @@
 
 from typing import Any
 
-from nova.mvvm.trame_binding import TrameBinding  # type: ignore
-from nova.trame import ThemedApp  # type: ignore
-from trame.app import get_server  # type: ignore
-from trame.widgets import vuetify3 as vuetify  # type: ignore
+from nova.mvvm.trame_binding import TrameBinding
+from nova.trame import ThemedApp
+from trame.app import get_server
+from trame.widgets import vuetify3 as vuetify
 
 from nova_tutorial.view_models.visualization import VisualizationViewModel
-from nova_tutorial.views.plotly_2d import Plot2D
-from nova_tutorial.views.pyvista_3d import PyVistaPlot
-from nova_tutorial.views.vtk_3d import VTKPlot
+from nova_tutorial.views.plotly import PlotlyView
+from nova_tutorial.views.pyvista import PyVistaView
+from nova_tutorial.views.vtk import VTKView
 
 
 class VisualizationApp(ThemedApp):  # Inherits from nova.trame.ThemedApp for consistent styling
@@ -40,19 +40,19 @@ class VisualizationApp(ThemedApp):  # Inherits from nova.trame.ThemedApp for con
                 with vuetify.VTabs(
                     v_model="controls.active_tab", classes="pl-4", update_modelValue="flushState('controls');"
                 ):
-                    vuetify.VTab("Plotly", value=1)
-                    vuetify.VTab("PyVista", value=2)
-                    vuetify.VTab("VTK", value=3)
+                    vuetify.VTab("Plotly", value=0)
+                    vuetify.VTab("PyVista", value=1)
+                    vuetify.VTab("VTK", value=2)
 
             with layout.content:
                 with vuetify.VCard():
                     with vuetify.VTabsWindow(v_model="controls.active_tab"):
+                        with vuetify.VTabsWindowItem(value=0):
+                            PlotlyView(self.view_model)
                         with vuetify.VTabsWindowItem(value=1):
-                            Plot2D(self.view_model)
+                            PyVistaView(self.view_model)
                         with vuetify.VTabsWindowItem(value=2):
-                            PyVistaPlot(self.view_model)
-                        with vuetify.VTabsWindowItem(value=3):
-                            VTKPlot(self.view_model)
+                            VTKView(self.view_model)
 
             layout.post_content.classes += "mb-4"
 
