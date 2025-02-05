@@ -14,7 +14,7 @@ The Neutron Data Interpretation Platform (NDIP) is a workflow management system 
 
 ## What is NOVA?
 
-NOVA is a platform that aims to simplify the development of applications that interact with NDIP. It consists of three core libraries:
+NOVA is a framework that aims to simplify the development of applications that interact with NDIP. It consists of three core libraries:
 
 *   **`nova-galaxy`**: This library simplifies interaction with the NDIP platform's APIs. It allows developers to easily connect to NDIP, **submit jobs, handle parameters, and monitor job progress.**
 
@@ -29,7 +29,7 @@ NOTE: THIS WILL BE REPLACED WITH AN ACTUAL DIAGRAM ONCE CHANGES SETTLE
 User Application (Built with NOVA)
     |  (Leverages)
     V
-NOVA Platform
+NOVA Framework
 +-----------------+   +-----------------+   +-----------------+
 |   nova-galaxy   |---|   nova-trame    |---|   nova-mvvm     |  (NOVA Libraries)
 +-----------------+   +-----------------+   +-----------------+
@@ -58,6 +58,12 @@ All of the code examples used in this tutorial are available in the `code` direc
 
 Each episode's subdirectory contains a complete, self-contained Python project that can be run independently using Poetry. This allows you to easily explore the code examples, run them, and modify them as you go through the tutorial.
 
+::::::::::::::::::::::::::::::::::::::::: callout
+
+Poetry is a tool for dependency management and packaging in Python. It allows you to declare the libraries your project depends on, and it will manage the installation and updating of those dependencies. Poetry also helps you create reproducible builds by locking the versions of your dependencies. It also makes it easier to publish and share your Python projects.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
 To run the code for a specific episode, navigate to the episode's directory in your terminal and use the following commands:
 
 ```bash
@@ -67,19 +73,6 @@ poetry run app      # Run the application for this episode
 ```
 
 This structure ensures that each code example is isolated and runnable, making it easier for you to follow along with the tutorial and experiment with the code.
-
-## Prerequisites
-
-Before starting this tutorial, you will need to have the following:
-
-*   **Basic Python Knowledge:** A basic understanding of Python programming concepts is required.
-*   **Python Installation:** You must have Python 3.8 or higher installed on your system.
-*   **Python's `copier` Library** We will be using this library to copy generate a starting application from a template. Can likely be installed using `pip install copier`
-*   **Poetry:** The code samples provided in this tutorial leverage poetry for dependency management. 
-*   **NDIP Access:** You should have access to a working NDIP system. (Specific details about NDIP access will need to be provided by the instructor.)
-*   **NOVA Libraries:** The NOVA libraries will be used extensively throughout this tutorial. Poetry should manage these dependencies for you could also checkout the git repositories and look at the documentaion on readthedocs.
-*   **A Text Editor or IDE:** You will need a text editor or IDE (such as VS Code, Sublime Text, or Atom) for writing code.
-*   **Familiarity with the Command Line:** You will need to be comfortable using the command line or terminal.
 
 ## References
 

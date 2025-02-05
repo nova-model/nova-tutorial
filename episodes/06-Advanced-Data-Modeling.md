@@ -1,164 +1,109 @@
 ---
-title: "Advanced Data model Validation Using Pydantic"
-teaching: 10
-exercises: 3
+title: "Data Validation with Pydantic"
+teaching: 20
+exercises: 0
 ---
 
-# Advanced Data Model Validation Using Pydantic
+# 6. Data Validation with Pydantic: Ensuring Data Integrity
 
-In this section, we will delve deeper into Pydantic and explore more advanced data validation techniques. We will expand upon the basic Pydantic introduction from Day 1 and learn how to define more complex data models and validation rules.
+In this section, we will explore Pydantic, a powerful Python library for data validation and settings management. We'll delve into the benefits of data validation, how Pydantic works, and best practices for using it effectively within the NOVA framework and the MVVM architecture.
 
-## Advanced Pydantic Features
+## Why Data Validation Matters
 
-Building upon our basic understanding of Pydantic, let's explore some advanced features that make it even more powerful for data validation and management:
+Data validation is the process of ensuring that data meets certain criteria before it's processed by your application. It's a crucial step in building robust and reliable software. Without proper data validation, your application could be vulnerable to:
 
-*   **Nested Models:** Pydantic allows you to define models that are nested within each other. This is useful for representing complex data structures.
-*   **List and Dictionary Validation:** Pydantic can validate lists and dictionaries, ensuring that the elements within them conform to specific types or models.
-*   **Custom Validation:** Pydantic provides mechanisms for defining custom validation functions to enforce business-specific rules beyond basic type checking.
-*   **Data Transformation:** Pydantic can automatically transform data during validation (e.g., converting strings to dates, cleaning up whitespace).
+*   **Unexpected Errors:** Invalid data can cause your application to crash or produce incorrect results.
+*   **Security Vulnerabilities:** Malicious users can exploit the lack of data validation to inject harmful data into your application, leading to security breaches.
+*   **Data Corruption:** Invalid data can corrupt your data stores, leading to data loss or inconsistency.
+*   **Integration Issues:** When interacting with external systems or APIs, data validation ensures that your data conforms to the expected format and constraints.
 
-## Nested Pydantic Models
+Data validation helps you:
 
-Let's imagine we want to represent more complex input for our fractal tool.  Suppose we want to group parameters related to the fractal's appearance into a nested model.  Modify your `src/nova_tutorial/view_models/fractal_view_model.py` to include a nested model like `FractalAppearance`:
+*   **Improve Data Quality:** By enforcing data constraints, you ensure that your application works with clean and consistent data.
+*   **Enhance Application Reliability:** By preventing invalid data from being processed, you reduce the risk of errors and crashes.
+*   **Strengthen Security:** By sanitizing user input and validating data from external sources, you protect your application from security threats.
 
-```python
-# src/nova_tutorial/view_models/fractal_view_model.py
-import os
-from nova.galaxy import Nova, Parameters, Tool
-from nova.mvvm.interface import BindingInterface
-from pydantic import BaseModel, ValidationError
-from typing import Literal, Optional
+## Introduction to Pydantic
 
-class FractalAppearance(BaseModel): # Nested Model
-    color_palette: Optional[Literal["viridis", "magma", "plasma"]] = "viridis" # Optional field with default
+Pydantic is a Python library that provides a powerful and elegant way to define data models and enforce data validation. It uses Python type hints to define the structure of your data and automatically validates data against these types at runtime.
 
-class FractalToolInput(BaseModel):
-    fractal_type: Literal["mandelbrot", "julia", "random", "markus"]
-    appearance: FractalAppearance = FractalAppearance() # Nested model as a field
+Key Features of Pydantic:
 
+*   **Data Validation:** Automatically validates data types and constraints, ensuring data integrity. Pydantic supports a wide range of validation options, including type checking, length constraints, regular expressions, custom validators, and more.
+*   **Clear Data Structures:** Defines data models in a clear and readable way using Python type hints. Pydantic models are easy to understand and maintain.
+*   **Serialization and Deserialization:** Easily serializes data to and from standard formats like JSON. This is useful for interacting with APIs and other external systems.
+*   **Settings Management:** Can be used to manage application settings and configuration, providing a centralized and type-safe way to access configuration values.
+*   **Improved Code Readability:** Makes code easier to understand and maintain by explicitly defining data models. Type hints make it clear what type of data is expected for each field.
 
-class FractalViewModel():
-    def __init__(self, binding: BindingInterface):
-        super().__init__()
-        self._fractal_type = "mandelbrot"  # Default fractal type
-        self.galaxy_url = os.getenv("GALAXY_URL")
-        self.galaxy_key = os.getenv("GALAXY_API_KEY")
-        self._run_button_disabled = False
-        self._message = ""
-        self.run_button_disabled_bind = binding.new_bind(
-            linked_object=self,
-            linked_object_arguments=["_run_button_disabled"],
-        )
-        self.message_bind = binding.new_bind(
-            linked_object=self,
-            linked_object_arguments=["_message"],
-        )
-        self.fractal_type_bind = binding.new_bind(linked_object=self, linked_object_arguments=["_fractal_type"])
+## How Pydantic Works
 
+Pydantic uses Python type hints to define data models. When you create an instance of a Pydantic model, Pydantic automatically validates the input data against the defined types and constraints.
 
-    def set_fractal_type(self, fractal_type: str):
-        try:
-            FractalToolInput(fractal_type=fractal_type)
-        except ValidationError as e:
-             self._message = f"Validation Error: {e}"
-             self.message_bind.update_in_view(self._message)
-             return
-        self._fractal_type = fractal_type
-        self.fractal_type_bind.update_in_view(self._fractal_type)
-
-    def run_fractal_tool(self):
-        """Runs the fractal tool with the current fractal type."""
-        if not self.galaxy_url or not self.galaxy_key:
-            self._message = "You must specify GALAXY_URL and GALAXY_API_KEY as environment variables."
-            self.message_bind.update_in_view(self._message)
-            return
-
-        self._run_button_disabled = True
-        self.run_button_disabled_bind.update_in_view(self._run_button_disabled)
-        try:
-            nova = Nova(galaxy_url=self.galaxy_url, galaxy_key=self.galaxy_key)
-            tool = Tool(id="neutrons_fractal")
-            params = Parameters()
-            params.add_input(name="fractal_type", value=self._fractal_type)
-
-            with nova.connect() as galaxy_connection:
-                data_store = galaxy_connection.create_data_store(name="fractal_store")
-                tool.run(data_store, params)
-                # Datastore is deleted after function exists
-            self._message = "Fractal tool finished successfully."
-        except Exception as e:
-            self._message = f"Error running fractal tool: {e}"
-        finally:
-            self.message_bind.update_in_view(self._message)
-            self._run_button_disabled = False
-            self.run_button_disabled_bind.update_in_view(self._run_button_disabled)
-
-    @property
-    def run_button_disabled(self):
-        return self._run_button_disabled
-
-    @run_button_disabled.setter
-    def run_button_disabled(self, value):
-        self._run_button_disabled = value
-
-    @property
-    def message(self):
-        return self._message
-
-    @message.setter
-    def message(self, value):
-        self._message = value
-
-    @property
-    def fractal_type(self):
-        return self._fractal_type
-
-    @fractal_type.setter
-    def fractal_type(self, value):
-        self.set_fractal_type(value)
-```
-
-We've added `FractalAppearance` as a nested model and included it as a field in `FractalToolInput`.  Note that `color_palette` is optional and has a default value.
-
-## Custom Validation
-
-Pydantic allows for custom validation logic using validator decorators.  Let's add a custom validator to `FractalToolInput` to ensure that if `fractal_type` is "julia", then `color_palette` must be specified as "plasma".  *(This is a contrived example for demonstration purposes.)*
-
-Add the following validator to the `FractalToolInput` model in `src/nova_tutorial/view_models/fractal_view_model.py`:
+Here's a simple example:
 
 ```python
-# ... inside FractalToolInput class ...
-    @pydantic.model_validator(mode='after')
-    def check_julia_palette(self) -> 'FractalToolInput':
-        if self.fractal_type == "julia" and self.appearance.color_palette != "plasma":
-            raise ValueError("For 'julia' fractals, color_palette must be 'plasma'.")
-        return self
+from pydantic import BaseModel, Field
+
+class User(BaseModel):
+    id: int = Field(default=1, gt=0)  # id must be an integer greater than 0
+    name: str = Field(default="someName", min_length=1) # name must be a string with at least one character
+    email: str = Field(default="test@test.com", regex=r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$") # email must be a valid email address
 ```
 
-You'll also need to import `pydantic` at the top of the file: `import pydantic`.
+In this example, we define a `User` model with three fields: `id`, `name`, and `email`. We use type hints to specify the data type for each field (e.g., `int`, `str`) and `Field` with validation arguments to specify additional constraints (e.g., `gt=0`, `min_length=1`, `regex=...`).
 
-This validator function is decorated with `@pydantic.model_validator(mode='after')`, which means it runs *after* the basic field validation. It checks the condition and raises a `ValueError` if the rule is violated.
+When you create an instance of the `User` model, Pydantic automatically validates the input data:
 
-## Running the application
+```python
+from pydantic import ValidationError
 
-To run the code, use the following command in the top level of your `nova_tutorial` project:
-
-```bash
-poetry install
-poetry run app
+try:
+    user = User(id=0, name="", email="invalid-email")
+except ValidationError as e:
+    print(e)
 ```
 
-This will still run the application, but now Pydantic models with nested structures and custom validation are defined.
+If the input data is invalid, Pydantic raises a `ValidationError` exception with detailed information about the validation errors.
 
-## Exercises
+## Where to Perform Validation: Model vs. ViewModel
 
-1.  **Trigger Nested Model Validation:**  Modify the `set_fractal_type` method to also set a value for `appearance.color_palette` when the `fractal_type` is set.  Try setting an invalid `color_palette` value (e.g., `"invalid_palette"`). What validation error do you observe?
-2.  **Trigger Custom Validator:** Modify the `set_fractal_type` method to set `fractal_type` to `"julia"` and `appearance.color_palette` to `"viridis"`. Run the application. What validation error do you see now? Why?
-3.  **Explore Pydantic Validators:** Refer to the Pydantic documentation on validators ([https://docs.pydantic.dev/latest/usage/validators/](https://docs.pydantic.dev/latest/usage/validators/)). Identify at least two other types of validators (e.g., `@field_validator`, `@root_validator`).  Briefly describe their purpose and how they differ from `@model_validator`.
+In the MVVM architecture, the question arises: where should data validation be performed? Should it be done in the Model or the ViewModel?
 
-## References
+*   **Model Validation:** Validating data in the Model ensures that the underlying data is always in a valid state. This is especially important for data that is stored in a database or used by other parts of the application. However, Model validation is not always UI-specific.
 
-*   **Nova Documentation**: https://nova-application-development.readthedocs.io/en/latest/
-*   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
-*   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
-*   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
+*   **ViewModel Validation:** Validating data in the ViewModel allows you to perform UI-specific validation, such as checking that a required field is not empty or that a value falls within a certain range. ViewModel validation is also useful for providing immediate feedback to the user about validation errors.
+
+In general, it's a good practice to perform both Model and ViewModel validation. Model validation ensures data integrity at the data level, while ViewModel validation provides a better user experience by providing immediate feedback and preventing invalid data from being passed to the Model. Pydantic supports both.
+
+In the context of our NOVA tutorial, here's how we can apply this:
+
+*   **NDIP Interactions (Model):** When using `nova-galaxy` to interact with NDIP, validate the data being sent to NDIP in the Model to ensure it conforms to the NDIP API requirements.
+
+*   **UI Input (ViewModel):** When the user enters data in the UI, validate the data in the ViewModel to provide immediate feedback to the user.
+
+## Pydantic and `nova-trame` Input Validation
+
+One of the great features of `nova-trame` is that it leverages the validation attributes of Pydantic models to automatically create validation routines for Vuetify UI elements. Let's walk through what that looks like in code.
+
+First, let's assume you have the following model:
+
+```python
+from pydantic import BaseModel, Field
+
+class SettingsModel(BaseModel):
+    port: int = Field(default=8080, gt=0, lt=65536, title="Port Number", description="The port to listen on.")
+```
+
+Then in your view, you create the following InputField:
+
+```python
+from nova.trame.view.components import InputField
+
+InputField(v_model="settings.port")
+```
+
+Notice how you don't need to pass any attributes to `InputField` other than `v_model`. The `InputField` automatically retrieves the `title` and attempts to retrieve other information.
+
+The InputField performs automatic validation for this field. If you enter an invalid port number into the InputField, the InputField will change state to invalid and the label will turn red.
+
+In that fashion, the `InputField` seamlessly pulls information from your code's data model and displays errors to the user.

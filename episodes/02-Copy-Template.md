@@ -8,20 +8,18 @@ exercises: 3
 
 As mentioned in the introduction, all code examples in this tutorial are based on a template application. In this episode, we will create this starting point by cloning a template using the `copier` library. This template provides a basic project structure and pre-configured files that will help us get started quickly with our NOVA project, saving us from setting up everything from scratch.
 
-## Installing Copier
+::::::::::::::::::::::::::::::::::::::::: callout
+The setup section detailed the prerequisites required for the tutorial. One of those prerequisites is copier which will be used to clone a template application. If you've not already insalled copier and other dependencies, please follow the instructions in the "Setup" section.
 
-First, you will need to make sure that copier is installed. You can install it by running the following command (assuming you have pip installed):
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
-```bash
-pip install copier
-```
 
 ## Cloning the Template
 
 To clone the template application, run the following command:
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/python nova_tutorial
+copier copy https://code.ornl.gov/ndip/project-templates/python.git nova_tutorial
 ```
 
 This command will download the template to a directory called `nova_tutorial`. Copier will prompt you with a series of questions. Please answer the questions as follows:
@@ -29,15 +27,31 @@ This command will download the template to a directory called `nova_tutorial`. C
 *   **What is the name of your project?**
 
     > Enter `Nova Tutorial`
+
 *   **What is your python package name?**
 
     > Press enter to accept the default.
+
 *   **Do you want to install Mantid for your project?**
-
+    
     > Enter `no`
+
+*   ** Are you developing a GUI application using MVVM pattern?**
+    
+    > Enter `yes`
+
+*   ** Which library will you use?**
+    
+    > Select `Trame`
+
+*   **Do you want a template with multiple tabs?
+    
+    > Enter `yes`
+
 *   **Publish to pypi?**
-
+    
     > Enter `no`
+
 *   **Publish documentation to readthedocs.io?**
 
     > Enter `no`
@@ -58,11 +72,62 @@ The template creates a basic project structure to help get you started quickly. 
 
 In the following sections, we will start adding code to this structure to build our NDIP job submission tool.
 
-## Exercises
+:::::::::::::::::::::::::::::::::::::::  challenge
 
-1.  **List Project Files:** Use the command line to navigate into the `nova_tutorial` directory and list all the files and folders created by the template.
-2.  **Explore `pyproject.toml`:** Open the `pyproject.toml` file in your text editor. Identify the sections that define project dependencies and project scripts.
-3.  **Install Dependencies:** If you haven't already, run `poetry install` in the `nova_tutorial` directory. Explain in your own words what this command does in terms of dependency management and virtual environments.
+## **Run the Initial Tests** 
+
+The template comes with a basic test suite using `pytest`. Navigate to the `nova_tutorial` directory in your terminal and run the tests using the command `pytest`.  Examine the output.  Where are the tests located?  What does a successful test look like? Modify the test to intentionally fail. Observe the error message. Remember to revert the changes so that the tests pass again..
+
+:::::::::::::::  solution
+
+    *   **Where are the tests located?** The tests are typically located in the `tests/` directory, often mirroring the structure of the `src/` directory (e.g., `tests/nova_tutorial/test_module.py`).
+    *   **What does a successful test look like?**  A successful test will usually result in output from `pytest` that indicates all tests have passed (e.g., "100% passed").  There will be no error messages. The exact output varies slightly depending on the number of tests and the pytest configuration.
+    *   **Modify the test to intentionally fail:**  To make a test fail, you can change an assertion to be incorrect. For example, if a test asserts that `1 + 1 == 2`, change it to `1 + 1 == 3`.
+    *   **Observe the error message:** The error message will indicate which assertion failed and provide information about the expected and actual values.  For example, you might see something like: `AssertionError: assert 2 == 3`.
+:::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+## **Explore Pre-Commit Hooks**
+
+The template includes pre-commit hooks for code formatting and linting.
+    *   **Inspect the Configuration:** Open the `.pre-commit-config.yaml` file.  What tools are configured to run? What does each tool do (e.g., `black`, `flake8`)?
+    *   **Try It Out:**  Make a deliberate formatting error in one of the Python files (e.g., add extra spaces, make a line too long).  Now, run `pre-commit run`. Observe how the pre-commit hooks automatically fix the formatting issues. Commit your changes.  Pre-commit hooks can also be automatically run upon git commit.
+
+:::::::::::::::  solution
+
+    *   **What tools are configured to run?** Open `.pre-commit-config.yaml` to see the list. Common tools include:
+        *   `black`: Auto-formats Python code to adhere to a consistent style.
+        *   `flake8`: Lints Python code, checking for style errors and potential bugs.
+        *   `isort`: Sorts Python imports alphabetically and separates them into sections.
+        *   `end-of-file-fixer`: Ensures that files end with a newline.
+        *   `trailing-whitespace-fixer`: Removes trailing whitespace from lines.
+    *   **Observe how the pre-commit hooks automatically fix the formatting issues:** When you run `pre-commit run`, the configured tools will automatically modify the files to correct formatting errors. The output will show which tools were run and which files were modified. You'll need to `git add` the modified files before committing.
+
+:::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+## **CI/CD Setup with GitLab CI**
+
+The template includes a basic GitLab CI configuration file (`.gitlab-ci.yml`).  While we won't fully execute a CI/CD pipeline in this tutorial step, let's understand its purpose.
+    *   **Examine the Configuration:** Open the `.gitlab-ci.yml` file.  This file defines the *pipeline*.  What are the key stages defined in the pipeline (e.g., build, test, deploy)?  Identify the jobs that install dependencies, run tests, and perform linting. What triggers the pipeline to run (e.g., pushes, merge requests)?
+    *   **GitLab Runner:** GitLab CI/CD uses *runners* to execute the jobs defined in your `.gitlab-ci.yml` file.  These runners can be configured in various ways.  (No action required; this is just an informational point.)
+    *   **Discussion:** If you were to push this project to a GitLab repository, what would happen when you create a merge request? How could you use CI/CD to automatically verify the code quality of your project? (No action required; this is a thought exercise.)
+
+:::::::::::::::  solution
+    *   **What are the key stages defined in the pipeline?**  The stages typically include:
+        *   `build`: Installs dependencies and prepares the application for testing.
+        *   `test`: Runs the unit tests.
+        *   `lint`: Performs code linting and formatting checks.
+        *   `deploy` (optional): Deploys the application to a server or environment.
+    *   **Identify the jobs that install dependencies, run tests, and perform linting:**  Look for job definitions that use commands like `pip install`, `pytest`, and `flake8` (or similar linting tools).
+    *   **What triggers the pipeline to run?** The pipeline is typically triggered by pushes to the repository and the creation of merge requests. This is defined in the `.gitlab-ci.yml` file using keywords like `on: [push, merge_requests]`.
+    *   **If you were to push this project to a GitLab repository, what would happen when you create a merge request?** A pipeline would be automatically triggered. The pipeline would run the jobs defined in `.gitlab-ci.yml`, such as installing dependencies, running tests, and performing linting. The results of the pipeline would be displayed in the merge request, allowing you to see if the code passes all checks before merging it.  This helps ensure code quality and prevents broken code from being merged into the main branch.
+:::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## References
 

@@ -1,5 +1,5 @@
 ---
-title: "Using NDIP for Backend Computations"
+title: "Invoking an NDIP tool"
 teaching: 10
 exercises: 3
 ---
