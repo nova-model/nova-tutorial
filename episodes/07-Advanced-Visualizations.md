@@ -213,6 +213,10 @@ As with our previous examples, there is a corresponding model.
             return figure
     ```
 
+Now, if you run the application you should see the following in the Plotly tab:
+
+![Plotly chart](fig/plotly.png)
+
 ## PyVista (3D)
 
 One of Trame\'s core features is that it has direct integration with VTK for building 3D visualizations. Learning VTK from scratch is non-trivial, however, so we recommend that you work with PyVista. PyVista serves as a more developer-friendly wrapper around VTK, allowing you to build your visualizations with a simpler, more intuitive API. To get started, you will need to install the Python package.
@@ -326,6 +330,10 @@ Now we can set up our view.
 PyVista's volume rendering engine isn't currently suitable for large data. If you find yourself running into performance issues, then you should likely switch over to using VTK directly.
 
 :::::::::::::::::::::::::::::::::::
+
+Now, if you run the application you should see the following in the PyVista tab:
+
+![PyVista chart](fig/pyvista.png)
 
 ## VTK (3D)
 
@@ -445,6 +453,10 @@ Since we\'ve seen plenty of examples of UI controls at this point, we've omitted
         def get_volume(self) -> vtkVolume:
             return self.volume
     ```
+
+Now, if you run the application you should see the following in the VTK tab:
+
+![VTK chart](fig/vtk.png)
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Plotly Box Plot**
