@@ -59,6 +59,7 @@ Benefits of using `nova-trame`:
 
 `nova-trame` provides several key components that simplify UI development. Here are some of the most important:
 
+*   **Layout & Theme Management (`ThemedApp`):** `nova-trame` provides a default layout and theme that will give your application a consistent look and feel to other NOVA applications. If needed, you can still customize or override the defaults.
 *   **`InputField`:** This component simplifies the creation of various input fields (text fields, dropdowns, checkboxes, etc.). It automatically integrates with Pydantic models to load labels, hints, and validation rules, reducing the amount of code you need to write.  It also supports debouncing and throttling for improved performance.
 *   **Layout Components:** `nova-trame` provides layout components that help you structure your UI. These components are based on CSS Flexbox and Grid layouts, making it easy to create responsive and visually appealing UIs. The main layout components include:
     *   **`GridLayout`:** Creates a grid with a specified number of columns. You can use `GridLayout` to arrange your UI elements in a structured grid layout.
@@ -66,6 +67,32 @@ Benefits of using `nova-trame`:
     *   **`HBoxLayout`:** Creates an element that horizontally stacks its children. Use `HBoxLayout` to arrange UI elements in a horizontal row.
 
 Let\'s explore these components in more detail:
+
+### Layout & Theme Management (`ThemedApp`)
+
+Layouts are responsible for arraging your content in a consistent manner. In Trame, a layout consists of multiple "slots". A slot is a section of the page to which you can add content.
+
+`nova-trame` provides a basic layout and theme that you can access via the `ThemedApp` class. The template app will setup your main view class to inherit from this class already, so let's look at how the layout is defined and how we can add content to one of the slots it provides.
+
+```python
+class MainApp(ThemedApp):
+    def create_ui(self) -> None:
+        with super().create_ui() as layout:
+            with layout.pre_content:
+                with vuetify.VTabs():
+                    vuetify.VTab("Tab 1")
+                    vuetify.VTab("Tab 2")
+            with layout.content:
+                vuetify.VBtn("Click Me!")
+```
+
+Here is a layout diagram showing all of the slots in `ThemedApp`:
+
+![nova-trame's slot diagram for its default layout](https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/_images/layout.png)
+
+::::::::::::::::::::::::::::::::::::::::: callout
+For a detailed discussion of how to work with these slots, please review the [`nova-trame` documentation](https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/working_with_trame.html). This documentation also shows you how to customize the theme provided by `nova-trame` and how to perform common UI tasks such as managing the spacing between elements.
+:::::::::::::::::::::::::::::::::::::::::::::::::
 
 ### `InputField`
 
@@ -127,11 +154,13 @@ The `InputField` also provides debouncing and throttling features that can impro
 
 By combining these layout components, you can create complex and responsive UI layouts.
 
+For a more detailed explanation of how to work with our layout and theme, please refer to the [`nova-trame documentation`](https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/working_with_trame.html).
+
 ## Adding More UI Components to the Sample Tabs
 
 Now, let\'s add some UI components to the Sample Tabs in our application to demonstrate how to use these components. We\'ll modify the `sample_tab_1.py` and `sample_tab_2.py` files to include these components.
 
-**1. `nova_tutorial/views/sample_tab_1.py` (Modify):**
+**2. `nova_tutorial/views/sample_tab_1.py` (Modify):**
 
 We\'ll add an `InputField` and a `VBoxLayout` to this tab.
 
@@ -154,7 +183,7 @@ class SampleTab1:
             vuetify.VCheckbox(label="Remember me")
 ```
 
-**2. `nova_tutorial/views/sample_tab_2.py` (Modify):**
+**3. `nova_tutorial/views/sample_tab_2.py` (Modify):**
 
 We\'ll add a `GridLayout` and an `InputField` to this tab.
 
@@ -190,7 +219,7 @@ poetry run start
 You should now see the simple UI. When you click the "Sample Tab 1" and "Sample Tab 2" tabs, you should now see the updated content with the new UI components.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
-**Explore the `InputField` Component** 
+**Explore the `InputField` Component**
 Modify the `InputField` component in `SampleTab1` to automatically retrieve the label, hint, and validation rules from a Pydantic model field. Create a simple Pydantic model with a `username` field with a `title`, `description`, and `min_length` constraint.
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -200,7 +229,7 @@ Combine `GridLayout`, `VBoxLayout`, and `HBoxLayout` components to create a more
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  challenge
-**Customize Component Appearance** 
+**Customize Component Appearance**
 Experiment with customizing the appearance of the Vuetify components using the various props and styles available. Try changing the color, size, font, and other visual attributes of the components. Refer to Vuetify\'s component documentation for details.
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
