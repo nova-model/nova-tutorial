@@ -27,6 +27,10 @@ To containerize your application, you would:
 
 After the docker container is deployed to a registry, it can then be used by the platform.
 
+::::::::::::::::::::::::::::::::::::::::: callout
+GPU acceleration in a container is possible but beyond the scope of this tutorial. Typically, a base container is chosen which already has all of the gpu dependencies installed such as ```regproxy.ornl.gov/hub_proxy/kitware/trame:py3.10-glvnd-2024-12```. The team has built similar containers already which can be used as a reference for development such as ```https://code.ornl.gov/ndip/trame-apps/ct-scan-visualizer/```
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
 ## Defining Your Tool with XML
 
 Once your application is containerized, you will also need to define your tool using an XML file. This XML file describes your tool to the NDIP platform, including its inputs, outputs, parameters, and the Docker container image that should be used to run the tool. The NDIP platform makes use of the Galaxy tool framework.

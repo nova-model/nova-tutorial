@@ -1,12 +1,16 @@
 import os
+import base64
+from typing import Literal
+
 from pydantic import BaseModel, Field
 from nova.galaxy import Nova, Parameters, Tool
 
 
 class Fractal(BaseModel):
-    fractal_type: str = Field(default="mandelbrot", description="Type of fractal to generate")
+    fractal_type: Literal["mandelbrot", "julia", "random", "markus"] = Field(default="mandelbrot")
     galaxy_url: str = Field(default_factory=lambda: os.getenv("GALAXY_URL"), description="NDIP Galaxy URL")
     galaxy_key: str = Field(default_factory=lambda: os.getenv("GALAXY_API_KEY"), description="NDIP Galaxy API Key")
+    image_data: str = Field(default="", description="Base64 encoded PNG")
 
     def set_fractal_type(self, fractal_type: str):
         self.fractal_type = fractal_type
@@ -25,6 +29,7 @@ class Fractal(BaseModel):
         with nova.connect() as galaxy_connection:
             data_store = galaxy_connection.create_data_store(name="fractal_store")
             data_store.persist()
-            tool.run(data_store, params)
+            output = tool.run(data_store, params)
+            output.get_dataset("output").download("tmp.png")
 
         print("Fractal tool finished successfully.")

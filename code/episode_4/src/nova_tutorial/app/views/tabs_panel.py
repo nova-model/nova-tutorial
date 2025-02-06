@@ -11,7 +11,6 @@ class TabsPanel:
     def __init__(self, view_model: MainViewModel):
         self.view_model = view_model
         self.view_model.config_bind.connect("config")
-        #self.view_model.fractal_bind.connect("fractal")
         self.create_ui()
 
     def create_ui(self) -> None:

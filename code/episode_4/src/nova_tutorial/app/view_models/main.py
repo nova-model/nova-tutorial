@@ -7,11 +7,13 @@ from nova.mvvm.interface import BindingInterface
 from ..models.main_model import MainModel
 
 
-class MainViewModel:
+class MainViewModel():
     """Viewmodel class, used to create data<->view binding and react on changes from GUI."""
 
     def __init__(self, model: MainModel, binding: BindingInterface):
         self.model = model
+        self.image_path = ""
+
 
         # here we create a bind that connects ViewModel with View. It returns a communicator object,
         # that allows to update View from ViewModel (by calling update_view).
@@ -31,3 +33,5 @@ class MainViewModel:
 
     def run_fractal(self) -> None:
         self.model.fractal.run_fractal_tool()
+        self.image_path = self.model.fractal.image_data
+        self.update_view()

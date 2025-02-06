@@ -7,7 +7,7 @@ exercises: 3
 # Using NDIP for Backend Computations
 In this section, we will start using the `nova-galaxy` library to interact with the NDIP platform and run a neutron analysis tool.  First, ensure you have set your `GALAXY_URL` and `GALAXY_API_KEY` as environment variables, as explained in the notes at the end of this episode.  We also need to add `nova-galaxy` as a project dependency.
 
-Open the `pyproject.toml` file in your project and add `nova-galaxy = "^0.4.0"` under `[tool.poetry.dependencies]`. Then, run `poetry install` to update your project dependencies.
+From the command line, type `poetry add nova-galaxy@^0.4.0`. This command will add the nova-galaxy library to the pyproject.toml file as a project dependency. Then run `poetry install` to update your project dependencies.
 
 ## Interacting with NDIP via `nova-galaxy`
 
@@ -92,15 +92,35 @@ poetry run app
 
 You should see `Fractal tool finished successfully.` printed to the console.
 
+::::::::::::::::::::::::::::::::::::::::: callout
+By default, trame will open a new tab in the browser and bring it to focus. If this is undesired behavior, it can be prevented by using ```poetry run app --server```.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Asynchronous tool execution
+
+At times, it may be desirable to execute a tool or workflow without waiting on the result. The class Tool method run has an optional `wait` parameter. The default is true so that the tool is run in a blocking manner. However, by setting the parameter to false, the tool will be run asynchronously in a non-blocking manner.
+
 ## Next Steps
 
 In this section, you learned how to use the `nova-galaxy` library to run a tool on NDIP. In the next sections, we will expand on this to create a full user interface to make this functionality accessible to the end user.
 
-## Exercises
+:::::::::::::::::::::::::::::::::::::::  challenge
+**Run with Different Fractal Types** 
+Modify the `FractalViewModel` class to default to a different fractal type (e.g., "julia"). Run the application again and verify that it still works.
+:::::::::::::::  solution
+The simplest way to accomplish this is to change the default for fractal type in the Fractal class. You can easily observe the change in galaxy.
+:::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
-1.  **Run with Different Fractal Types:** Modify the `FractalViewModel` class to default to a different fractal type (e.g., "julia"). Run the application again and verify that it still works.
-2.  **Introduce an Error:**  Comment out the line `params.add_input(name="fractal_type", value=self.fractal_type)` in the `run_fractal_tool` method. Run the application. What output do you see? Why do you think this error occurred? (Hint: Consider what input the `neutrons_fractal` tool expects.)
-3.  **Explore `nova-galaxy` Documentation:** Open the `nova-galaxy` library source code that was provided earlier. Look at the `Nova` class and the `Tool` class. Identify at least two other methods available in these classes and briefly describe what they do based on their names and docstrings.
+:::::::::::::::::::::::::::::::::::::::  challenge
+**Introduce an Error**
+Introduce an error into the code by changing the tool id to something different. What ouput do you see? What if you change the fractal_type to an invalid option such as mandel instead of mandelbrot?
+:::::::::::::::  solution
+In both cases, an error is received from the ndip-galaxy library. When changing the tool id, a `Tool not found` error will be returned. When selecting an invalid parameter, a `parameter 'option': an invalid option was selected` error will be returned.
+:::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
 
 ## References
 

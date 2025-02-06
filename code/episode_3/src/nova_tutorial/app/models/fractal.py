@@ -19,13 +19,14 @@ class Fractal:
             )
 
         nova = Nova(galaxy_url=self.galaxy_url, galaxy_key=self.galaxy_key)
-        tool = Tool(id="neutrons_fractal")
+        tool = Tool(id="neutrons_fracta")
         params = Parameters()
-        #params.add_input(name="option", value=self.fractal_type)
+        params.add_input(name="option", value=self.fractal_type)
 
         with nova.connect() as galaxy_connection:
             data_store = galaxy_connection.create_data_store(name="fractal_store")
             data_store.persist()
-            tool.run(data_store, params)
+            output = tool.run(data_store, params)
+            output.get_dataset("output").download("image.png")
 
         print("Fractal tool finished successfully.")
