@@ -23,6 +23,7 @@ exercises: 3
 
 # 2. Getting Started with a Template Application
 
+
 As mentioned in the introduction, all code examples in this tutorial are based on a template application. In this episode, we will create this starting point by cloning a template using the `copier` library. This template provides a basic project structure and pre-configured files that will help us get started quickly with our NOVA project, saving us from setting up everything from scratch.
 
 ::::::::::::::::::::::::::::::::::::::::: callout
@@ -30,6 +31,22 @@ The setup section detailed the prerequisites required for the tutorial. One of t
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
+## Install Project Dependencies
+
+1.  **Clone the Template:**  Follow the instructions in the "Getting Started with a Template Application" episode to clone the NOVA template using `copier`.  This will create a new directory (e.g., `nova_tutorial`) containing your project files.
+2.  **Navigate to the Project Directory:**  Open your terminal and navigate to the newly created project directory:
+
+    ```bash
+    cd nova_tutorial
+    ```
+
+3.  **Install Dependencies with Poetry:**  Use Poetry to install the project dependencies defined in the `pyproject.toml` file:
+
+    ```bash
+    poetry install
+    ```
+
+    This command will create a virtual environment for your project and install all required libraries, including the NOVA libraries and Trame.
 
 ## Cloning the Template
 

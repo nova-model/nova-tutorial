@@ -124,6 +124,10 @@ At times, it may be desirable to execute a tool or workflow without waiting on t
             output = tool.run(data_store, params, wait=False)
 ```
 
+## Tool output
+
+After the tool finishes running on NDIP, the result of the tool is returned as an output. In this example, the output is a single image file of the generated fractal. Tools can return single files or a collection of files as a zip. The output can be used by the rest of your application, saved, or simply discarded. A copy of the output also resides on the NDIP platform, so it is not necessary to maintain a local copy.
+
 ## Next Steps
 
 In this section, you learned how to use the `nova-galaxy` library to run a tool on NDIP. In the next sections, we will expand on this to create a full user interface to make this functionality accessible to the end user.

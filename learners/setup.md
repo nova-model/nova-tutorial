@@ -18,24 +18,7 @@ Before proceeding, ensure you have met the following prerequisites:
 *   **A Text Editor or IDE:** You will need a text editor or IDE (such as VS Code, Sublime Text, or Atom) for writing code.
 *   **Familiarity with the Command Line:** You will need to be comfortable using the command line or terminal.
 
-## 2. Install Project Dependencies
-
-1.  **Clone the Template:**  Follow the instructions in the "Getting Started with a Template Application" episode to clone the NOVA template using `copier`.  This will create a new directory (e.g., `nova_tutorial`) containing your project files.
-2.  **Navigate to the Project Directory:**  Open your terminal and navigate to the newly created project directory:
-
-    ```bash
-    cd nova_tutorial
-    ```
-
-3.  **Install Dependencies with Poetry:**  Use Poetry to install the project dependencies defined in the `pyproject.toml` file:
-
-    ```bash
-    poetry install
-    ```
-
-    This command will create a virtual environment for your project and install all required libraries, including the NOVA libraries and Trame.
-
-## 3. Configure Environment Variables
+## 2. Configure Environment Variables
 
 The NOVA framework requires you to set environment variables for your NDIP URL and API key. These variables are used to authenticate with the NDIP platform.
 
@@ -64,7 +47,7 @@ For this tutorial, we will be using calvera-test.ornl.gov as our galaxy endpoint
 
     **Important:** For security reasons, it is recommended to avoid hardcoding your API key directly in your code. Using environment variables is a more secure and flexible approach.
 
-## 4. Verify Your Setup
+## 3. Verify Your Setup
 
 To ensure your setup is correct, run the following command in your terminal within the `nova_tutorial` directory:
 
