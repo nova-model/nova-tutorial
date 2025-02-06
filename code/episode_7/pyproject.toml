@@ -14,7 +14,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-nova-galaxy = "^0.4.0"
+nova-galaxy = "^0.7.0"
 nova-mvvm = "0.9.0"
 nova-trame = "0.14.0"
 pandas = "^2.2.3"
