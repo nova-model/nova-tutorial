@@ -6,7 +6,7 @@ from trame.widgets import vtk as vtkw
 from trame.widgets import vuetify3 as vuetify
 from vtkmodules.vtkRenderingCore import vtkRenderer, vtkRenderWindow, vtkRenderWindowInteractor, vtkVolume
 
-from nova_tutorial.view_models.visualization import VisualizationViewModel
+from nova_tutorial.view_models.main import VisualizationViewModel
 
 
 class VTKView:
