@@ -16,7 +16,7 @@ The Neutron Data Interpretation Platform (NDIP) is a workflow management system 
 
 NOVA is a framework that aims to simplify the development of applications that interact with NDIP. It consists of three core libraries:
 
-*   **`nova-galaxy`**: This library simplifies interaction with the NDIP platform's APIs. It allows developers to easily connect to NDIP, **submit jobs, handle parameters, and monitor job progress.**
+*   **`nova-galaxy`**: This library simplifies interaction with the NDIP platform\'s APIs. It allows developers to easily connect to NDIP, **submit jobs, handle parameters, and monitor job progress.**
 
 *   **`nova-trame`**: This library facilitates the creation of interactive user interfaces using Trame. Trame is a powerful Python framework for building web-based UIs and visualizations. `nova-trame` provides a consistent look and feel for NOVA applications by simplifying interactions with Trame components (such as Vuetify).
 
@@ -50,13 +50,13 @@ In this tutorial, you will learn how to use these three core NOVA libraries to b
 *   Submit jobs to NDIP.
 *   Monitor the progress of your submitted jobs.
 
-We'll be using example tools from neutron scattering as a demonstration for this tutorial, however, the lessons learned here can be applied to a wide variety of neutron analysis applications. This hands-on tutorial will guide you through each step of the process, empowering you to build your own interactive tools for neutron data analysis and management.
+We\'ll be using example tools from neutron scattering as a demonstration for this tutorial, however, the lessons learned here can be applied to a wide variety of neutron analysis applications. This hands-on tutorial will guide you through each step of the process, empowering you to build your own interactive tools for neutron data analysis and management.
 
 ## Code Examples Directory
 
 All of the code examples used in this tutorial are available in the `code` directory of the tutorial repository. These examples are built upon the template application that you will clone in the next episode. The code is organized by episode, with each episode having its own subdirectory (e.g., `code/episode_2`, `code/episode_3`, etc.).
 
-Each episode's subdirectory contains a complete, self-contained Python project that can be run independently using Poetry. This allows you to easily explore the code examples, run them, and modify them as you go through the tutorial.
+Each episode\'s subdirectory contains a complete, self-contained Python project that can be run independently using Poetry. This allows you to easily explore the code examples, run them, and modify them as you go through the tutorial.
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
@@ -64,7 +64,7 @@ Poetry is a tool for dependency management and packaging in Python. It allows yo
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-To run the code for a specific episode, navigate to the episode's directory in your terminal and use the following commands:
+To run the code for a specific episode, navigate to the episode\'s directory in your terminal and use the following commands:
 
 ```bash
 cd code/episode_X  # Replace X with the episode number

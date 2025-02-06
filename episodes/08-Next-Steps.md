@@ -5,7 +5,7 @@ exercises: 0
 ---
 # Next Steps
 
-In this section, we will outline the process for taking an application like the one we've created in this tutorial and deploying it to the NOVA/NDIP platform. While we won't actually perform the deployment in this tutorial, we will cover the key steps and resources involved.
+In this section, we will outline the process for taking an application like the one we\'ve created in this tutorial and deploying it to the NOVA/NDIP platform. While we won\'t actually perform the deployment in this tutorial, we will cover the key steps and resources involved.
 
 ## Containerizing Your Application
 
@@ -13,7 +13,7 @@ The first step in deploying your application to the NOVA/NDIP platform is to pac
 
 Fortunately, the template application we used in this tutorial already includes a `dockerfiles/Dockerfile` that you can use as a starting point. The Dockerfile is a set of instructions that Docker uses to build your container image. 
 
-Here's what the Dockerfile typically includes:
+Here\'s what the Dockerfile typically includes:
 * **Base Image:** Specifies the base operating system and environment for your application.
 * **Dependencies:** Describes how to install any required libraries or packages.
 * **Application Files:** Defines how to copy your application code into the container.

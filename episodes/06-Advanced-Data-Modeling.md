@@ -6,11 +6,11 @@ exercises: 0
 
 # 6. Data Validation with Pydantic: Ensuring Data Integrity
 
-In this section, we will explore Pydantic, a powerful Python library for data validation and settings management. We'll delve into the benefits of data validation, how Pydantic works, and best practices for using it effectively within the NOVA framework and the MVVM architecture.
+In this section, we will explore Pydantic, a powerful Python library for data validation and settings management. We\'ll delve into the benefits of data validation, how Pydantic works, and best practices for using it effectively within the NOVA framework and the MVVM architecture.
 
 ## Why Data Validation Matters
 
-Data validation is the process of ensuring that data meets certain criteria before it's processed by your application. It's a crucial step in building robust and reliable software. Without proper data validation, your application could be vulnerable to:
+Data validation is the process of ensuring that data meets certain criteria before it\'s processed by your application. It\'s a crucial step in building robust and reliable software. Without proper data validation, your application could be vulnerable to:
 
 *   **Unexpected Errors:** Invalid data can cause your application to crash or produce incorrect results.
 *   **Security Vulnerabilities:** Malicious users can exploit the lack of data validation to inject harmful data into your application, leading to security breaches.
@@ -39,7 +39,7 @@ Key Features of Pydantic:
 
 Pydantic uses Python type hints to define data models. When you create an instance of a Pydantic model, Pydantic automatically validates the input data against the defined types and constraints.
 
-Here's a simple example:
+Here\'s a simple example:
 
 ```python
 from pydantic import BaseModel, Field
@@ -73,9 +73,9 @@ In the MVVM architecture, the question arises: where should data validation be p
 
 *   **ViewModel Validation:** Validating data in the ViewModel allows you to perform UI-specific validation, such as checking that a required field is not empty or that a value falls within a certain range. ViewModel validation is also useful for providing immediate feedback to the user about validation errors.
 
-In general, it's a good practice to perform both Model and ViewModel validation. Model validation ensures data integrity at the data level, while ViewModel validation provides a better user experience by providing immediate feedback and preventing invalid data from being passed to the Model. Pydantic supports both.
+In general, it\'s a good practice to perform both Model and ViewModel validation. Model validation ensures data integrity at the data level, while ViewModel validation provides a better user experience by providing immediate feedback and preventing invalid data from being passed to the Model. Pydantic supports both.
 
-In the context of our NOVA tutorial, here's how we can apply this:
+In the context of our NOVA tutorial, here\'s how we can apply this:
 
 *   **NDIP Interactions (Model):** When using `nova-galaxy` to interact with NDIP, validate the data being sent to NDIP in the Model to ensure it conforms to the NDIP API requirements.
 
@@ -83,9 +83,9 @@ In the context of our NOVA tutorial, here's how we can apply this:
 
 ## Pydantic and `nova-trame` Input Validation
 
-One of the great features of `nova-trame` is that it leverages the validation attributes of Pydantic models to automatically create validation routines for Vuetify UI elements. Let's walk through what that looks like in code.
+One of the great features of `nova-trame` is that it leverages the validation attributes of Pydantic models to automatically create validation routines for Vuetify UI elements. Let\'s walk through what that looks like in code.
 
-First, let's assume you have the following model:
+First, let\'s assume you have the following model:
 
 ```python
 from pydantic import BaseModel, Field
@@ -102,8 +102,8 @@ from nova.trame.view.components import InputField
 InputField(v_model="settings.port")
 ```
 
-Notice how you don't need to pass any attributes to `InputField` other than `v_model`. The `InputField` automatically retrieves the `title` and attempts to retrieve other information.
+Notice how you don\'t need to pass any attributes to `InputField` other than `v_model`. The `InputField` automatically retrieves the `title` and attempts to retrieve other information.
 
 The InputField performs automatic validation for this field. If you enter an invalid port number into the InputField, the InputField will change state to invalid and the label will turn red.
 
-In that fashion, the `InputField` seamlessly pulls information from your code's data model and displays errors to the user.
+In that fashion, the `InputField` seamlessly pulls information from your code\'s data model and displays errors to the user.

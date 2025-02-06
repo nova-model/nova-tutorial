@@ -6,11 +6,11 @@ exercises: 0
 
 # 4. User Interface Best Practices: The MVVM Design Pattern
 
-In this section, we will introduce the Model-View-ViewModel (MVVM) design pattern, a powerful architectural approach for structuring applications, particularly those with user interfaces. We'll explore the core principles of MVVM, the roles of each component, and how the NOVA framework simplifies its implementation, making your code more organized, testable, and maintainable.
+In this section, we will introduce the Model-View-ViewModel (MVVM) design pattern, a powerful architectural approach for structuring applications, particularly those with user interfaces. We\'ll explore the core principles of MVVM, the roles of each component, and how the NOVA framework simplifies its implementation, making your code more organized, testable, and maintainable.
 
 ## What is a Design Pattern?
 
-Before diving into MVVM, it's helpful to understand what a *design pattern* is in software development. A design pattern is a reusable solution to a commonly occurring problem in software design. It's not a code snippet you can copy and paste, but rather a template or blueprint for how to structure your code to achieve a specific goal (e.g., separation of concerns, code reusability, testability).
+Before diving into MVVM, it\'s helpful to understand what a *design pattern* is in software development. A design pattern is a reusable solution to a commonly occurring problem in software design. It\'s not a code snippet you can copy and paste, but rather a template or blueprint for how to structure your code to achieve a specific goal (e.g., separation of concerns, code reusability, testability).
 
 ## The Model-View-ViewModel (MVVM) Pattern
 
@@ -18,32 +18,32 @@ MVVM is an architectural design pattern specifically designed for applications w
 
 The MVVM pattern consists of three core components:
 
-*   **Model:** The Model represents the *data* and the *business logic* of the application. It's responsible for:
+*   **Model:** The Model represents the *data* and the *business logic* of the application. It\'s responsible for:
     *   Data storage (e.g., reading from and writing to a database, a file, or an API).
     *   Data validation (ensuring the data is in a valid state).
     *   Business rules (the logic that governs how the data is manipulated and used).
 
-    The Model is *agnostic* to the UI. It doesn't know anything about how the data will be displayed or how the user will interact with it. It simply provides the data and the means to manipulate it.
+    The Model is *agnostic* to the UI. It doesn\'t know anything about how the data will be displayed or how the user will interact with it. It simply provides the data and the means to manipulate it.
 
     *In the context of our NOVA tutorial, the Model will often include the logic for interacting with the NDIP platform via `nova-galaxy`.*
 
-*   **View:** The View is the *user interface* (UI) of the application. It's responsible for:
+*   **View:** The View is the *user interface* (UI) of the application. It\'s responsible for:
     *   Displaying data to the user.
     *   Capturing user input (e.g., button clicks, text entered in a field, selections from a dropdown).
-    *   Presenting the application's visual appearance.
+    *   Presenting the application\'s visual appearance.
 
-    The View is *passive*. It doesn't contain any business logic or data manipulation code. It simply displays the data provided to it and relays user actions to the ViewModel.
+    The View is *passive*. It doesn\'t contain any business logic or data manipulation code. It simply displays the data provided to it and relays user actions to the ViewModel.
 
     *In our NOVA tutorial, the View will be built using Trame and Vuetify components, leveraging the styling and structure provided by `nova-trame`.*
 
-*   **ViewModel:** The ViewModel acts as an *intermediary* between the Model and the View. It's responsible for:
+*   **ViewModel:** The ViewModel acts as an *intermediary* between the Model and the View. It\'s responsible for:
     *   Preparing data from the Model for display in the View. This might involve formatting the data, combining data from multiple sources, or creating derived data.
     *   Handling user actions from the View. This might involve validating user input, updating the Model, or triggering other actions in the application.
     *   Exposing data and commands to the View through *data binding*.
 
-    The ViewModel is *UI-specific*. It knows about the View and the data that the View needs, but it doesn't know about the specific UI elements that are used to display the data. It also orchestrates the interaction between the View and the Model.
+    The ViewModel is *UI-specific*. It knows about the View and the data that the View needs, but it doesn\'t know about the specific UI elements that are used to display the data. It also orchestrates the interaction between the View and the Model.
 
-    *The ViewModel is where we'll use `nova-mvvm` to create bindings between the ViewModel and the View, enabling the reactive updates.*
+    *The ViewModel is where we\'ll use `nova-mvvm` to create bindings between the ViewModel and the View, enabling the reactive updates.*
 
 ## Why Use MVVM? (Benefits)
 
@@ -53,7 +53,7 @@ The MVVM pattern provides several benefits:
 *   **Testability:** Because the ViewModel is independent of the View, it can be easily unit-tested. You can test the presentation logic without needing to create a UI.
 *   **Maintainability:** Changes to the UI are less likely to affect the underlying application logic, and vice versa. This makes the application easier to maintain and evolve over time.
 *   **Reusability:** The ViewModel can be reused with different Views, allowing you to create different UIs for the same underlying data and logic.
-*   **Team Collaboration:** MVVM facilitates collaboration between developers and UI designers. Developers can focus on the Model and ViewModel, while designers can focus on the View, without interfering with each other's work.
+*   **Team Collaboration:** MVVM facilitates collaboration between developers and UI designers. Developers can focus on the Model and ViewModel, while designers can focus on the View, without interfering with each other\'s work.
 
 ## Data Binding: The Heart of MVVM
 
@@ -82,7 +82,7 @@ Benefits of Pydantic:
 
 ## Implementing MVVM with `nova-mvvm` and Pydantic - Key Code Snippets
 
-Let's see how to implement the MVVM pattern using `nova-mvvm` and incorporate Pydantic for data validation in our `FractalViewModel`. You can find the complete code for this episode in the `code/episode_4` directory. Here, we will focus on the key code snippets and explain the important parts.
+Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate Pydantic for data validation in our `FractalViewModel`. You can find the complete code for this episode in the `code/episode_4` directory. Here, we will focus on the key code snippets and explain the important parts.
 
 **1. `FractalToolInput` Pydantic Model (`src/nova_tutorial/view_models/fractal_view_model.py`):**
 
@@ -95,7 +95,7 @@ Let's see how to implement the MVVM pattern using `nova-mvvm` and incorporate Py
     class FractalToolInput(BaseModel):
         fractal_type: Literal["mandelbrot", "julia", "random", "markus"]
     ```
-    By defining `fractal_type` with `Literal[...]`, we ensure that only the specified string values are accepted, leveraging Pydantic's data validation capabilities.
+    By defining `fractal_type` with `Literal[...]`, we ensure that only the specified string values are accepted, leveraging Pydantic\'s data validation capabilities.
 
 **2. `FractalViewModel` Class (`src/nova_tutorial/view_models/fractal_view_model.py`):**
 
@@ -146,9 +146,9 @@ Let's see how to implement the MVVM pattern using `nova-mvvm` and incorporate Py
             self._fractal_type = fractal_type
             self.fractal_type_bind.update_in_view(self._fractal_type) # Update fractal_type state
     ```
-    Here, `FractalToolInput(fractal_type=fractal_type)` attempts to create an instance of the Pydantic model, which triggers validation. If `fractal_type` is invalid, a `ValidationError` is caught, and the error message is set in the ViewModel's `_message` state, which, thanks to binding, *will later* update the UI.
+    Here, `FractalToolInput(fractal_type=fractal_type)` attempts to create an instance of the Pydantic model, which triggers validation. If `fractal_type` is invalid, a `ValidationError` is caught, and the error message is set in the ViewModel\'s `_message` state, which, thanks to binding, *will later* update the UI.
 
-*   **`run_fractal_tool` method**:  In `run_fractal_tool`, we now also use the `message_bind` and `run_button_disabled_bind` to update the UI state (even though we don't have a UI yet, this demonstrates good MVVM practice):
+*   **`run_fractal_tool` method**:  In `run_fractal_tool`, we now also use the `message_bind` and `run_button_disabled_bind` to update the UI state (even though we don\'t have a UI yet, this demonstrates good MVVM practice):
 
     ```python
     def run_fractal_tool(self):
@@ -162,7 +162,7 @@ Let's see how to implement the MVVM pattern using `nova-mvvm` and incorporate Py
             raise e
         self._job_status["fractal"] = "Completed"
     ```
-    Even without a View, we are already considering what the functionality that we'll need to support. We've already created the bindings to server as our communicators between our future view and our new view model.
+    Even without a View, we are already considering what the functionality that we\'ll need to support. We\'ve already created the bindings to server as our communicators between our future view and our new view model.
 
 **2. `main.py` - Wiring up TrameBinding (`src/nova_tutorial/main.py`):**
 

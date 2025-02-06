@@ -24,11 +24,11 @@ The basic workflow for running a tool with `nova-galaxy` involves these steps:
 1.  **Connect to NDIP**: Create a `Nova` instance with your credentials.
 2.  **Define the Tool**: Create a `Tool` instance, specifying the ID of the NDIP tool you want to run.
 3.  **Set Parameters**: Create a `Parameters` instance and add the necessary input parameters and their values for the tool.
-4.  **Run the Tool**: Use the `tool.run()` method to submit the job to NDIP. This typically involves creating a datastore to hold the job's input and output data.
+4.  **Run the Tool**: Use the `tool.run()` method to submit the job to NDIP. This typically involves creating a datastore to hold the job\'s input and output data.
 
 ## Creating a Model of a Tool
 
-Let's create a `Fractal` class that uses `nova-galaxy` to run the `neutrons_fractal` tool on NDIP. You can find the complete code for this episode in the `code/episode_3` directory. Here, we will focus on the key code snippets and explain the important parts.
+Let\'s create a `Fractal` class that uses `nova-galaxy` to run the `neutrons_fractal` tool on NDIP. You can find the complete code for this episode in the `code/episode_3` directory. Here, we will focus on the key code snippets and explain the important parts.
 
 **1. `Fractal` Class (`src/nova_tutorial/models/fractal.py`):**
 
@@ -48,7 +48,7 @@ Let's create a `Fractal` class that uses `nova-galaxy` to run the `neutrons_frac
             self.galaxy_key = os.getenv("GALAXY_API_KEY")
     ```
 
-*   **`run_fractal_tool` method**: This method encapsulates the logic for running the `fractal` tool. Let's examine the key steps within this method:
+*   **`run_fractal_tool` method**: This method encapsulates the logic for running the `fractal` tool. Let\'s examine the key steps within this method:
 
     *   **Instantiate `Nova`, `Tool`, and `Parameters`**: We create instances of the `Nova`, `Tool`, and `Parameters` classes:
         ```python
@@ -58,7 +58,7 @@ Let's create a `Fractal` class that uses `nova-galaxy` to run the `neutrons_frac
             params.add_input(name="fractal_type", value=self.fractal_type)
 
         ```
-        Note that we create a `Tool` object with the `id="neutrons_fractal"`. This tells `nova-galaxy` which NDIP tool we want to run. The obvious question at this point is how do we know the id of the tool and what parameters it expects? We can look at the tool's launch page in calvera for some hints but ultimately we have to look at the tool's [xml file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads). 
+        Note that we create a `Tool` object with the `id="neutrons_fractal"`. This tells `nova-galaxy` which NDIP tool we want to run. The obvious question at this point is how do we know the id of the tool and what parameters it expects? We can look at the tool\'s launch page in calvera for some hints but ultimately we have to look at the tool\'s [xml file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads). 
 
     *   **Connect and Run the Tool**:  The `with nova.connect() as galaxy_connection:` block establishes a connection to NDIP and ensures proper handling of the connection:
         ```python
@@ -108,6 +108,7 @@ In this section, you learned how to use the `nova-galaxy` library to run a tool 
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Run with Different Fractal Types** 
 Modify the `FractalViewModel` class to default to a different fractal type (e.g., "julia"). Run the application again and verify that it still works.
+
 :::::::::::::::  solution
 The simplest way to accomplish this is to change the default for fractal type in the Fractal class. You can easily observe the change in galaxy.
 :::::::::::::::::::::::::
@@ -116,6 +117,7 @@ The simplest way to accomplish this is to change the default for fractal type in
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Introduce an Error**
 Introduce an error into the code by changing the tool id to something different. What ouput do you see? What if you change the fractal_type to an invalid option such as mandel instead of mandelbrot?
+
 :::::::::::::::  solution
 In both cases, an error is received from the ndip-galaxy library. When changing the tool id, a `Tool not found` error will be returned. When selecting an invalid parameter, a `parameter 'option': an invalid option was selected` error will be returned.
 :::::::::::::::::::::::::

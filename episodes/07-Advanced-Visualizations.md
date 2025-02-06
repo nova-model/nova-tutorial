@@ -111,7 +111,7 @@ As with our previous examples, there is a corresponding model.
             return self.plot_type != "heatmap"
     ```
 
-*   **Plotly Figure Setup**:  Finally, we define the Plotly figure based on the user's selection. go.Heatmap and go.Scatter define Plotly `traces`, which represent individual components of the figure.
+*   **Plotly Figure Setup**:  Finally, we define the Plotly figure based on the user\'s selection. go.Heatmap and go.Scatter define Plotly `traces`, which represent individual components of the figure.
 
     ```python
         def get_figure(self) -> go.Figure:
@@ -137,7 +137,7 @@ As with our other examples, the view model connects these two classes together. 
 
 ## PyVista (3D)
 
-One of Trame's core features is that it has direct integration with VTK for building 3D visualizations. Learning VTK from scratch is non-trivial, however, so we recommend that you work with PyVista. PyVista serves as a more developer-friendly wrapper around VTK, allowing you to build your visualizations with a simpler, more intuitive API. To get started, you will need to install the Python package.
+One of Trame\'s core features is that it has direct integration with VTK for building 3D visualizations. Learning VTK from scratch is non-trivial, however, so we recommend that you work with PyVista. PyVista serves as a more developer-friendly wrapper around VTK, allowing you to build your visualizations with a simpler, more intuitive API. To get started, you will need to install the Python package.
 
 ```bash
 poetry add pyvista trame-vtk
@@ -165,7 +165,7 @@ Now we can set up our view.
     from nova_tutorial.view_models.visualization import VisualizationViewModel
     ```
 
-*   **Class Definition:**  The `Plotter` object is PyVista's main entry point. It will allow you to add meshes and volumes with the properties you've specified.
+*   **Class Definition:**  The `Plotter` object is PyVista\'s main entry point. It will allow you to add meshes and volumes with the properties you\'ve specified.
 
     ```python
     class PyVistaView:
@@ -207,7 +207,7 @@ Now we can set up our view.
 
 **4. `PyVistaConfig` Model Class (`src/nova_tutorial/models/pyvista.py`):**
 
-*   **Imports:**  `download_knee_full` yields a 3D dataset that is suitable for volume rendering. You can find more datasets in PyVista's [Dataset Gallery](https://docs.pyvista.org/api/examples/dataset_gallery).
+*   **Imports:**  `download_knee_full` yields a 3D dataset that is suitable for volume rendering. You can find more datasets in PyVista\'s [Dataset Gallery](https://docs.pyvista.org/api/examples/dataset_gallery).
 
     ```python
     """Configuration for the PyVista example."""
@@ -251,7 +251,7 @@ If you have prior experience with VTK then you may prefer to work with it direct
 poetry add trame-vtk vtk
 ```
 
-Since we've seen plenty of examples of UI controls at this point, we've omitted them for this example so that we can focus on the VTK boilerplate needed to get started.
+Since we\'ve seen plenty of examples of UI controls at this point, we've omitted them for this example so that we can focus on the VTK boilerplate needed to get started.
 
 **5. `VTKView` View Class (`src/nova_tutorial/views/vtk.py`):**
 
@@ -364,9 +364,9 @@ Since we've seen plenty of examples of UI controls at this point, we've omitted 
 
 ## Exercises
 
-1. **Plotly Box Plot:** Add a box plot to the available plot types. Hint: you shouldn't need to change anything in the view class to do this.
+1. **Plotly Box Plot:** Add a box plot to the available plot types. Hint: you shouldn\'t need to change anything in the view class to do this.
 2. **PyVista clim Control:** Add control(s) to the UI to control the `clim` argument for the `add_volume` method.
-3. **Investigate the lookup table and piecewise function:** We didn't look at `VTKConfig.init_lut` or `VTKConfig.init_pwf` during the tutorial. Read through these methods and then trys manipulating the opacity of the rendering.
+3. **Investigate the lookup table and piecewise function:** We didn\'t look at `VTKConfig.init_lut` or `VTKConfig.init_pwf` during the tutorial. Read through these methods and then trys manipulating the opacity of the rendering.
 
 ## References
 
