@@ -4,6 +4,27 @@ teaching: 20
 exercises: 0
 ---
 
+::::::::::::::::::::::::::::::::::::::: objectives
+
+- Define nested Pydantic models to represent complex data structures.
+- Implement custom validation logic using Pydantic validator decorators (`@model_validator`).
+- Trigger and observe validation errors for nested models.
+- Apply custom validators to enforce business-specific rules.
+- Explore different types of Pydantic validators (`@model_validator`, `@field_validator`, `@root_validator`) and understand their use cases.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::: questions
+
+- How can I represent complex data structures with nested relationships using Pydantic?
+- How can I enforce validation rules that go beyond basic type checking using Pydantic?
+- How do I define custom validation logic for Pydantic models?
+- What are the different types of Pydantic validators, and when should I use each one?
+- How can I trigger and observe validation errors in my Pydantic models?
+- How do I use Pydantic models and validators effectively in conjunction with my viewmodel?
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
 # 6. Data Validation with Pydantic: Ensuring Data Integrity
 
 In this section, we will explore Pydantic, a powerful Python library for data validation and settings management. We\'ll delve into the benefits of data validation, how Pydantic works, and best practices for using it effectively within the NOVA framework and the MVVM architecture.

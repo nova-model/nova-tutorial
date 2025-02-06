@@ -4,6 +4,29 @@ teaching: 10
 exercises: 1
 ---
 
+::::::::::::::::::::::::::::::::::::::: objectives
+
+- Describe the purpose of Plotly for interactive 2D charts.
+- Explain how to integrate Plotly charts into Trame applications using `trame-plotly`.
+- Describe the purpose of PyVista for interactive 3D visualizations.
+- Explain how to integrate PyVista visualizations into Trame applications using `trame-vtk`.
+- Explain how to work directly with VTK for 3D visualizations within Trame applications.
+- Understand the basic boilerplate code required to set up a VTK rendering pipeline in Trame.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::: questions
+
+- How can I create interactive 2D charts in my NOVA application?
+- How can I integrate Plotly charts into Trame applications?
+- How can I create interactive 3D visualizations in my NOVA application?
+- What are the advantages and disadvantages of using PyVista vs. VTK for 3D visualizations?
+- How can I integrate PyVista visualizations into Trame applications?
+- How can I work directly with VTK for more advanced 3D visualizations in Trame?
+- What are the key components of a VTK rendering pipeline?
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
 # Advanced Visualizations
 
 In this section, we will look at a selection of the libraries that integrate well with Trame for producing more sophisticated visualizations of your data. Specifically, we will look at Plotly for interactive 2D charts, PyVista for interactive 3D visualizations, and VTK for advanced 3D visualizations.
@@ -362,11 +385,20 @@ Since we\'ve seen plenty of examples of UI controls at this point, we've omitted
             return self.volume
     ```
 
-## Exercises
+:::::::::::::::::::::::::::::::::::::::  challenge
+**Plotly Box Plot**
+Add a box plot to the available plot types. Hint: you shouldn\'t need to change anything in the view class to do this.
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
-1. **Plotly Box Plot:** Add a box plot to the available plot types. Hint: you shouldn\'t need to change anything in the view class to do this.
-2. **PyVista clim Control:** Add control(s) to the UI to control the `clim` argument for the `add_volume` method.
-3. **Investigate the lookup table and piecewise function:** We didn\'t look at `VTKConfig.init_lut` or `VTKConfig.init_pwf` during the tutorial. Read through these methods and then trys manipulating the opacity of the rendering.
+:::::::::::::::::::::::::::::::::::::::  challenge
+**PyVista clim Control** 
+Add control(s) to the UI to control the `clim` argument for the `add_volume` method.
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+**Investigate the lookup table and piecewise function** 
+We didn\'t look at `VTKConfig.init_lut` or `VTKConfig.init_pwf` during the tutorial. Read through these methods and then trys manipulating the opacity of the rendering.
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## References
 

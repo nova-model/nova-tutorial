@@ -4,6 +4,25 @@ teaching: 10
 exercises: 3
 ---
 
+::::::::::::::::::::::::::::::::::::::: objectives
+
+- Explain the purpose of the `Nova`, `Tool`, and `Parameters` classes in `nova-galaxy`.
+- Describe the basic workflow for running an NDIP tool using `nova-galaxy`.
+- Connect to NDIP using the `Nova` class.
+- Define an NDIP tool and set its parameters using the `Tool` and `Parameters` classes.
+- Run the tool and create a datastore.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::: questions
+
+- How can I interact with the NDIP platform programmatically from Python?
+- What is the `nova-galaxy` library, and how does it simplify NDIP operations?
+- How do I define an NDIP tool and specify its input parameters using `nova-galaxy`?
+- Where can I find information about what NDIP tool to use and parameters to set?
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
 # Using NDIP for Backend Computations
 In this section, we will start using the `nova-galaxy` library to interact with the NDIP platform and run a neutron analysis tool.  First, ensure you have set your `GALAXY_URL` and `GALAXY_API_KEY` as environment variables, as explained in the notes at the end of this episode.  We also need to add `nova-galaxy` as a project dependency.
 

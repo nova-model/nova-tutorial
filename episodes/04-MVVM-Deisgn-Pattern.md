@@ -4,6 +4,27 @@ teaching: 10
 exercises: 0
 ---
 
+::::::::::::::::::::::::::::::::::::::: objectives
+
+- Define the Model-View-ViewModel (MVVM) design pattern and its benefits.
+- Explain the responsibilities of each component in the MVVM pattern (Model, View, ViewModel).
+- Describe the role of data binding in MVVM and how it enables reactive UIs.
+- Explain the purpose of the `nova-mvvm` library and its key components (`BindingInterface`, `TrameBinding`, `Communicator`, `new_bind`).
+- Introduce Pydantic for data modeling and validation within the MVVM pattern.
+- Understand how to implement MVVM using `nova-mvvm` and Pydantic in a NOVA application.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::: questions
+
+- What is the Model-View-ViewModel (MVVM) design pattern, and why is it useful for UI development?
+- What are the roles and responsibilities of the Model, View, and ViewModel in the MVVM pattern?
+- How does data binding work in MVVM, and why is it important?
+- How does the `nova-mvvm` library simplify the implementation of the MVVM pattern in NOVA applications?
+- What is Pydantic, and how can it be used for data modeling and validation in the context of MVVM?
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
 # 4. User Interface Best Practices: The MVVM Design Pattern
 
 In this section, we will introduce the Model-View-ViewModel (MVVM) design pattern, a powerful architectural approach for structuring applications, particularly those with user interfaces. We\'ll explore the core principles of MVVM, the roles of each component, and how the NOVA framework simplifies its implementation, making your code more organized, testable, and maintainable.
@@ -16,8 +37,9 @@ Before diving into MVVM, it\'s helpful to understand what a *design pattern* is 
 
 MVVM is an architectural design pattern specifically designed for applications with user interfaces (UIs). It aims to separate the UI (the View) from the underlying data and logic (the Model) by introducing an intermediary component called the ViewModel. This separation makes the application more maintainable, testable, and easier to evolve.
 
-The MVVM pattern consists of three core components:
+![](fig/mvvm.png)
 
+The MVVM pattern consists of three core components:
 *   **Model:** The Model represents the *data* and the *business logic* of the application. It\'s responsible for:
     *   Data storage (e.g., reading from and writing to a database, a file, or an API).
     *   Data validation (ensuring the data is in a valid state).
@@ -41,7 +63,7 @@ The MVVM pattern consists of three core components:
     *   Handling user actions from the View. This might involve validating user input, updating the Model, or triggering other actions in the application.
     *   Exposing data and commands to the View through *data binding*.
 
-    The ViewModel is *UI-specific*. It knows about the View and the data that the View needs, but it doesn\'t know about the specific UI elements that are used to display the data. It also orchestrates the interaction between the View and the Model.
+    The ViewModel knows about the View and the data that the View needs, but it doesn\'t know about the specific UI elements that are used to display the data. It also orchestrates the interaction between the View and the Model.
 
     *The ViewModel is where we\'ll use `nova-mvvm` to create bindings between the ViewModel and the View, enabling the reactive updates.*
 
@@ -193,9 +215,8 @@ poetry run app
 
 You should see `Fractal tool finished successfully.` printed to the console, although we have not created a UI yet.
 
-## Exercises
-
-1.  **Trigger Pydantic Validation Error (Programmatic):**
+:::::::::::::::::::::::::::::::::::::::  challenge
+**Trigger Pydantic Validation Error (Programmatic)**
     *   In `FractalViewModel` in `src/nova_tutorial/view_models/fractal_view_model.py`, modify the `update_fractal_programmatically` function from the previous exercise to use an *invalid* fractal type:
         ```python
         def update_fractal_programmatically(new_type: str):
@@ -211,12 +232,18 @@ You should see `Fractal tool finished successfully.` printed to the console, alt
         *   The "Current fractal type (after attempt):" is still "mandelbrot" indicating the invalid update was rejected.
         *   The "Current message:" now contains a "Validation Error" message from Pydantic.
 
-2.  **Inspect ViewModel State:**
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+**Inspect ViewModel State**
     *   In `src/nova_tutorial/view_models/fractal_view_model.py`, add `print` statements within the `FractalViewModel.__init__` method to print the initial values of `self._fractal_type`, `self._job_status`, and `self._message`.
     *   Run the application (`poetry run app`). Observe the output in the console. Verify that the initial values are printed as expected.
     *   Now, modify the `FractalViewModel.__init__` method to change the initial value of `self._message` to "Application starting...". Run the application again and confirm that the printed initial message has changed.
 
-3.  **Programmatic State Update and Binding:**
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+**Programmatic State Update and Binding:**
     *   In `FractalViewModel` in `src/nova_tutorial/view_models/fractal_view_model.py`, after the line `self.fractal_type_bind = binding.new_bind(...)` in `__init__`, add the following lines:
         ```python
         print("Initial fractal type:", self._fractal_type) # Print initial value
@@ -232,6 +259,8 @@ You should see `Fractal tool finished successfully.` printed to the console, alt
         *   The initial fractal type is printed as "mandelbrot".
         *   The message "Fractal type updated programmatically to: julia" is printed.
         *   The final fractal type (after programmatic update) is printed as "julia".
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## References
 

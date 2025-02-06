@@ -4,6 +4,23 @@ teaching: 10
 exercises: 3
 ---
 
+::::::::::::::::::::::::::::::::::::::: objectives
+
+- Clone the NOVA template application using `copier`.
+- Understand the basic project structure created by the template.
+- Identify key files in the project (e.g., `pyproject.toml`).
+- Install project dependencies using `poetry`.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::: questions
+
+- How do I quickly set up a starting point for a NOVA project?
+- What files and directories are included in the NOVA template application?
+- How does `poetry` manage project dependencies and virtual environments?
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
 # 2. Getting Started with a Template Application
 
 As mentioned in the introduction, all code examples in this tutorial are based on a template application. In this episode, we will create this starting point by cloning a template using the `copier` library. This template provides a basic project structure and pre-configured files that will help us get started quickly with our NOVA project, saving us from setting up everything from scratch.

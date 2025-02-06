@@ -4,6 +4,25 @@ teaching: 10
 exercises: 0
 ---
 
+::::::::::::::::::::::::::::::::::::::: objectives
+
+- Understand the purpose of the NOVA tutorial and its goals.
+- Explain the roles of NDIP and NOVA in neutron data analysis.
+- Identify the core NOVA libraries and their functionalities.
+- Describe the high-level architecture of a NOVA application interacting with NDIP.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::: questions
+
+- What is the Neutron Data Interpretation Platform (NDIP)?
+- What is NOVA, and how does it simplify NDIP application development?
+- What are the key components of NOVA, and what problems do they solve?
+- How do NOVA libraries interact with the NDIP platform?
+- What will I be able to do after completing this tutorial?
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
 # 1. Introduction to NOVA and NDIP
 
 Welcome to the NOVA tutorial! This guide will walk you through the process of building interactive tools for **neutron analysis** using the NOVA platform. You will learn how to create a web application that leverages the NOVA libraries to simplify interaction with the Neutron Data Interpretation Platform (NDIP).

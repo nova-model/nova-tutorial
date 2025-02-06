@@ -4,6 +4,30 @@ teaching: 20
 exercises: 3
 ---
 
+::::::::::::::::::::::::::::::::::::::: objectives
+
+- Explain the purpose of Trame as a UI framework.
+- Describe how `nova-trame` simplifies Trame development in NOVA applications.
+- Identify key features and benefits of using Trame.
+- Use `nova-trame` components to build a basic user interface.
+- Incorporate common Vuetify components into a Trame application.
+- Explore the Vuetify component library and identify components suitable for scientific applications.
+- Add custom UI components, and tailor their appearance with attributes.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::: questions
+
+- What is Trame, and why should I use it for building UIs in NOVA?
+- How does `nova-trame` make Trame development easier?
+- What are the key advantages of using a declarative UI approach with Trame?
+- How can I create a basic UI layout using `nova-trame` components?
+- How can I add common Vuetify components (e.g., `VTextField`, `VCheckbox`, `VSlider`) to my Trame application?
+- How can I customize the appearance of Vuetify components?
+- Where can I find more information about available Vuetify components?
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
 # 5. Web-based User Interface Development with Trame
 
 In this section, we will dive into Trame and the `nova-trame` library to build interactive web-based user interfaces for our NOVA applications. We\'ll explore how `nova-trame` simplifies UI development within the NOVA ecosystem and how to use common layout components.
@@ -165,11 +189,20 @@ poetry run start
 
 You should now see the simple UI. When you click the "Sample Tab 1" and "Sample Tab 2" tabs, you should now see the updated content with the new UI components.
 
-## Exercises
+:::::::::::::::::::::::::::::::::::::::  challenge
+**Explore the `InputField` Component** 
+Modify the `InputField` component in `SampleTab1` to automatically retrieve the label, hint, and validation rules from a Pydantic model field. Create a simple Pydantic model with a `username` field with a `title`, `description`, and `min_length` constraint.
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
-1.  **Explore the `InputField` Component:** Modify the `InputField` component in `SampleTab1` to automatically retrieve the label, hint, and validation rules from a Pydantic model field. Create a simple Pydantic model with a `username` field with a `title`, `description`, and `min_length` constraint.
-2.  **Create a Complex Layout:** Combine `GridLayout`, `VBoxLayout`, and `HBoxLayout` components to create a more complex UI layout in `SampleTab2`. Try creating a layout with a header, a sidebar, and a main content area.
-3.  **Customize Component Appearance:** Experiment with customizing the appearance of the Vuetify components using the various props and styles available. Try changing the color, size, font, and other visual attributes of the components. Refer to Vuetify\'s component documentation for details.
+:::::::::::::::::::::::::::::::::::::::  challenge
+**Create a Complex Layout**
+Combine `GridLayout`, `VBoxLayout`, and `HBoxLayout` components to create a more complex UI layout in `SampleTab2`. Try creating a layout with a header, a sidebar, and a main content area.
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+**Customize Component Appearance** 
+Experiment with customizing the appearance of the Vuetify components using the various props and styles available. Try changing the color, size, font, and other visual attributes of the components. Refer to Vuetify\'s component documentation for details.
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## References
 
