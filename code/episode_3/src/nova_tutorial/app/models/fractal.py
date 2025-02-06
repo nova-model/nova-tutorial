@@ -19,7 +19,7 @@ class Fractal:
             )
 
         nova = Nova(galaxy_url=self.galaxy_url, galaxy_key=self.galaxy_key)
-        tool = Tool(id="neutrons_fracta")
+        tool = Tool(id="neutrons_fractal")
         params = Parameters()
         params.add_input(name="option", value=self.fractal_type)
 

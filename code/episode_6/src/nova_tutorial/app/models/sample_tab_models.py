@@ -3,8 +3,8 @@ from pydantic import BaseModel, Field
 class SampleTab1Model(BaseModel):
     """Data model for Sample Tab 1."""
     username: str = Field(default="test_user", min_length=3, title="Username", description="Your username.")
-    firstName: str = Field(default="", title="First Name")
-    lastName: str = Field(default="", title="Last Name")
+    firstName: str = Field(default="", pattern="^[a-zA-Z]+$", title="First Name")
+    lastName: str = Field(default="", pattern="^[a-zA-Z]+$", title="Last Name")
     rememberMe: bool = Field(default=False, title="Remember Me")
     enableNotifications: bool = Field(default=True, title="Enable Notifications")
 
