@@ -1126,13 +1126,13 @@ files = [
 
 [[package]]
 name = "nova-galaxy"
-version = "0.4.0"
+version = "0.7.0"
 description = "Utilties for accessing the ORNL Galaxy instance"
 category = "main"
 optional = false
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "nova_galaxy-0.4.0-py3-none-any.whl", hash = "sha256:407ae4b272f5386bd23578daf8c0c9c48c3723fd9fd14aa7328ea38532427ab9"},
+    {file = "nova_galaxy-0.7.0-py3-none-any.whl", hash = "sha256:1ff51e5e7fcf050f7678a52dc4248ba3283f3bb222f45d24d7c13efba0d2c91f"},
 ]
 
 [package.dependencies]
@@ -2332,4 +2332,4 @@ propcache = ">=0.2.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "5a4cbc0db131ca92dbfbfa620080878ba0b5276d9ac85c0b77f3a260b574c7ed"
+content-hash = "21cb4efdfeedffeac02c47e0e53c8fa5e296badf0f246a4f72738eb878ebcc21"
