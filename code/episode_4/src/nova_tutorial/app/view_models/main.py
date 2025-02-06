@@ -12,7 +12,6 @@ class MainViewModel():
 
     def __init__(self, model: MainModel, binding: BindingInterface):
         self.model = model
-        self.image_path = ""
 
 
         # here we create a bind that connects ViewModel with View. It returns a communicator object,
@@ -33,5 +32,4 @@ class MainViewModel():
 
     def run_fractal(self) -> None:
         self.model.fractal.run_fractal_tool()
-        self.image_path = self.model.fractal.image_data
         self.update_view()

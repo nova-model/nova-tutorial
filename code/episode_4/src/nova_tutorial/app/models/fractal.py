@@ -1,5 +1,5 @@
 import os
-import base64
+from base64 import b64encode
 from typing import Literal
 
 from pydantic import BaseModel, Field
@@ -31,5 +31,8 @@ class Fractal(BaseModel):
             data_store.persist()
             output = tool.run(data_store, params)
             output.get_dataset("output").download("tmp.png")
+
+            with open("tmp.png", "rb") as image_file:
+                self.image_data = f"data:image/png;base64,{b64encode(image_file.read()).decode()}"
 
         print("Fractal tool finished successfully.")
