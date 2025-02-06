@@ -45,7 +45,7 @@ The basic workflow for running a tool with `nova-galaxy` involves these steps:
 3.  **Set Parameters**: Create a `Parameters` instance and add the necessary input parameters and their values for the tool.
 4.  **Run the Tool**: Use the `tool.run()` method to submit the job to NDIP. This typically involves creating a datastore to hold the job\'s input and output data.
 
-## Creating a Model of a Tool
+## Running the Fractal tool
 
 Let\'s create a `Fractal` class that uses `nova-galaxy` to run the `neutrons_fractal` tool on NDIP. You can find the complete code for this episode in the `code/episode_3` directory. Here, we will focus on the key code snippets and explain the important parts.
 
@@ -119,6 +119,10 @@ By default, trame will open a new tab in the browser and bring it to focus. If t
 ## Asynchronous tool execution
 
 At times, it may be desirable to execute a tool or workflow without waiting on the result. The class Tool method run has an optional `wait` parameter. The default is true so that the tool is run in a blocking manner. However, by setting the parameter to false, the tool will be run asynchronously in a non-blocking manner.
+
+```
+            output = tool.run(data_store, params, wait=False)
+```
 
 ## Next Steps
 

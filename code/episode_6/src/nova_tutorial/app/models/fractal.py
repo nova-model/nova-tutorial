@@ -1,6 +1,6 @@
 import os
 from pydantic import BaseModel, Field
-from nova.galaxy import Nova, Parameters, Tool
+from nova.galaxy import Connection, Parameters, Tool
 
 
 class Fractal(BaseModel):
@@ -18,11 +18,11 @@ class Fractal(BaseModel):
                 "You must specify GALAXY_URL and GALAXY_API_KEY as environment variables."
             )
 
-        nova = Nova(galaxy_url=self.galaxy_url, galaxy_key=self.galaxy_key)
+        conn = Connection(galaxy_url=self.galaxy_url, galaxy_key=self.galaxy_key)
         tool = Tool(id="neutrons_fractal")
         params = Parameters()
 
-        with nova.connect() as galaxy_connection:
+        with conn.connect() as galaxy_connection:
             data_store = galaxy_connection.create_data_store(name="fractal_store")
             data_store.persist()
             tool.run(data_store, params)

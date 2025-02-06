@@ -45,7 +45,7 @@ The MVVM pattern consists of three core components:
     *   Data validation (ensuring the data is in a valid state).
     *   Business rules (the logic that governs how the data is manipulated and used).
 
-    The Model is *agnostic* to the UI. It doesn\'t know anything about how the data will be displayed or how the user will interact with it. It simply provides the data and the means to manipulate it.
+The Model is *agnostic* to the UI. It doesn\'t know anything about how the data will be displayed or how the user will interact with it. It simply provides the data and the means to manipulate it.
 
     *In the context of our NOVA tutorial, the Model will often include the logic for interacting with the NDIP platform via `nova-galaxy`.*
 

@@ -41,6 +41,8 @@ NOVA is a framework that aims to simplify the development of applications that i
 
 *   **`nova-mvvm`**: This library simplifies implementation of the Model-View-ViewModel (MVVM) design pattern. By utilizing this library, users can create structured applications that are more testable and easier to maintain.
 
+## NDIP and NOVA Together
+
 To better understand how NOVA works with NDIP, consider this simplified architecture:
 
 NOTE: THIS WILL BE REPLACED WITH AN ACTUAL DIAGRAM ONCE CHANGES SETTLE
