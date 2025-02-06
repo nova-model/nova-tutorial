@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "nova-tutorial"
 version = "0.1.0"
-description = "Template application"
+description = "Nova Tutorial Project"
 authors = []
 readme = "README.md"
 license = "MIT"
@@ -14,9 +14,8 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.10"
-nova-galaxy = "^0.4.0"
-nova-mvvm = "0.8.0"
-
+nova-trame = "*"
+nova-galaxy = "^0.7.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -89,4 +88,4 @@ sphinxcontrib-napoleon ="*"
 tomli = "*"
 
 [tool.poetry.scripts]
-app = "nova_tutorial:main"
+app = "nova_tutorial.app:main"

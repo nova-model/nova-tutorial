@@ -4,6 +4,25 @@ teaching: 10
 exercises: 0
 ---
 
+::::::::::::::::::::::::::::::::::::::: objectives
+
+- Understand the purpose of the NOVA tutorial and its goals.
+- Explain the roles of NDIP and NOVA in neutron data analysis.
+- Identify the core NOVA libraries and their functionalities.
+- Describe the high-level architecture of a NOVA application interacting with NDIP.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::: questions
+
+- What is the Neutron Data Interpretation Platform (NDIP)?
+- What is NOVA, and how does it simplify NDIP application development?
+- What are the key components of NOVA, and what problems do they solve?
+- How do NOVA libraries interact with the NDIP platform?
+- What will I be able to do after completing this tutorial?
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
 # 1. Introduction to NOVA and NDIP
 
 Welcome to the NOVA tutorial! This guide will walk you through the process of building interactive tools for **neutron analysis** using the NOVA platform. You will learn how to create a web application that leverages the NOVA libraries to simplify interaction with the Neutron Data Interpretation Platform (NDIP).
@@ -14,13 +33,15 @@ The Neutron Data Interpretation Platform (NDIP) is a workflow management system 
 
 ## What is NOVA?
 
-NOVA is a platform that aims to simplify the development of applications that interact with NDIP. It consists of three core libraries:
+NOVA is a framework that aims to simplify the development of applications that interact with NDIP. It consists of three core libraries:
 
-*   **`nova-galaxy`**: This library simplifies interaction with the NDIP platform's APIs. It allows developers to easily connect to NDIP, **submit jobs, handle parameters, and monitor job progress.**
+*   **`nova-galaxy`**: This library simplifies interaction with the NDIP platform\'s APIs. It allows developers to easily connect to NDIP, **submit jobs, handle parameters, and monitor job progress.**
 
 *   **`nova-trame`**: This library facilitates the creation of interactive user interfaces using Trame. Trame is a powerful Python framework for building web-based UIs and visualizations. `nova-trame` provides a consistent look and feel for NOVA applications by simplifying interactions with Trame components (such as Vuetify).
 
 *   **`nova-mvvm`**: This library simplifies implementation of the Model-View-ViewModel (MVVM) design pattern. By utilizing this library, users can create structured applications that are more testable and easier to maintain.
+
+## NDIP and NOVA Together
 
 To better understand how NOVA works with NDIP, consider this simplified architecture:
 
@@ -29,7 +50,7 @@ NOTE: THIS WILL BE REPLACED WITH AN ACTUAL DIAGRAM ONCE CHANGES SETTLE
 User Application (Built with NOVA)
     |  (Leverages)
     V
-NOVA Platform
+NOVA Framework
 +-----------------+   +-----------------+   +-----------------+
 |   nova-galaxy   |---|   nova-trame    |---|   nova-mvvm     |  (NOVA Libraries)
 +-----------------+   +-----------------+   +-----------------+
@@ -50,15 +71,21 @@ In this tutorial, you will learn how to use these three core NOVA libraries to b
 *   Submit jobs to NDIP.
 *   Monitor the progress of your submitted jobs.
 
-We'll be using example tools from neutron scattering as a demonstration for this tutorial, however, the lessons learned here can be applied to a wide variety of neutron analysis applications. This hands-on tutorial will guide you through each step of the process, empowering you to build your own interactive tools for neutron data analysis and management.
+We\'ll be using example tools from neutron scattering as a demonstration for this tutorial, however, the lessons learned here can be applied to a wide variety of neutron analysis applications. This hands-on tutorial will guide you through each step of the process, empowering you to build your own interactive tools for neutron data analysis and management.
 
 ## Code Examples Directory
 
 All of the code examples used in this tutorial are available in the `code` directory of the tutorial repository. These examples are built upon the template application that you will clone in the next episode. The code is organized by episode, with each episode having its own subdirectory (e.g., `code/episode_2`, `code/episode_3`, etc.).
 
-Each episode's subdirectory contains a complete, self-contained Python project that can be run independently using Poetry. This allows you to easily explore the code examples, run them, and modify them as you go through the tutorial.
+Each episode\'s subdirectory contains a complete, self-contained Python project that can be run independently using Poetry. This allows you to easily explore the code examples, run them, and modify them as you go through the tutorial.
 
-To run the code for a specific episode, navigate to the episode's directory in your terminal and use the following commands:
+::::::::::::::::::::::::::::::::::::::::: callout
+
+Poetry is a tool for dependency management and packaging in Python. It allows you to declare the libraries your project depends on, and it will manage the installation and updating of those dependencies. Poetry also helps you create reproducible builds by locking the versions of your dependencies. It also makes it easier to publish and share your Python projects.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+To run the code for a specific episode, navigate to the episode\'s directory in your terminal and use the following commands:
 
 ```bash
 cd code/episode_X  # Replace X with the episode number
@@ -67,19 +94,6 @@ poetry run app      # Run the application for this episode
 ```
 
 This structure ensures that each code example is isolated and runnable, making it easier for you to follow along with the tutorial and experiment with the code.
-
-## Prerequisites
-
-Before starting this tutorial, you will need to have the following:
-
-*   **Basic Python Knowledge:** A basic understanding of Python programming concepts is required.
-*   **Python Installation:** You must have Python 3.8 or higher installed on your system.
-*   **Python's `copier` Library** We will be using this library to copy generate a starting application from a template. Can likely be installed using `pip install copier`
-*   **Poetry:** The code samples provided in this tutorial leverage poetry for dependency management. 
-*   **NDIP Access:** You should have access to a working NDIP system. (Specific details about NDIP access will need to be provided by the instructor.)
-*   **NOVA Libraries:** The NOVA libraries will be used extensively throughout this tutorial. Poetry should manage these dependencies for you could also checkout the git repositories and look at the documentaion on readthedocs.
-*   **A Text Editor or IDE:** You will need a text editor or IDE (such as VS Code, Sublime Text, or Atom) for writing code.
-*   **Familiarity with the Command Line:** You will need to be comfortable using the command line or terminal.
 
 ## References
 
