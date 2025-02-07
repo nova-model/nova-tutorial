@@ -362,7 +362,7 @@ This is very similar to the Plotly setup.
 
 **8. `src/nova_tutorial/views/tab_content_panel.py` (Modify):**
 
-*   **Import `PlotlyView`**
+*   **Import `PyVistaView`**
 
 ```python
 from ..views.pyvista import PyVistaView
@@ -393,7 +393,7 @@ from ..views.pyvista import PyVistaView
 
 **10. `src/nova_tutorial/view_models/main.py` (Modify):**
 
-*   **Import `PlotlyConfig`**
+*   **Import `PyVistaConfig`**
 
 ```python
 from pyvista import Plotter  # just for typing
@@ -431,12 +431,16 @@ Now, if you run the application you should see the following in the PyVista tab:
 If you have prior experience with VTK then you may prefer to work with it directly. You can get started with it by installing the Python VTK bindings and the Trame widget for VTK.
 
 ```bash
-poetry add trame-vtk vtk
+poetry add trame-vtk vtk==9.3.1
 ```
 
-Since we\'ve seen plenty of examples of UI controls at this point, we\'ve omitted them for this example so that we can focus on the VTK boilerplate needed to get started.
+::::::::::::::::::::::::: callout
+PyVista isn't compatible with VTK 9.4, yet. If you are not using PyVista, there is no need to specify the VTK version like this.
+:::::::::::::::::::::::::::::::::
 
-**13. `VTKView` View Class (`src/nova_tutorial/views/vtk.py`):**
+Once more, let's setup a view and model.
+
+**11. `VTKView` View Class (`src/nova_tutorial/views/vtk.py`):**
 
 *   **Imports:**  The `vtkRenderingVolumeOpenGL2` import is necessary despite being unreferenced.
 
@@ -449,7 +453,7 @@ from trame.widgets import vtk as vtkw
 from trame.widgets import vuetify3 as vuetify
 from vtkmodules.vtkRenderingCore import vtkRenderer, vtkRenderWindow, vtkRenderWindowInteractor, vtkVolume
 
-from nova_tutorial.view_models.visualization import VisualizationViewModel
+from ..view_models.main import MainViewModel
 ```
 
 *   **Initialization:**  Here we define the boiler plate for the interactive VTK window. As with PyVista, setting off-screen rendering to on is necessary when working with Trame.
@@ -458,12 +462,13 @@ from nova_tutorial.view_models.visualization import VisualizationViewModel
 class VTKView:
     """View class for the 3d plot using PyVista."""
 
-    def __init__(self, view_model: VisualizationViewModel) -> None:
+    def __init__(self, view_model: MainViewModel) -> None:
         self.view_model = view_model
-        self.view_model.render_vtk_bind.connect(self.render)
 
         self.create_vtk()
         self.create_ui()
+
+        self.render()
 
     def create_vtk(self) -> None:
         self.renderer = vtkRenderer()
@@ -488,13 +493,15 @@ class VTKView:
         with HBoxLayout(halign="center", height="50vh"):
             self.view = vtkw.VtkRemoteView(self.render_window, interactive_ratio=1)
 
-    def render(self, volume: vtkVolume) -> None:
+    def render(self) -> None:
+        volume = self.view_model.get_vtk_volume()
+
         self.renderer.Clear()
         self.renderer.AddVolume(volume)
         self.render_window.Render()
 ```
 
-**14. `VTKConfig` Model Class (`src/nova_tutorial/models/vtk.py`):**
+**12. `VTKConfig` Model Class (`src/nova_tutorial/models/vtk.py`):**
 
 *   **Imports:**  We are only using PyVista to get an example dataset. There are two references to it as we use `KNEE_DATA` to compute min/max bounds for the data and `KNEE_DATAFILE` to pass the data file into a VTK reader. The FixedPointVolumeRayCastMapper is CPU-based, but other mappers are available if you need GPU support.
 
@@ -543,6 +550,154 @@ class VTKConfig:
 
     def get_volume(self) -> vtkVolume:
         return self.volume
+```
+
+*   **Defining the colormap and opacity transfer functions:**  A full discussion of the colormap would be out-of-scope for the tutorial, but please copy/paste this method into the class to have things work.
+
+```python
+    def init_lut(self) -> vtkColorTransferFunction:
+        # This method defines the "Fast" colormap.
+        # See https://www.kitware.com/new-default-colormap-and-background-in-next-paraview-release/
+
+        lut = vtkColorTransferFunction()
+
+        lut.SetColorSpaceToRGB()
+        lut.SetNanColor([0.0, 1.0, 0.0])
+
+        srgb = np.array(
+            [
+                0,
+                0.05639999999999999,
+                0.05639999999999999,
+                0.47,
+                0.17159223942480895,
+                0.24300000000000013,
+                0.4603500000000004,
+                0.81,
+                0.2984914818394138,
+                0.3568143826543521,
+                0.7450246485363142,
+                0.954367702893722,
+                0.4321287371255907,
+                0.6882,
+                0.93,
+                0.9179099999999999,
+                0.5,
+                0.8994959551205902,
+                0.944646394975174,
+                0.7686567142818399,
+                0.5882260353170073,
+                0.957107977357604,
+                0.8338185108985666,
+                0.5089156299842102,
+                0.7061412605695164,
+                0.9275207599610714,
+                0.6214389091739178,
+                0.31535705838676426,
+                0.8476395308725272,
+                0.8,
+                0.3520000000000001,
+                0.15999999999999998,
+                1,
+                0.59,
+                0.07670000000000013,
+                0.11947499999999994,
+            ]
+        )
+
+        for arr in np.split(srgb, len(srgb) / 4):
+            lut.AddRGBPoint(arr[0], arr[1], arr[2], arr[3])
+
+        prev_min, prev_max = lut.GetRange()
+        prev_delta = prev_max - prev_min
+        node = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        next_delta = self.max - self.min
+        for i in range(lut.GetSize()):
+            lut.GetNodeValue(i, node)
+            node[0] = next_delta * (node[0] - prev_min) / prev_delta + self.min
+            lut.SetNodeValue(i, node)
+
+        return lut
+
+    def init_pwf(self) -> vtkPiecewiseFunction:
+        pwf = vtkPiecewiseFunction()
+
+        pwf.RemoveAllPoints()
+        pwf.AddPoint(self.min, 0)
+        pwf.AddPoint(self.max, 0.7)
+
+        return pwf
+```
+
+*   **Binding the new view and model**:  Now, we need to add `VTKView` to our view and bind `VTKConfig` to it in the view model.
+
+This is very similar to the Plotly and PyVista setup.
+
+**13. `src/nova_tutorial/views/tab_content_panel.py` (Modify):**
+
+*   **Import `VTKView`**
+
+```python
+from ..views.vtk import VTKView
+```
+
+*   **Update `create_ui`**
+
+```python
+    def create_ui(self) -> None:
+        with vuetify.VForm(ref="form") as self.f:
+            with vuetify.VContainer(classes="pa-0", fluid=True):
+                with vuetify.VCard():
+                    with vuetify.VWindow(v_model="active_tab"):
+                        with vuetify.VWindowItem(value=1):
+                            PlotlyView(self.view_model)
+                        with vuetify.VWindowItem(value=2):
+                            PyVistaView(self.view_model)
+                        with vuetify.VWindowItem(value=3):
+                            VTKView(self.view_model)
+```
+
+**14. `src/nova_tutorial/views/tabs_panel.py` (Modify):**
+
+```python
+    def create_ui(self) -> None:
+        with vuetify.VTabs(v_model=("active_tab", 0), classes="pl-5"):
+            vuetify.VTab("Plotly", value=1)
+            vuetify.VTab("PyVista", value=2)
+            vuetify.VTab("VTK", value=3)
+```
+
+**15. `src/nova_tutorial/view_models/main.py` (Modify):**
+
+*   **Import `VTKConfig`**
+
+```python
+from vtkmodules.vtkRenderingCore import vtkVolume  # just for typing
+from ..models.vtk import VTKConfig
+```
+
+*   **Update `__init__`**
+
+```python
+    def __init__(self, model: MainModel, binding: BindingInterface):
+        self.model = model
+        self.plotly_config = PlotlyConfig()
+        self.pyvista_config = PyVistaConfig()
+        self.vtk_config = VTKConfig()
+
+        self.plotly_config_bind = binding.new_bind(
+            linked_object=self.plotly_config, callback_after_update=self.update_plotly_figure
+        )
+        self.plotly_figure_bind = binding.new_bind()
+        self.pyvista_figure_bind = binding.new_bind(linked_object=self.pyvista_config)
+        # We didn't add any controls for the VTK rendering, so there's no need to create a data binding here.
+```
+
+*   **Add method for retrieving the volume:**  This allows us to pass the volume to the vtkRenderer in the view.
+
+```python
+    def get_vtk_volume(self) -> None:
+        self.vtk_config.get_volume()
 ```
 
 Now, if you run the application you should see the following in the VTK tab:

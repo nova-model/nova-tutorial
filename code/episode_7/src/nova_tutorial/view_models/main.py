@@ -4,10 +4,12 @@ from typing import Any, Dict
 
 from nova.mvvm.interface import BindingInterface
 from pyvista import Plotter  # just for typing
+from vtkmodules.vtkRenderingCore import vtkVolume  # just for typing
 
 from ..models.main_model import MainModel
 from ..models.plotly import PlotlyConfig
 from ..models.pyvista import PyVistaConfig
+from ..models.vtk import VTKConfig
 
 
 class MainViewModel:
@@ -17,12 +19,14 @@ class MainViewModel:
         self.model = model
         self.plotly_config = PlotlyConfig()
         self.pyvista_config = PyVistaConfig()
+        self.vtk_config = VTKConfig()
 
         self.plotly_config_bind = binding.new_bind(
             linked_object=self.plotly_config, callback_after_update=self.update_plotly_figure
         )
         self.plotly_figure_bind = binding.new_bind()
         self.pyvista_config_bind = binding.new_bind(linked_object=self.pyvista_config)
+        # We didn't add any controls for the VTK rendering, so there's no need to create a data binding here.
 
         # here we create a bind that connects ViewModel with View. It returns a communicator object,
         # that allows to update View from ViewModel (by calling update_view).
@@ -46,3 +50,6 @@ class MainViewModel:
 
     def update_pyvista_volume(self, plotter: Plotter) -> None:
         self.pyvista_config.render(plotter)
+
+    def get_vtk_volume(self) -> vtkVolume:
+        return self.vtk_config.get_volume()

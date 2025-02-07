@@ -17,3 +17,4 @@ class TabsPanel:
         with vuetify.VTabs(v_model=("active_tab", 0), classes="pl-5"):
             vuetify.VTab("Plotly", value=1)
             vuetify.VTab("PyVista", value=2)
+            vuetify.VTab("VTK", value=3)

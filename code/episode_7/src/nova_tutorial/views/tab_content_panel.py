@@ -6,6 +6,7 @@ from trame_server import Server
 from ..view_models.main import MainViewModel
 from ..views.plotly import PlotlyView
 from ..views.pyvista import PyVistaView
+from ..views.vtk import VTKView
 
 
 class TabContentPanel:
@@ -26,3 +27,5 @@ class TabContentPanel:
                             PlotlyView(self.view_model)
                         with vuetify.VWindowItem(value=2):
                             PyVistaView(self.view_model)
+                        with vuetify.VWindowItem(value=3):
+                            VTKView(self.view_model)
