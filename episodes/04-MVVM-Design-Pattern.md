@@ -171,6 +171,7 @@ Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate P
         galaxy_key: str = Field(default_factory=lambda: os.getenv("GALAXY_API_KEY"), description="NDIP Galaxy API Key")
 
         image_data: str = Field(default="", description="Base64 encoded PNG")
+    ```
 
 *   **Decode the image data:** Finally, we need to decode the image that we receive as the output from the tool execution. Modify the section where we execute the tool to the following:
 
@@ -215,17 +216,17 @@ Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate P
             vuetify.VTab("Sample Tab 2", value=3)
     ```
 
-**4. Modify the tab panel (`src/nova_tutorial/views/tab_content_panel.py`):**
+**5. Modify the tab panel content (`src/nova_tutorial/views/tab_content_panel.py`):**
     Add our new Fractal Tab to the tab content panel.
 
     ```python
-    with vuetify.VWindow(v_model="active_tab"):
-        with vuetify.VWindowItem(value=1):
-            FractalTab(self.view_model)  # Add FractalTab
-        with vuetify.VWindowItem(value=2):
+        with vuetify.VWindow(v_model="active_tab"):
+            with vuetify.VWindowItem(value=1):
+                FractalTab(self.view_model)  # Add FractalTab
+            with vuetify.VWindowItem(value=2):
             SampleTab1()
-        with vuetify.VWindowItem(value=3):
-            SampleTab2()
+            with vuetify.VWindowItem(value=3):
+                SampleTab2()
     ```
 
 ## Running the application
