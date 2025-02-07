@@ -61,7 +61,7 @@ The Model is agnostic to the UI. It doesn\'t know anything about how the data wi
     *   Handling user actions from the View. This might involve validating user input, updating the Model, or triggering other actions in the application.
     *   Exposing data and commands to the View through *data binding*.
 
-    The ViewModel knows about the View and the data that the View needs, but it doesn\'t know about the specific UI componentss that are used to display the data. It also orchestrates the interaction between the View and the Model.
+    The ViewModel knows about the View and the data that the View needs, but it doesn\'t know about the specific UI components that are used to display the data. It also orchestrates the interaction between the View and the Model.
 
     *The ViewModel is where we\'ll use `nova-mvvm` to create bindings between the ViewModel and the View, enabling the reactive updates.*
 
@@ -79,7 +79,7 @@ The MVVM pattern provides several benefits:
 
 *Data binding* is a mechanism that allows the View and the ViewModel to automatically synchronize their data. When the data in the ViewModel changes, the View is automatically updated to reflect the changes. Conversely, when the user interacts with the View (e.g., by entering text in a field), the data in the ViewModel is automatically updated.
 
-This data binding is what makes MVVM so powerful and allows for reactive UIs. Instead of manually writing code to update the UI every time the data changes, you simply bind the UI componentss to the data in the ViewModel, and the updates happen automatically.
+This data binding is what makes MVVM so powerful and allows for reactive UIs. Instead of manually writing code to update the UI every time the data changes, you simply bind the UI components to the data in the ViewModel, and the updates happen automatically.
 
 ## How NOVA Simplifies MVVM
 
