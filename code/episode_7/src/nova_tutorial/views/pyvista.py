@@ -8,13 +8,13 @@ from nova.trame.view.layouts import GridLayout, HBoxLayout
 from pyvista.trame.ui import plotter_ui
 from trame.widgets import vuetify3 as vuetify
 
-from nova_tutorial.view_models.main import VisualizationViewModel
+from ..view_models.main import MainViewModel
 
 
 class PyVistaView:
     """View class for the 3d plot using PyVista."""
 
-    def __init__(self, view_model: VisualizationViewModel) -> None:
+    def __init__(self, view_model: MainViewModel) -> None:
         self.view_model = view_model
         self.view_model.pyvista_config_bind.connect("pyvista_config")
 
@@ -41,4 +41,4 @@ class PyVistaView:
 
     def update(self, _: Any = None) -> None:
         if self.plotter:
-            self.view_model.render_pyvista(self.plotter)
+            self.view_model.update_pyvista_volume(self.plotter)

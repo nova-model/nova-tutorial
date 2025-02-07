@@ -1,50 +1,55 @@
-"""View model for visualization examples."""
+"""Module for the main ViewModel."""
 
-from typing import Any, Optional
+from typing import Any, Dict
 
 from nova.mvvm.interface import BindingInterface
-from pydantic import BaseModel, Field
-from pyvista import Plotter
+from pyvista import Plotter  # just for typing
+from vtkmodules.vtkRenderingCore import vtkVolume  # just for typing
 
-from nova_tutorial.models.plotly import PlotlyConfig
-from nova_tutorial.models.pyvista import PyVistaConfig
-from nova_tutorial.models.vtk import VTKConfig
-
-
-class Controls(BaseModel):
-    """General controls for the GUI."""
-
-    active_tab: int = Field(default=0)
+from ..models.main_model import MainModel
+from ..models.plotly import PlotlyConfig
+from ..models.pyvista import PyVistaConfig
+from ..models.vtk import VTKConfig
 
 
-class VisualizationViewModel:
-    """View model for visualization examples."""
+class MainViewModel:
+    """Viewmodel class, used to create data<->view binding and react on changes from GUI."""
 
-    def __init__(self, binding: BindingInterface):
-        self.controls = Controls()
+    def __init__(self, model: MainModel, binding: BindingInterface):
+        self.model = model
         self.plotly_config = PlotlyConfig()
         self.pyvista_config = PyVistaConfig()
         self.vtk_config = VTKConfig()
 
-        self.controls_bind = binding.new_bind(self.controls)
         self.plotly_config_bind = binding.new_bind(
             linked_object=self.plotly_config, callback_after_update=self.update_plotly_figure
         )
         self.plotly_figure_bind = binding.new_bind()
         self.pyvista_config_bind = binding.new_bind(linked_object=self.pyvista_config)
-        self.vtk_config_bind = binding.new_bind(linked_object=self.vtk_config)
-        self.render_vtk_bind = binding.new_bind()
+        # We didn't add any controls for the VTK rendering, so there's no need to create a data binding here.
 
-    def init_view(self) -> None:
-        self.update_plotly_figure()
-        self.init_vtk()
+        # here we create a bind that connects ViewModel with View. It returns a communicator object,
+        # that allows to update View from ViewModel (by calling update_view).
+        # self.model will be updated automatically on changes of connected fields in View,
+        # but one also can provide a callback function if they want to react to those events
+        # and/or process errors.
+        self.config_bind = binding.new_bind(self.model, callback_after_update=self.change_callback)
 
-    def init_vtk(self) -> None:
-        self.render_vtk_bind.update_in_view(self.vtk_config.get_volume())
+    def change_callback(self, results: Dict[str, Any]) -> None:
+        if results["error"]:
+            print(f"error in fields {results['errored']}, model not changed")
+        else:
+            print(f"model fields updated: {results['updated']}")
 
-    def render_pyvista(self, plotter: Plotter) -> None:
-        self.pyvista_config.render(plotter)
+    def update_view(self) -> None:
+        self.config_bind.update_in_view(self.model)
 
-    def update_plotly_figure(self, _: Optional[dict[str, Any]] = None) -> None:
+    def update_plotly_figure(self, _: Any = None) -> None:
         self.plotly_config_bind.update_in_view(self.plotly_config)
         self.plotly_figure_bind.update_in_view(self.plotly_config.get_figure())
+
+    def update_pyvista_volume(self, plotter: Plotter) -> None:
+        self.pyvista_config.render(plotter)
+
+    def get_vtk_volume(self) -> vtkVolume:
+        return self.vtk_config.get_volume()

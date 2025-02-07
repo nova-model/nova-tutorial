@@ -6,18 +6,19 @@ from trame.widgets import vtk as vtkw
 from trame.widgets import vuetify3 as vuetify
 from vtkmodules.vtkRenderingCore import vtkRenderer, vtkRenderWindow, vtkRenderWindowInteractor, vtkVolume
 
-from nova_tutorial.view_models.main import VisualizationViewModel
+from ..view_models.main import MainViewModel
 
 
 class VTKView:
     """View class for the 3d plot using PyVista."""
 
-    def __init__(self, view_model: VisualizationViewModel) -> None:
+    def __init__(self, view_model: MainViewModel) -> None:
         self.view_model = view_model
-        self.view_model.render_vtk_bind.connect(self.render)
 
         self.create_vtk()
         self.create_ui()
+
+        self.render()
 
     def create_vtk(self) -> None:
         self.renderer = vtkRenderer()
@@ -38,7 +39,9 @@ class VTKView:
         with HBoxLayout(halign="center", height="50vh"):
             self.view = vtkw.VtkRemoteView(self.render_window, interactive_ratio=1)
 
-    def render(self, volume: vtkVolume) -> None:
+    def render(self) -> None:
+        volume = self.view_model.get_vtk_volume()
+
         self.renderer.Clear()
         self.renderer.AddVolume(volume)
         self.render_window.Render()
