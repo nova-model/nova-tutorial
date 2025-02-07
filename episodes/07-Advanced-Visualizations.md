@@ -602,5 +602,7 @@ We didn\'t look at `VTKConfig.init_lut` or `VTKConfig.init_pwf` during the tutor
 *   **Trame Tutorial**: https://kitware.github.io/trame/guide/tutorial/
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
-
+- Trame integrates well with Plotly for building 2D charts.
+- Trame integrates well with PyVista and VTK for building 3D visualizations.
+- PyVista provides a simpler API compared to VTK at the cost of performance.
 ::::::::::::::::::::::::::::::::::::::::::::::::::
