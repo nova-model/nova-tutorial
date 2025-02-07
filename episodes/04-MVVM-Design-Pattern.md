@@ -114,10 +114,10 @@ The initial step is to great a BindingInterface. The BindingInterface serves as 
 bindingInterface = TrameBinding(self.server.state) # server is the Trame Server
 ```
 
-After the bindingInterface has been created, variables must be added to the interface via the interface's new_bind method. The `new_bind` method expects the variable to link, and an optional callback method. The callback method is useful if there are actions to be performed after updates to the UI. In the code snippet below, the `model` variable is added to the binding interface. This `new_bind` method returns a `Communicator`. The `Communicator` is an object which manages the binding and will be used to propgate updates. 
+After the bindingInterface has been created, variables must be added to the interface via the interface\'s new_bind method. The `new_bind` method expects the variable to link, and an optional callback method. The callback method is useful if there are actions to be performed after updates to the UI. In the code snippet below, the `model` variable is added to the binding interface. This `new_bind` method returns a `Communicator`. The `Communicator` is an object which manages the binding and will be used to propgate updates.
 
 ``` python
-# Adding a binding to the Binding Interface 
+# Adding a binding to the Binding Interface
 self.config_bind = binding.new_bind(self.model)
 ```
 
@@ -127,13 +127,13 @@ def update_view(self) -> None:
     self.config_bind.update_in_view(self.model)
 ```
 
-We've seen how to create a BindingInterface, add a new binding, and how to perform updates. We also need to connect our view component to the Communicator. The Communicator class has a `connect` method. This method accepts a connector object. In the example below, we connect to the `config_bind` communicator object that was created in our ViewModel. We're passing in a string as our connector object, but we could pass in a callable object instead.
+We\'ve seen how to create a BindingInterface, add a new binding, and how to perform updates. We also need to connect our view component to the Communicator. The Communicator class has a `connect` method. This method accepts a connector object. In the example below, we connect to the `config_bind` communicator object that was created in our ViewModel. We\'re passing in a string as our connector object, but we could pass in a callable object instead.
 
 ```python
 self.view_model.config_bind.connect("config")
 ```
 
-Finally, we connect a GUI element to the connector object. The template application uses the *`nova-trame`* library which we'll work with in the next episode. For now, just note that InputField is a UI element that is being connected to the binding in our ViewModel
+Finally, we connect a GUI element to the connector object. The template application uses the *`nova-trame`* library which we\'ll work with in the next episode. For now, just note that InputField is a UI element that is being connected to the binding in our ViewModel
 
 ```python
 InputField(v_model="config.username")
@@ -186,7 +186,7 @@ Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate P
             linked_object_arguments=["message"],
         )
         self.fractal_type_bind = binding.new_bind(
-            linked_object=self, 
+            linked_object=self,
             linked_object_arguments=["fractal_type"]
         )
     ```

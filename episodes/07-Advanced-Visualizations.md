@@ -35,7 +35,7 @@ The complete code for this episode is available in the `code/episode_7` director
 
 ## Setup
 
-Let's start by setting up a new application from the template.
+Let\'s start by setting up a new application from the template.
 
 ```bash
 copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git viz_tutorial
@@ -44,7 +44,7 @@ poetry install
 poetry run app
 ```
 
-Since we've already discussed the data bindings, we will gloss over the data bindings and tab setup. Please copy the following files into your template.
+Since we\'ve already discussed the data bindings, we will gloss over the data bindings and tab setup. Please copy the following files into your template.
 
 **1. Main View Model (`src/nova_tutorial/view_models/main.py`):**
 
@@ -165,7 +165,7 @@ class VisualizationApp(ThemedApp):  # Inherits from nova.trame.ThemedApp for con
             return layout
 ```
 
-We'll also need to stub out each of the classes we'll build so that the application can be run after each step.
+We\'ll also need to stub out each of the classes we\'ll build so that the application can be run after each step.
 
 **3. `PlotlyView` (`src/nova_tutorial/views/plotly.py`):**
 
@@ -446,7 +446,7 @@ Now we can set up our view.
 
 ::::::::::::::::::::::::::: callout
 
-PyVista's volume rendering engine isn't currently suitable for large data. If you find yourself running into performance issues, then you should likely switch over to using VTK directly.
+PyVista\'s volume rendering engine isn\'t currently suitable for large data. If you find yourself running into performance issues, then you should likely switch over to using VTK directly.
 
 :::::::::::::::::::::::::::::::::::
 
@@ -462,7 +462,7 @@ If you have prior experience with VTK then you may prefer to work with it direct
 poetry add trame-vtk vtk
 ```
 
-Since we\'ve seen plenty of examples of UI controls at this point, we've omitted them for this example so that we can focus on the VTK boilerplate needed to get started.
+Since we\'ve seen plenty of examples of UI controls at this point, we\'ve omitted them for this example so that we can focus on the VTK boilerplate needed to get started.
 
 **13. `VTKView` View Class (`src/nova_tutorial/views/vtk.py`):**
 

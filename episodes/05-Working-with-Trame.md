@@ -73,7 +73,7 @@ Let\'s explore these components in more detail:
 
 Layouts are responsible for arraging your content in a consistent manner. In Trame, a layout consists of multiple "slots". A slot is a section of the page to which you can add content.
 
-`nova-trame` provides a basic layout and theme that you can access via the `ThemedApp` class. The template app will setup your main view class to inherit from `ThemedApp` already, so let's look at how the layout is defined and how we can add content to slots.
+`nova-trame` provides a basic layout and theme that you can access via the `ThemedApp` class. The template app will setup your main view class to inherit from `ThemedApp` already, so let\'s look at how the layout is defined and how we can add content to slots.
 
 **1. `nova_tutorial/views/main.py`:**
 
@@ -121,7 +121,7 @@ The `with` syntax is used by Trame to add content to a slot. This allows your vi
 
 Here is a layout diagram showing all of the available slots in `ThemedApp`:
 
-![nova-trame's slot diagram for its default layout](https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/_images/layout.png)
+![The `nova-trame` slot diagram for its default layout](https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/_images/layout.png)
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
