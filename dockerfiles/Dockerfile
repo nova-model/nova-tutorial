@@ -41,7 +41,7 @@ RUN R -e "install.packages('remotes', repos = getOption('repos'))"
 RUN R -e "remotes::install_github('carpentries/vise')"
 
 # Install R packages: varnish, sandpaper, pegboard (latest versions)
-RUN R -e "remotes::install_github('carpentries/varnish')"
+RUN R -e "remotes::install_github('gecage952/varnish')"
 RUN R -e "remotes::install_github('carpentries/sandpaper')"
 RUN R -e "remotes::install_github('carpentries/pegboard')"
 
