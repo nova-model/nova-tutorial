@@ -61,6 +61,7 @@ Benefits of using `nova-trame`:
 
 *   **Layout & Theme Management (`ThemedApp`):** `nova-trame` provides a default layout and theme that will give your application a consistent look and feel to other NOVA applications. If needed, you can still customize or override the defaults.
 *   **`InputField`:** This component simplifies the creation of various input fields (text fields, dropdowns, checkboxes, etc.). It automatically integrates with Pydantic models to load labels, hints, and validation rules, reducing the amount of code you need to write.  It also supports debouncing and throttling for improved performance.
+*   **`RemoteFileInput`:** This component allows you to browse the filesystem that the application is running on and select a file from it. This must be used carefully but can provide you with a simple way to connect to remote filesystems (e.g. the analysis cluster filesystem for HFIR and SNS).
 *   **Layout Components:** `nova-trame` provides layout components that help you structure your UI. These components are based on CSS Flexbox and Grid layouts, making it easy to create responsive and visually appealing UIs. The main layout components include:
     *   **`GridLayout`:** Creates a grid with a specified number of columns. You can use `GridLayout` to arrange your UI elements in a structured grid layout.
     *   **`VBoxLayout`:** Creates an element that vertically stacks its children. Use `VBoxLayout` to arrange UI elements in a vertical column.
@@ -72,26 +73,60 @@ Let\'s explore these components in more detail:
 
 Layouts are responsible for arraging your content in a consistent manner. In Trame, a layout consists of multiple "slots". A slot is a section of the page to which you can add content.
 
-`nova-trame` provides a basic layout and theme that you can access via the `ThemedApp` class. The template app will setup your main view class to inherit from this class already, so let's look at how the layout is defined and how we can add content to one of the slots it provides.
+`nova-trame` provides a basic layout and theme that you can access via the `ThemedApp` class. The template app will setup your main view class to inherit from `ThemedApp` already, so let's look at how the layout is defined and how we can add content to slots.
+
+**1. `nova_tutorial/views/main.py`:**
 
 ```python
 class MainApp(ThemedApp):
+    """Main application view class. Calls rendering of nested UI elements."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.server = get_server(None, client_type="vue3")
+        binding = TrameBinding(self.server.state)
+        self.server.state.trame__title = "Nova Tutorial"
+        self.view_models = create_viewmodels(binding)
+        self.view_model: MainViewModel = self.view_models["main"]
+        self.create_ui()
+
     def create_ui(self) -> None:
+        self.state.trame__title = "Nova Tutorial"
+
         with super().create_ui() as layout:
+            layout.toolbar_title.set_text("Nova Tutorial")
             with layout.pre_content:
-                with vuetify.VTabs():
-                    vuetify.VTab("Tab 1")
-                    vuetify.VTab("Tab 2")
+                TabsPanel(self.view_models["main"])
             with layout.content:
-                vuetify.VBtn("Click Me!")
+                TabContentPanel(
+                    self.server,
+                    self.view_models["main"],
+                )
+            with layout.post_content:
+                pass
+            return layout
 ```
 
-Here is a layout diagram showing all of the slots in `ThemedApp`:
+:::::::::::::::::::::::::: callout
+
+`ThemedApp.create_ui` will return the layout object, so be careful not to modify the `super().create_ui()` call.
+
+::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::: callout
+
+The `with` syntax is used by Trame to add content to a slot. This allows your view to be defined in a hierarchical way similar to writing HTML.
+
+::::::::::::::::::::::::::::::::::
+
+Here is a layout diagram showing all of the available slots in `ThemedApp`:
 
 ![nova-trame's slot diagram for its default layout](https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/_images/layout.png)
 
 ::::::::::::::::::::::::::::::::::::::::: callout
+
 For a detailed discussion of how to work with these slots, please review the [`nova-trame` documentation](https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/working_with_trame.html). This documentation also shows you how to customize the theme provided by `nova-trame` and how to perform common UI tasks such as managing the spacing between elements.
+
 :::::::::::::::::::::::::::::::::::::::::::::::::
 
 ### `InputField`
@@ -105,6 +140,24 @@ The `InputField` component simplifies creating different types of input fields i
 This integration significantly reduces the amount of boilerplate code you need to write for input fields.
 
 The `InputField` also provides debouncing and throttling features that can improve application performance. These features are useful when dealing with user input that triggers frequent updates to the Trame state.
+
+### `RemoteFileInput`
+
+The `RemoteFileInput` component allows you to quickly create a widget for the user to find and select files from the computer running your application. This can be powerful if you want to connect your application to the SNS analysis cluster filesystem, for example, as you could use `RemoteFileInput(base_paths=["/HFIR", "/SNS"])` to expose relevant experiment data to users.
+
+:::::::::::::::::::::::::::::::: callout
+
+If you want to connect your application to the analysis cluster, then it will need to be run on a computer where the filesystem is mounted. If your application is deployed through our platform, then we can ensure that your application runs in the correct environment to support your needs.
+
+::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::: callout
+
+When using `RemoteFileInput`, please ensure that the `base_paths` parameter only contains paths that you are ok with the user seeing.
+
+::::::::::::::::::::::::::::::::::::::::
+
+After the user selects a file, the `v_model` will store a path to the file.
 
 ### Layout Components: `GridLayout`, `VBoxLayout`, and `HBoxLayout`
 
@@ -156,6 +209,8 @@ By combining these layout components, you can create complex and responsive UI l
 
 For a more detailed explanation of how to work with our layout and theme, please refer to the [`nova-trame documentation`](https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/working_with_trame.html).
 
+###
+
 ## Adding More UI Components to the Sample Tabs
 
 Now, let\'s add some UI components to the Sample Tabs in our application to demonstrate how to use these components. We\'ll modify the `sample_tab_1.py` and `sample_tab_2.py` files to include these components.
@@ -181,6 +236,7 @@ class SampleTab1:
         with layouts.VBoxLayout(classes="ma-2"):
             InputField(v_model="config.username", label="Username")
             vuetify.VCheckbox(label="Remember me")
+            RemoteFileInput(v_model="config.file", base_paths=["/SNS"])
 ```
 
 **3. `nova_tutorial/views/sample_tab_2.py` (Modify):**
