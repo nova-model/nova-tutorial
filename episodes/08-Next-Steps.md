@@ -5,13 +5,17 @@ exercises: 0
 ---
 # Next Steps
 
-In this section, we will outline the process for taking an application like the one we\'ve created in this tutorial and deploying it to the NOVA/NDIP platform. While we won\'t actually perform the deployment in this tutorial, we will cover the key steps and resources involved.
+In this section, we will look at other resources you may want to integrate with your application and outline the process for taking an application like the one we\'ve created in this tutorial and deploying it to the NOVA/NDIP platform. While we won\'t actually perform the deployment in this tutorial, we will cover the key steps and resources involved.
+
+## ONCat Integration
+
+If needed, you can integrate your application with ONCat via [pyoncat](https://pypi.org/project/pyoncat/2.1/). If you need to access non-public information with the API then you will need to use an authenticated client in `pyoncat`. We strongly recommend you email oncat-support@ornl.gov explaining the use case for your ONCat integration as they can advise you on the most appropriate form of authentication for your application and how to set it up.
 
 ## Containerizing Your Application
 
 The first step in deploying your application to the NOVA/NDIP platform is to package it as a Docker container. Docker containers provide a lightweight and portable way to package your application and all of its dependencies. This ensures that your application will run consistently across different environments.
 
-Fortunately, the template application we used in this tutorial already includes a `Dockerfile` that you can use as a starting point. The Dockerfile is a set of instructions that Docker uses to build your container image. 
+Fortunately, the template application we used in this tutorial already includes a `Dockerfile` that you can use as a starting point. The Dockerfile is a set of instructions that Docker uses to build your container image.
 
 Here\'s what the Dockerfile typically includes:
 * **Base Image:** Specifies the base operating system and environment for your application.
@@ -23,7 +27,7 @@ To containerize your application, you would:
 1. Navigate to the top level of your project (where the `dockerfiles` folder is).
 2. Run the docker build command in the following format `docker build -t <your_image_name>:<your_image_tag> -f dockerfiles/Dockerfile .`
 3. Test your docker container using the command `docker run <your_image_name>:<your_image_tag>`.
-4. Push your docker container to a container registry. 
+4. Push your docker container to a container registry.
 
 After the docker container is deployed to a registry, it can then be used by the platform.
 
@@ -62,7 +66,7 @@ The section name where your tool should appear in the tool panel
 Whether the tool will need a GPU
 Additional developers who will be working on the tool (if this is their first time contributing to this repository)
 
-The *dev* branch is used as a staging branch for tools that are ready to be put in front of users. Tools here will be added to the NDIP production instance, Calvera, during the next deployment. 
+The *dev* branch is used as a staging branch for tools that are ready to be put in front of users. Tools here will be added to the NDIP production instance, Calvera, during the next deployment.
 
 ### Continued Development
 
@@ -90,3 +94,9 @@ After performing these steps, your application will be available to NDIP users.
 
 By following the steps outlined in this section, you can deploy your own applications to the NDIP platform and make them available to the wider scientific community.
 ```
+
+:::::::::::::::::::::::::::::::::::::::: keypoints
+- Tools must be containerized to run on NDIP.
+- NDIP requires tools to have an XML file which defines input, outputs, tool id, and the container location.
+- Tool XML files must be added to the Galaxy Tools Repository.
+::::::::::::::::::::::::::::::::::::::::::::::::::

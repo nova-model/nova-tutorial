@@ -45,7 +45,7 @@ The MVVM pattern consists of three core components:
     *   Data validation (ensuring the data is in a valid state).
     *   Business rules (the logic that governs how the data is manipulated and used).
 
-The Model is *agnostic* to the UI. It doesn\'t know anything about how the data will be displayed or how the user will interact with it. It simply provides the data and the means to manipulate it.
+The Model is agnostic to the UI. It doesn\'t know anything about how the data will be displayed or how the user will interact with it. It simply provides the data and the means to manipulate it.
 
     *In the context of our NOVA tutorial, the Model will often include the logic for interacting with the NDIP platform via `nova-galaxy`.*
 
@@ -56,7 +56,7 @@ The Model is *agnostic* to the UI. It doesn\'t know anything about how the data 
 
     The View is *passive*. It doesn\'t contain any business logic or data manipulation code. It simply displays the data provided to it and relays user actions to the ViewModel.
 
-    *In our NOVA tutorial, the View will be built using Trame and Vuetify components, leveraging the styling and structure provided by `nova-trame`.*
+    In our NOVA tutorial, the View will be built using Trame and Vuetify components, leveraging the styling and structure provided by `nova-trame`.
 
 *   **ViewModel:** The ViewModel acts as an *intermediary* between the Model and the View. It\'s responsible for:
     *   Preparing data from the Model for display in the View. This might involve formatting the data, combining data from multiple sources, or creating derived data.
@@ -101,6 +101,43 @@ Benefits of Pydantic:
 *   **Clear Data Structures:**  Defines data models in a clear and readable way using Python type hints.
 *   **Serialization and Deserialization:** Easily serializes data to and from standard formats like JSON.
 *   **Improved Code Readability:**  Makes code easier to understand and maintain by explicitly defining data models.
+
+## Data Binding with NOVA
+
+The **`nova-mvvm`** library greatly simplifies the data synchronization between the View and Model-View for Trame, PyQt, and Panel. The library provides the classes TrameBinding, PyQtBinding, and PanelBinding to connect UI components to Model-View variables. Here, we'll focus on the TrameBinding but all three function similarly.
+
+### How to use TrameBinding
+
+The initial step is to great a BindingInterface. The BindingInterface serves as the foundational layer for how connections are made between variables in the ViewModel and GUI elements in the View. Once a Trame application has started, the BindingInterface can be created with:
+
+``` python
+bindingInterface = TrameBinding(self.server.state) # server is the Trame Server
+```
+
+After the bindingInterface has been created, variables must be added to the interface via the interface\'s new_bind method. The `new_bind` method expects the variable to link, and an optional callback method. The callback method is useful if there are actions to be performed after updates to the UI. In the code snippet below, the `model` variable is added to the binding interface. This `new_bind` method returns a `Communicator`. The `Communicator` is an object which manages the binding and will be used to propgate updates.
+
+``` python
+# Adding a binding to the Binding Interface
+self.config_bind = binding.new_bind(self.model)
+```
+
+```python
+# Updating the UI connected to a binding.
+def update_view(self) -> None:
+    self.config_bind.update_in_view(self.model)
+```
+
+We\'ve seen how to create a BindingInterface, add a new binding, and how to perform updates. We also need to connect our view component to the Communicator. The Communicator class has a `connect` method. This method accepts a connector object. In the example below, we connect to the `config_bind` communicator object that was created in our ViewModel. We\'re passing in a string as our connector object, but we could pass in a callable object instead.
+
+```python
+self.view_model.config_bind.connect("config")
+```
+
+Finally, we connect a GUI element to the connector object. The template application uses the *`nova-trame`* library which we\'ll work with in the next episode. For now, just note that InputField is a UI element that is being connected to the binding in our ViewModel
+
+```python
+InputField(v_model="config.username")
+```
 
 ## Implementing MVVM with `nova-mvvm` and Pydantic - Key Code Snippets
 
@@ -149,7 +186,7 @@ Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate P
             linked_object_arguments=["message"],
         )
         self.fractal_type_bind = binding.new_bind(
-            linked_object=self, 
+            linked_object=self,
             linked_object_arguments=["fractal_type"]
         )
     ```
@@ -268,3 +305,13 @@ You should see `Fractal tool finished successfully.` printed to the console, alt
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
+
+:::::::::::::::::::::::::::::::::::::::: keypoints
+- MVVM stands for Model, View, View-Model.
+- MVVM is a design pattern which provides best practices for UI development.
+- MVVM helps developers create maintainable, testable, and reusable code.
+- The foundation of MVVM is a separation of logic between the UI (view), and the business logic (model) of the application.
+- The View-Model component serves as an intermediary between the Model and the View.
+- Pydantic is frequently used to validate inputs into our models.
+- Bindings are used to synchronize data between the view and view-model.
+::::::::::::::::::::::::::::::::::::::::::::::::::

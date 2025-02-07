@@ -5,7 +5,7 @@ from nova.trame.view.components import InputField
 from nova.trame.view.layouts import GridLayout, HBoxLayout
 from trame.widgets import plotly
 
-from nova_tutorial.view_models.visualization import VisualizationViewModel
+from nova_tutorial.view_models.main import VisualizationViewModel
 
 
 class PlotlyView:
