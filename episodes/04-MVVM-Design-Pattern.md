@@ -47,8 +47,6 @@ The MVVM pattern consists of three core components:
 
 The Model is agnostic to the UI. It doesn\'t know anything about how the data will be displayed or how the user will interact with it. It simply provides the data and the means to manipulate it.
 
-    *In the context of our NOVA tutorial, the Model will often include the logic for interacting with the NDIP platform via `nova-galaxy`.*
-
 *   **View:** The View is the *user interface* (UI) of the application. It\'s responsible for:
     *   Displaying data to the user.
     *   Capturing user input (e.g., button clicks, text entered in a field, selections from a dropdown).
@@ -139,108 +137,96 @@ Finally, we connect a GUI element to the connector object. The template applicat
 InputField(v_model="config.username")
 ```
 
-## Implementing MVVM with `nova-mvvm` and Pydantic - Key Code Snippets
+## Implementing MVVM with `nova-mvvm` and Pydantic
 
-Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate Pydantic for data validation in our `FractalViewModel`. You can find the complete code for this episode in the `code/episode_4` directory. Here, we will focus on the key code snippets and explain the important parts.
+Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate Pydantic for data validation.
 
-**1. `FractalToolInput` Pydantic Model (`src/nova_tutorial/view_models/fractal_view_model.py`):**
+**1. Adding Fractal to the ViewModel (`src/nova_tutorial/view_models/main.py`):**
 
-*   **Defining the Model**: We start by defining a Pydantic model `FractalToolInput` to represent the input data for our fractal tool. This model uses type hints and `Literal` to enforce valid `fractal_type` values:
+*   **Running our Model**:  We start by adding a method to our ViewModel which will run the Fractal tool.
 
     ```python
-    from pydantic import BaseModel, ValidationError
+    def run_fractal(self) -> None:
+        self.model.fractal.run_fractal_tool()
+        self.update_view()
+
+    ```
+**2. Updating our Fractal Class for pydantaic and MVVM (`src/nova/tutorial/models/fractal.py**
+
+*   **Adding new imports**: We need to add some imports for pydantic and working with base64 encondings to deal with the image.
+
+    ```python
+    from base64 import b64encode
     from typing import Literal
 
-    class FractalToolInput(BaseModel):
-        fractal_type: Literal["mandelbrot", "julia", "random", "markus"]
+    from pydantic import BaseModel, Field
     ```
-    By defining `fractal_type` with `Literal[...]`, we ensure that only the specified string values are accepted, leveraging Pydantic\'s data validation capabilities.
 
-**2. `FractalViewModel` Class (`src/nova_tutorial/view_models/fractal_view_model.py`):**
-
-*   **Imports**:  The `FractalViewModel` now imports classes from `nova.mvvm.interface` and `nova.mvvm.trame_binding`, and `pydantic`:
+*   **Update class variables:** Now we'll update fractal_type to support pydantic and add an image variable to store the image. Modify the variable declarations to the following: 
 
     ```python
-    from nova.mvvm.interface import BindingInterface
-    from nova.mvvm.trame_binding import TrameBinding
-    ```
+    class Fractal(BaseModel):
+        fractal_type: Literal["mandelbrot", "julia", "random", "markus"] = Field(default="mandelbrot")
+        galaxy_url: str = Field(default_factory=lambda: os.getenv("GALAXY_URL"), description="NDIP Galaxy URL")
+        galaxy_key: str = Field(default_factory=lambda: os.getenv("GALAXY_API_KEY"), description="NDIP Galaxy API Key")
 
-*   **`__init__` method**:  In the `__init__` method, we now accept a `BindingInterface` instance (specifically, `TrameBinding`) as an argument. We also initialize state variables with leading underscores ( `_fractal_type`, `_run_button_disabled`, `_message`) to follow a convention for "internal" variables, and create bindings using `binding.new_bind(...)`:
+        image_data: str = Field(default="", description="Base64 encoded PNG")
 
-    ```python
-    class FractalViewModel():
-    def __init__(self, binding: BindingInterface):
-        super().__init__()
-        self.fractal = Fractal()
-
-        self._fractal_type = "mandelbrot"
-        self._run_button_disabled = True
-        self._message = ""
-
-        self.run_button_disabled_bind = binding.new_bind(
-            linked_object=self,
-            linked_object_arguments=["run_button_disabled"],
-        )
-        self.message_bind = binding.new_bind(
-            linked_object=self,
-            linked_object_arguments=["message"],
-        )
-        self.fractal_type_bind = binding.new_bind(
-            linked_object=self,
-            linked_object_arguments=["fractal_type"]
-        )
-    ```
-    The `binding.new_bind(...)` calls are crucial for setting up the MVVM pattern. They create `Communicator` objects that will manage the synchronization of state between the ViewModel and the View (UI).
-
-*   **`set_fractal_type` method**: We modify `set_fractal_type` to use the `FractalToolInput` Pydantic model for validation. If validation fails, we update the `_message` state variable with the error:
+*   **Decode the image data:** Finally, we need to decode the image that we receive as the output from the tool execution. Modify the section where we execute the tool to the following:
 
     ```python
-        def set_fractal_type(self, fractal_type: str):
-            try:
-                FractalToolInput(fractal_type=fractal_type) # Validate input using Pydantic
-            except ValidationError as e:
-                self._message = f"Validation Error: {e}"
-                self.message_bind.update_in_view(self._message) # Update message state
-                return
-            self._fractal_type = fractal_type
-            self.fractal_type_bind.update_in_view(self._fractal_type) # Update fractal_type state
-    ```
-    Here, `FractalToolInput(fractal_type=fractal_type)` attempts to create an instance of the Pydantic model, which triggers validation. If `fractal_type` is invalid, a `ValidationError` is caught, and the error message is set in the ViewModel\'s `_message` state, which, thanks to binding, *will later* update the UI.
+            output.get_dataset("output").download("tmp.png")
 
-*   **`run_fractal_tool` method**:  In `run_fractal_tool`, we now also use the `message_bind` and `run_button_disabled_bind` to update the UI state (even though we don\'t have a UI yet, this demonstrates good MVVM practice):
+            with open("tmp.png", "rb") as image_file:
+                self.image_data = f"data:image/png;base64,{b64encode(image_file.read()).decode()}"
+    ```
+
+**3. Creating a FractalTab (`src/nova_tutorial/views/fractal_tab.py`):**
+
+*   **Create a fractal tab**: Create a new file and add the following code:
 
     ```python
-    def run_fractal_tool(self):
-        self._job_status["fractal"] = "Starting"
-        try:
-            self.fractal.set_fractal_type(self._fractal_type.fractal_type)
-            self.fractal.run_fractal_tool()
-            self._message = "Fractal tool finished successfully."
-        except Exception as e:
-            self._message = f"Error running fractal tool: {e}"
-            raise e
-        self._job_status["fractal"] = "Completed"
+    from trame.widgets import vuetify3 as vuetify
+
+    from nova.trame.view.components import InputField
+    from nova_tutorial.app.view_models.main import MainViewModel
+
+    class FractalTab:
+
+        def __init__(self, view_model: MainViewModel) -> None:
+            self.view_model = view_model
+            self.create_ui()
+
+        def create_ui(self) -> None:
+            InputField(v_model="config.fractal.fractal_type")
+            vuetify.VBtn(
+                "Run Fractal",
+                click=self.view_model.run_fractal # calls the run_fractal_tool method
+            )
+            vuetify.VImg(src=("config.fractal.image_data",), height="400", width="400")
     ```
-    Even without a View, we are already considering what the functionality that we\'ll need to support. We\'ve already created the bindings to server as our communicators between our future view and our new view model.
+**4. Modify the tab panel (`src/nova_tutorial/views/tab_panel.py`):**
+    Modify the tab panel to add our new Fractal tab
 
-**2. `main.py` - Wiring up TrameBinding (`src/nova_tutorial/main.py`):**
-
-*   **Import `TrameBinding`**: We import `TrameBinding` from `nova.mvvm.trame_binding`:
     ```python
-    # src/nova_tutorial/main.py
-    from nova.mvvm.trame_binding import TrameBinding
+        with vuetify.VTabs(v_model=("active_tab", 0), classes="pl-5"):
+            vuetify.VTab("Fractal", value=1)  # Add Fractal Tab
+            vuetify.VTab("Sample Tab 1", value=2)
+            vuetify.VTab("Sample Tab 2", value=3)
     ```
 
-*   **Instantiate `TrameBinding` and Pass to ViewModel**: In `main()`, we now create a `TrameBinding` instance and pass it to the `FractalViewModel` constructor:
+**4. Modify the tab panel (`src/nova_tutorial/views/tab_content_panel.py`):**
+    Add our new Fractal Tab to the tab content panel.
 
     ```python
-    def main():
-        server = get_server(None, client_type="vue3") # Trame server (not yet used for UI in this episode)
-        binding = TrameBinding(server.state)
-        fractal_vm = FractalViewModel(binding)
+    with vuetify.VWindow(v_model="active_tab"):
+        with vuetify.VWindowItem(value=1):
+            FractalTab(self.view_model)  # Add FractalTab
+        with vuetify.VWindowItem(value=2):
+            SampleTab1()
+        with vuetify.VWindowItem(value=3):
+            SampleTab2()
     ```
-    This is the crucial step that "wires up" the ViewModel to the Trame binding, making it ready to interact with a Trame-based View in later episodes.
-
 
 ## Running the application
 

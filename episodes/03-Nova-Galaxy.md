@@ -86,12 +86,13 @@ Let\'s create a `Fractal` class that uses `nova-galaxy` to run the `neutrons_fra
             data_store.persist()
             output = tool.run(data_store, params)
             output.get_dataset("output").download("image.png")
+
         ```
 
 
 **2. `main.py` - Calling the Model (`src/nova_tutorial/main.py`):**
 
-*   **Instantiate and Run**: In the `main()` function, we create an instance of `FractalViewModel` and call the `run_fractal_tool()` method, wrapped in a `try...except` block for basic error handling:
+*   **Instantiate and Run**: In the `main()` function, we create an instance of `Fractal` and call the `run_fractal_tool()` method, wrapped in a `try...except` block for basic error handling:
     ```python
     def main():
         fractal = Fractal()

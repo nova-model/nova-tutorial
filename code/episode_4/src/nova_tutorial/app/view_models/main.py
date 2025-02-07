@@ -13,7 +13,6 @@ class MainViewModel():
     def __init__(self, model: MainModel, binding: BindingInterface):
         self.model = model
 
-
         # here we create a bind that connects ViewModel with View. It returns a communicator object,
         # that allows to update View from ViewModel (by calling update_view).
         # self.model will be updated automatically on changes of connected fields in View,
