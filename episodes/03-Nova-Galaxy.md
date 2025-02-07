@@ -53,9 +53,9 @@ The basic workflow for running a tool with `nova-galaxy` involves these steps:
 
 Let\'s create a `Fractal` class that uses `nova-galaxy` to run the `neutrons_fractal` tool on NDIP. You can find the complete code for this episode in the `code/episode_3` directory. 
 
-**1. `Fractal` Class (`src/nova_tutorial/models/fractal.py`):**
+**1. `Fractal` Class (`src/nova_tutorial/app/models/fractal.py`):**
 
-To get started, let\'s create the Fractal class. Create a new file at `src/nova_tutorial/models/fractal.py`. Add the following pieces of code to the newly created file. 
+To get started, let\'s create the Fractal class. Create an empty file at `src/nova_tutorial/app/models/fractal.py`. Add the following pieces of code to the newly created file. 
 
 *   **Imports**:  The `Fractal Class` will start by importing the necessary classes from `nova-galaxy`:
 
@@ -63,7 +63,7 @@ To get started, let\'s create the Fractal class. Create a new file at `src/nova_
     from nova.galaxy import Connection, Parameters, Tool
     ```
 
-*   **`__init__` method**:  In the `__init__` method, we instantiate the `Fractal` class. Note how we retrieve `GALAXY_URL` and `GALAXY_API_KEY` from environment variables. This establishes how we will connect to NDIP:
+*   **`__init__` method**:  In the `__init__` method, we initialize the `Fractal` class. Note how we retrieve `GALAXY_URL` and `GALAXY_API_KEY` from environment variables. This establishes how we will connect to NDIP:
 
     ```python
     class Fractal:
@@ -90,13 +90,14 @@ To get started, let\'s create the Fractal class. Create a new file at `src/nova_
         with conn.connect() as galaxy_connection:
             data_store = galaxy_connection.create_data_store(name="fractal_store")
             data_store.persist()
+            print("Executing fractal tool. This might take a few minutes.")
             output = tool.run(data_store, params)
             output.get_dataset("output").download("image.png")
 
         ```
 
 
-**2. `main.py` - Calling the Model (`src/nova_tutorial/main.py`):**
+**2. `main.py` - Calling the Model (`src/nova_tutorial/app/main.py`):**
 
 We are now going to modify the existing `main.py` file. Change the main method to match the code below.
 

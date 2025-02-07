@@ -26,6 +26,7 @@ class Fractal:
         with conn.connect() as galaxy_connection:
             data_store = galaxy_connection.create_data_store(name="fractal_store")
             data_store.persist()
+            print("Executing fractal tool. This might take a few minutes.")
             output = tool.run(data_store, params)
             output.get_dataset("output").download("image.png")
 
