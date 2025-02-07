@@ -254,7 +254,7 @@ PyVista contains built-in Trame support, but we still need to install the Trame 
 
 Now we can set up our view.
 
-**11. `PyVistaView` View Class (`src/nova_tutorial/views/pyvista.py`):**
+**6. `PyVistaView` View Class (`src/nova_tutorial/views/pyvista.py`):**
 
 *   **Imports:**  `plotter_ui` contains the Trame widget for PyVista.
 
@@ -269,7 +269,7 @@ from nova.trame.view.layouts import GridLayout, HBoxLayout
 from pyvista.trame.ui import plotter_ui
 from trame.widgets import vuetify3 as vuetify
 
-from nova_tutorial.view_models.visualization import VisualizationViewModel
+from ..view_models.main import MainViewModel
 ```
 
 *   **Class Definition:**  The `Plotter` object is PyVista\'s main entry point. It will allow you to add meshes and volumes with the properties you\'ve specified.
@@ -278,7 +278,7 @@ from nova_tutorial.view_models.visualization import VisualizationViewModel
 class PyVistaView:
     """View class for the 3d plot using PyVista."""
 
-    def __init__(self, view_model: VisualizationViewModel) -> None:
+    def __init__(self, view_model: MainViewModel) -> None:
         self.view_model = view_model
         self.view_model.pyvista_config_bind.connect("pyvista_config")
 
@@ -309,10 +309,10 @@ class PyVistaView:
 
     def update(self, _: Any = None) -> None:
         if self.plotter:
-            self.view_model.render_pyvista(self.plotter)
+            self.view_model.update_pyvista_volume(self.plotter)
 ```
 
-**12. `PyVistaConfig` Model Class (`src/nova_tutorial/models/pyvista.py`):**
+**7. `PyVistaConfig` Model Class (`src/nova_tutorial/models/pyvista.py`):**
 
 *   **Imports:**  `download_knee_full` yields a 3D dataset that is suitable for volume rendering. You can find more datasets in PyVista\'s [Dataset Gallery](https://docs.pyvista.org/api/examples/dataset_gallery).
 
@@ -355,6 +355,72 @@ class PyVistaConfig(BaseModel):
 PyVista\'s volume rendering engine isn\'t currently suitable for large data. If you find yourself running into performance issues, then you should likely switch over to using VTK directly.
 
 :::::::::::::::::::::::::::::::::::
+
+*   **Binding the new view and model**:  Now, we need to add `PyVistaView` to our view and bind `PyVistaConfig` to it in the view model.
+
+This is very similar to the Plotly setup.
+
+**8. `src/nova_tutorial/views/tab_content_panel.py` (Modify):**
+
+*   **Import `PlotlyView`**
+
+```python
+from ..views.pyvista import PyVistaView
+```
+
+*   **Update `create_ui`**
+
+```python
+    def create_ui(self) -> None:
+        with vuetify.VForm(ref="form") as self.f:
+            with vuetify.VContainer(classes="pa-0", fluid=True):
+                with vuetify.VCard():
+                    with vuetify.VWindow(v_model="active_tab"):
+                        with vuetify.VWindowItem(value=1):
+                            PlotlyView(self.view_model)
+                        with vuetify.VWindowItem(value=2):
+                            PyVistaView(self.view_model)
+```
+
+**9. `src/nova_tutorial/views/tabs_panel.py` (Modify):**
+
+```python
+    def create_ui(self) -> None:
+        with vuetify.VTabs(v_model=("active_tab", 0), classes="pl-5"):
+            vuetify.VTab("Plotly", value=1)
+            vuetify.VTab("PyVista", value=2)
+```
+
+**10. `src/nova_tutorial/view_models/main.py` (Modify):**
+
+*   **Import `PlotlyConfig`**
+
+```python
+from pyvista import Plotter  # just for typing
+from ..models.pyvista import PyVistaConfig
+```
+
+*   **Update `__init__`**
+
+```python
+    def __init__(self, model: MainModel, binding: BindingInterface):
+        self.model = model
+        self.plotly_config = PlotlyConfig()
+        self.pyvista_config = PyVistaConfig()
+
+        self.plotly_config_bind = binding.new_bind(
+            linked_object=self.plotly_config, callback_after_update=self.update_plotly_figure
+        )
+        self.plotly_figure_bind = binding.new_bind()
+        self.pyvista_figure_bind = binding.new_bind(linked_object=self.pyvista_config)
+```
+
+*   **Add callback method:**  This method is called directly from the view due to the need to reference the Plotter object that is created in the view.
+
+```python
+    def update_pyvista_volume(self, plotter: Plotter) -> None:
+        self.pyvista_config.render(plotter)
+```
 
 Now, if you run the application you should see the following in the PyVista tab:
 

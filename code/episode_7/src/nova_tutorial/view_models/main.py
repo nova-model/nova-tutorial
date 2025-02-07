@@ -3,9 +3,11 @@
 from typing import Any, Dict
 
 from nova.mvvm.interface import BindingInterface
+from pyvista import Plotter  # just for typing
 
 from ..models.main_model import MainModel
 from ..models.plotly import PlotlyConfig
+from ..models.pyvista import PyVistaConfig
 
 
 class MainViewModel:
@@ -14,11 +16,13 @@ class MainViewModel:
     def __init__(self, model: MainModel, binding: BindingInterface):
         self.model = model
         self.plotly_config = PlotlyConfig()
+        self.pyvista_config = PyVistaConfig()
 
         self.plotly_config_bind = binding.new_bind(
             linked_object=self.plotly_config, callback_after_update=self.update_plotly_figure
         )
         self.plotly_figure_bind = binding.new_bind()
+        self.pyvista_config_bind = binding.new_bind(linked_object=self.pyvista_config)
 
         # here we create a bind that connects ViewModel with View. It returns a communicator object,
         # that allows to update View from ViewModel (by calling update_view).
@@ -39,3 +43,6 @@ class MainViewModel:
     def update_plotly_figure(self, _: Any = None) -> None:
         self.plotly_config_bind.update_in_view(self.plotly_config)
         self.plotly_figure_bind.update_in_view(self.plotly_config.get_figure())
+
+    def update_pyvista_volume(self, plotter: Plotter) -> None:
+        self.pyvista_config.render(plotter)
