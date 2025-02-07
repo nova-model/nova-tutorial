@@ -6,7 +6,6 @@ from pydantic import BaseModel, Field, computed_field
 
 IRIS_DATA = iris()
 
-
 class PlotlyConfig(BaseModel):
     """Configuration class for the Plotly example."""
 
