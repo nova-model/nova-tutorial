@@ -155,9 +155,17 @@ class PlotlyConfig(BaseModel):
     def get_figure(self) -> go.Figure:
         match self.plot_type:
             case "heatmap":
-                plot_data = go.Heatmap(x=IRIS_DATA[self.x_axis], y=IRIS_DATA[self.y_axis], z=IRIS_DATA[self.z_axis])
+                plot_data = go.Heatmap(
+                    x=IRIS_DATA[self.x_axis].tolist(),
+                    y=IRIS_DATA[self.y_axis].tolist(),
+                    z=IRIS_DATA[self.z_axis].tolist()
+                )
             case "scatter":
-                plot_data = go.Scatter(x=IRIS_DATA[self.x_axis], y=IRIS_DATA[self.y_axis], mode="markers")
+                plot_data = go.Scatter(
+                    x=IRIS_DATA[self.x_axis].tolist(),
+                    y=IRIS_DATA[self.y_axis].tolist(),
+                    mode="markers"
+                )
             case _:
                 raise ValueError(f"Invalid plot type: {self.plot_type}")
 
