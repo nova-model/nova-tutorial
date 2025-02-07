@@ -57,20 +57,13 @@ Detailed documentation on creating tool XML files is available on the Calvera do
 
 ### How to get a new tool on NDIP
 
-After creating your tool\'s XML file, it needs to be added to the NDIP platform. For testing your tool on the platform, it should be uploaded to the *prototype* branch of the GitLab repository linked above. An automated CI job will push your tool to the calvera-test instance. Test your application via the web browser interface. After you\'ve verified that your tool is performing as expected, submit a merge request to the repository\'s *dev* branch and engage with our team. When first adding a tool to the platform, Calvera admins will need to configure Calvera to use the tool.
-
-Create an issue in the [galaxy tools](https://code.ornl.gov/ndip/galaxy-tools/-/issues/new) repository providing the following information:
-The name of the XML file you've created (see more about XML files here)
-The tool ID (i.e. neutrons_my_new_tool)
-The section name where your tool should appear in the tool panel
-Whether the tool will need a GPU
-Additional developers who will be working on the tool (if this is their first time contributing to this repository)
+After creating your tool\'s XML file, it needs to be added to the NDIP platform. For testing your tool on the platform, it should be added to the *prototype* branch of the GitLab repository linked above in a repository folder `tools/neutrons`, or it's subfolder. With a git commit, an automated CI job will push your tool to the calvera-test instance. Test your application via the web browser interface. After you\'ve verified that your tool is performing as expected, submit a merge request to the repository\'s *dev* branch and engage with our team.
 
 The *dev* branch is used as a staging branch for tools that are ready to be put in front of users. Tools here will be added to the NDIP production instance, Calvera, during the next deployment.
 
 ### Continued Development
 
-The process for continuing development on an existing tool is very similar to getting a new tool on the platform except that the initial configuration does not need to be repeated. You will continue to develop on the *prototype* branch, where you can push and test changes. Once you are satisified with the new version of your tool, submit a merge request to update the the tool in the *dev* branch. Our team will review these changes, perform the merge, and the new version of the tool will be updated on the NDIP production instance, Calvera, during the next deployment.
+The process for continuing development on an existing tool is similar to getting a new tool on the platform. You will continue to develop on the *prototype* branch, where you can push and test changes. Once you are satisified with the new version of your tool, submit a merge request to update the tool in the *dev* branch. Our team will review these changes, perform the merge, and the new version of the tool will be updated on the NDIP production instance, Calvera, during the next deployment.
 
 ## Putting It All Together
 
