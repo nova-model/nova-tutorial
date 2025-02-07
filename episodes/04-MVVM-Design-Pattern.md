@@ -104,7 +104,7 @@ Benefits of Pydantic:
 
 ## Data Binding with NOVA
 
-The **`nova-trame`** library greatly simplifies the data synchronization between the View and Model-View for Trame, PyQt, and Panel. The library provides the classes TrameBinding, PyQtBinding, and PanelBinding to connect UI components to Model-View variables. Here, we'll focus on the TrameBinding but all three function similarly.
+The **`nova-mvvm`** library greatly simplifies the data synchronization between the View and Model-View for Trame, PyQt, and Panel. The library provides the classes TrameBinding, PyQtBinding, and PanelBinding to connect UI components to Model-View variables. Here, we'll focus on the TrameBinding but all three function similarly.
 
 ### How to use TrameBinding
 
