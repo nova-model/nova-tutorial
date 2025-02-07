@@ -412,7 +412,7 @@ from ..models.pyvista import PyVistaConfig
             linked_object=self.plotly_config, callback_after_update=self.update_plotly_figure
         )
         self.plotly_figure_bind = binding.new_bind()
-        self.pyvista_figure_bind = binding.new_bind(linked_object=self.pyvista_config)
+        self.pyvista_config_bind = binding.new_bind(linked_object=self.pyvista_config)
 ```
 
 *   **Add callback method:**  This method is called directly from the view due to the need to reference the Plotter object that is created in the view.
@@ -689,15 +689,15 @@ from ..models.vtk import VTKConfig
             linked_object=self.plotly_config, callback_after_update=self.update_plotly_figure
         )
         self.plotly_figure_bind = binding.new_bind()
-        self.pyvista_figure_bind = binding.new_bind(linked_object=self.pyvista_config)
+        self.pyvista_config_bind = binding.new_bind(linked_object=self.pyvista_config)
         # We didn't add any controls for the VTK rendering, so there's no need to create a data binding here.
 ```
 
 *   **Add method for retrieving the volume:**  This allows us to pass the volume to the vtkRenderer in the view.
 
 ```python
-    def get_vtk_volume(self) -> None:
-        self.vtk_config.get_volume()
+    def get_vtk_volume(self) -> vtkVolume:
+        return self.vtk_config.get_volume()
 ```
 
 Now, if you run the application you should see the following in the VTK tab:
