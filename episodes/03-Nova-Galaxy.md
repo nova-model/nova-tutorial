@@ -45,7 +45,7 @@ The basic workflow for running a tool with `nova-galaxy` involves these steps:
 3.  **Set Parameters**: Create a `Parameters` instance and add the necessary input parameters and their values for the tool.
 4.  **Run the Tool**: Use the `tool.run()` method to submit the job to NDIP. This typically involves creating a datastore to hold the job\'s input and output data.
 
-## Running the Fractal tool
+## Setting up the Fractal tool
 
 Let\'s create a `Fractal` class that uses `nova-galaxy` to run the `neutrons_fractal` tool on NDIP. You can find the complete code for this episode in the `code/episode_3` directory. Here, we will focus on the key code snippets and explain the important parts.
 
@@ -157,3 +157,9 @@ In both cases, an error is received from the ndip-galaxy library. When changing 
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
+
+:::::::::::::::::::::::::::::::::::::::: keypoints
+- Tools are run remotely on the NDIP platform
+- Nova-Galaxy is used to connect to NDIP and run tools
+- The fractal tool is started remotely and run on NDIP.
+::::::::::::::::::::::::::::::::::::::::::::::::::

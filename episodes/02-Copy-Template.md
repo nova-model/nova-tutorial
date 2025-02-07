@@ -31,23 +31,6 @@ The setup section detailed the prerequisites required for the tutorial. One of t
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Install Project Dependencies
-
-1.  **Clone the Template:**  Follow the instructions in the "Getting Started with a Template Application" episode to clone the NOVA template using `copier`.  This will create a new directory (e.g., `nova_tutorial`) containing your project files.
-2.  **Navigate to the Project Directory:**  Open your terminal and navigate to the newly created project directory:
-
-    ```bash
-    cd nova_tutorial
-    ```
-
-3.  **Install Dependencies with Poetry:**  Use Poetry to install the project dependencies defined in the `pyproject.toml` file:
-
-    ```bash
-    poetry install
-    ```
-
-    This command will create a virtual environment for your project and install all required libraries, including the NOVA libraries and Trame.
-
 ## Cloning the Template
 
 To clone the template application, run the following command:
@@ -91,6 +74,24 @@ This command will download the template to a directory called `nova_tutorial`. C
     > Enter `no`
 
 After answering these questions, `copier` will clone the template repository and create your project within the `nova_tutorial` directory.
+
+
+## Install Project Dependencies
+
+1.  **Clone the Template:**  Follow the instructions in the "Getting Started with a Template Application" episode to clone the NOVA template using `copier`.  This will create a new directory (e.g., `nova_tutorial`) containing your project files.
+2.  **Navigate to the Project Directory:**  Open your terminal and navigate to the newly created project directory:
+
+    ```bash
+    cd nova_tutorial
+    ```
+
+3.  **Install Dependencies with Poetry:**  Use Poetry to install the project dependencies defined in the `pyproject.toml` file:
+
+    ```bash
+    poetry install
+    ```
+
+    This command will create a virtual environment for your project and install all required libraries, including the NOVA libraries and Trame.
 
 ## Project Structure
 
@@ -169,3 +170,10 @@ The template includes a basic GitLab CI configuration file (`.gitlab-ci.yml`).  
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
+
+:::::::::::::::::::::::::::::::::::::::: keypoints
+- Nova provides a template application to help get started developing your application.
+- Use the copier tool to set clone the template application.
+- Poetry is a project management tool used to install dependencies and manage virtual environments.
+- The template application includes everything you need to get started such as basic CI, dockerfile, and tests.
+::::::::::::::::::::::::::::::::::::::::::::::::::

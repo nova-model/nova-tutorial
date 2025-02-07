@@ -45,7 +45,7 @@ The MVVM pattern consists of three core components:
     *   Data validation (ensuring the data is in a valid state).
     *   Business rules (the logic that governs how the data is manipulated and used).
 
-The Model is *agnostic* to the UI. It doesn\'t know anything about how the data will be displayed or how the user will interact with it. It simply provides the data and the means to manipulate it.
+The Model is agnostic to the UI. It doesn\'t know anything about how the data will be displayed or how the user will interact with it. It simply provides the data and the means to manipulate it.
 
     *In the context of our NOVA tutorial, the Model will often include the logic for interacting with the NDIP platform via `nova-galaxy`.*
 
@@ -56,7 +56,7 @@ The Model is *agnostic* to the UI. It doesn\'t know anything about how the data 
 
     The View is *passive*. It doesn\'t contain any business logic or data manipulation code. It simply displays the data provided to it and relays user actions to the ViewModel.
 
-    *In our NOVA tutorial, the View will be built using Trame and Vuetify components, leveraging the styling and structure provided by `nova-trame`.*
+    In our NOVA tutorial, the View will be built using Trame and Vuetify components, leveraging the styling and structure provided by `nova-trame`.
 
 *   **ViewModel:** The ViewModel acts as an *intermediary* between the Model and the View. It\'s responsible for:
     *   Preparing data from the Model for display in the View. This might involve formatting the data, combining data from multiple sources, or creating derived data.
@@ -268,3 +268,13 @@ You should see `Fractal tool finished successfully.` printed to the console, alt
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
+
+:::::::::::::::::::::::::::::::::::::::: keypoints
+- MVVM stands for Model, View, View-Model.
+- MVVM is a design pattern which provides best practices for UI development.
+- MVVM helps developers create maintainable, testable, and reusable code.
+- The foundation of MVVM is a separation of logic between the UI (view), and the business logic (model) of the application.
+- The View-Model component serves as an intermediary between the Model and the View.
+- Pydantic is frequently used to validate inputs into our models.
+- Bindings are used to synchronize data between the view and view-model.
+::::::::::::::::::::::::::::::::::::::::::::::::::

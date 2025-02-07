@@ -600,3 +600,7 @@ We didn\'t look at `VTKConfig.init_lut` or `VTKConfig.init_pwf` during the tutor
 *   **Trame/PyVista Integration Tutorial**: https://tutorial.pyvista.org/tutorial/09_trame/index.html
 *   **VTK Python Documentation**: https://docs.vtk.org/en/latest/api/python.html
 *   **Trame Tutorial**: https://kitware.github.io/trame/guide/tutorial/
+
+:::::::::::::::::::::::::::::::::::::::: keypoints
+
+::::::::::::::::::::::::::::::::::::::::::::::::::

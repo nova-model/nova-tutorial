@@ -297,3 +297,9 @@ Experiment with customizing the appearance of the Vuetify components using the v
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
 *   **Vuetify Documentation**: https://vuetifyjs.com/en/
 ```
+
+:::::::::::::::::::::::::::::::::::::::: keypoints
+- Trame is a powerful python UI framework which lets users create a UI declaratively.
+- Nova-Trame is a library which eases the development of UI applications for NOVA.
+- Nova-Trame provides key components, such as, InputField and GridLayout to greatly simplify the creation of a functional UI.
+::::::::::::::::::::::::::::::::::::::::::::::::::

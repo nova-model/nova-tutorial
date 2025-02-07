@@ -101,3 +101,9 @@ This structure ensures that each code example is isolated and runnable, making i
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
+
+:::::::::::::::::::::::::::::::::::::::: keypoints
+- NDIP is a workflow management system used for analsyis and interpretation of neutron data.
+- NDIP has a range of services and tools to enable.
+- NOVA is a set of libraries that provide a framework to simplify the development of applications for NDIP
+::::::::::::::::::::::::::::::::::::::::::::::::::

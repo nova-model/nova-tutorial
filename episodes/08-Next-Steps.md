@@ -94,3 +94,9 @@ After performing these steps, your application will be available to NDIP users.
 
 By following the steps outlined in this section, you can deploy your own applications to the NDIP platform and make them available to the wider scientific community.
 ```
+
+:::::::::::::::::::::::::::::::::::::::: keypoints
+- Tools must be containerized to run on NDIP.
+- NDIP requires tools to have an XML file which defines input, outputs, tool id, and the container location.
+- Tool XML files must be added to the Galaxy Tools Repository.
+::::::::::::::::::::::::::::::::::::::::::::::::::
