@@ -8,7 +8,7 @@
 # lc: Library Carpentry
 # cp: Carpentries (to use for instructor training for instance)
 # incubator: The Carpentries Incubator
-# 
+#
 # This option supports custom types so lessons can be branded
 # and themed with your own logo and alt-text (see `carpentry_description`)
 # See https://carpentries.github.io/sandpaper-docs/editing.html#adding-a-custom-logo
@@ -43,28 +43,26 @@ branch: 'main'
 contact: 'team@carpentries.org' # FIXME
 
 # Order of episodes in your lesson
-episodes: 
+episodes:
 - 01-Introduction.md
 - 02-Copy-Template.md
 - 03-Nova-Galaxy.md
-- 04-MVVM-Deisgn-Pattern.md
+- 04-MVVM-Design-Pattern.md
 - 05-Working-with-Trame.md
 - 06-Advanced-Data-Modeling.md
 - 07-Advanced-Visualizations.md
 - 08-Next-Steps.md
 
 # Information for Learners
-learners: 
+learners:
 
 # Information for Instructors
-instructors: 
+instructors:
 
 # Learner Profiles
-profiles: 
+profiles:
 
 # Customisation ---------------------------------------------
 #
 # This space below is where custom yaml items (e.g. pinning
 # sandpaper and varnish versions) should live
-
-
