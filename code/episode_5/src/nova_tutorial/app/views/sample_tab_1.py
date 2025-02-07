@@ -1,6 +1,6 @@
 """Module for the Sample Tab 1."""
 
-from nova.trame.view.components import InputField
+from nova.trame.view.components import InputField, RemoteFileInput
 from nova.trame.view import layouts
 from trame.widgets import vuetify3 as vuetify
 
@@ -18,3 +18,4 @@ class SampleTab1:
                 InputField(v_model="config.lastName", label="Last Name")
             vuetify.VCheckbox(label="Remember me")
             vuetify.VSwitch(label="Enable Notifications")
+            RemoteFileInput(v_model="config.file", base_paths=["/SNS"])
