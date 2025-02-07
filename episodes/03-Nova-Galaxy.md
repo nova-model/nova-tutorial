@@ -71,20 +71,21 @@ Let\'s create a `Fractal` class that uses `nova-galaxy` to run the `neutrons_fra
 
     *   **Instantiate `Nova`, `Tool`, and `Parameters`**: We create instances of the `Nova`, `Tool`, and `Parameters` classes:
         ```python
-            nova = Nova(galaxy_url=self.galaxy_url, galaxy_key=self.galaxy_key)
-            tool = Tool(id="neutrons_fractal")
-            params = Parameters()
-            params.add_input(name="fractal_type", value=self.fractal_type)
+        conn = Connection(galaxy_url=self.galaxy_url, galaxy_key=self.galaxy_key)
+        tool = Tool(id="neutrons_fractal")
+        params = Parameters()
+        params.add_input(name="option", value=self.fractal_type)
 
         ```
         Note that we create a `Tool` object with the `id="neutrons_fractal"`. This tells `nova-galaxy` which NDIP tool we want to run. The obvious question at this point is how do we know the id of the tool and what parameters it expects? We can look at the tool\'s launch page in calvera for some hints but ultimately we have to look at the tool\'s [xml file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads). 
 
     *   **Connect and Run the Tool**:  The `with nova.connect() as galaxy_connection:` block establishes a connection to NDIP and ensures proper handling of the connection:
         ```python
-            with nova.connect() as galaxy_connection:
-                data_store = galaxy_connection.create_data_store(name="fractal_store")
-                tool.run(data_store, params)
-        
+        with conn.connect() as galaxy_connection:
+            data_store = galaxy_connection.create_data_store(name="fractal_store")
+            data_store.persist()
+            output = tool.run(data_store, params)
+            output.get_dataset("output").download("image.png")
         ```
 
 

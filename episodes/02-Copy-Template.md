@@ -75,6 +75,11 @@ This command will download the template to a directory called `nova_tutorial`. C
 
 After answering these questions, `copier` will clone the template repository and create your project within the `nova_tutorial` directory.
 
+::::::::::::::::::::::::::::::::::::::::: callout
+
+If your application requires Mantid, you can enter Yes and Mantid will be added to your dockerfile. However, for local development you will still need to properly set up your conda environment.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Install Project Dependencies
 
