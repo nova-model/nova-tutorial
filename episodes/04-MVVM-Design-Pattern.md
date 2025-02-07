@@ -102,6 +102,43 @@ Benefits of Pydantic:
 *   **Serialization and Deserialization:** Easily serializes data to and from standard formats like JSON.
 *   **Improved Code Readability:**  Makes code easier to understand and maintain by explicitly defining data models.
 
+## Data Binding with NOVA
+
+The **`nova-trame`** library greatly simplifies the data synchronization between the View and Model-View for Trame, PyQt, and Panel. The library provides the classes TrameBinding, PyQtBinding, and PanelBinding to connect UI components to Model-View variables. Here, we'll focus on the TrameBinding but all three function similarly.
+
+### How to use TrameBinding
+
+The initial step is to great a BindingInterface. The BindingInterface serves as the foundational layer for how connections are made between variables in the ViewModel and GUI elements in the View. Once a Trame application has started, the BindingInterface can be created with:
+
+``` python
+bindingInterface = TrameBinding(self.server.state) # server is the Trame Server
+```
+
+After the bindingInterface has been created, variables must be added to the interface via the interface's new_bind method. The `new_bind` method expects the variable to link, and an optional callback method. The callback method is useful if there are actions to be performed after updates to the UI. In the code snippet below, the `model` variable is added to the binding interface. This `new_bind` method returns a `Communicator`. The `Communicator` is an object which manages the binding and will be used to propgate updates. 
+
+``` python
+# Adding a binding to the Binding Interface 
+self.config_bind = binding.new_bind(self.model)
+```
+
+```python
+# Updating the UI connected to a binding.
+def update_view(self) -> None:
+    self.config_bind.update_in_view(self.model)
+```
+
+We've seen how to create a BindingInterface, add a new binding, and how to perform updates. We also need to connect our view component to the Communicator. The Communicator class has a `connect` method. This method accepts a connector object. In the example below, we connect to the `config_bind` communicator object that was created in our ViewModel. We're passing in a string as our connector object, but we could pass in a callable object instead.
+
+```python
+self.view_model.config_bind.connect("config")
+```
+
+Finally, we connect a GUI element to the connector object. The template application uses the *`nova-trame`* library which we'll work with in the next episode. For now, just note that InputField is a UI element that is being connected to the binding in our ViewModel
+
+```python
+InputField(v_model="config.username")
+```
+
 ## Implementing MVVM with `nova-mvvm` and Pydantic - Key Code Snippets
 
 Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate Pydantic for data validation in our `FractalViewModel`. You can find the complete code for this episode in the `code/episode_4` directory. Here, we will focus on the key code snippets and explain the important parts.
