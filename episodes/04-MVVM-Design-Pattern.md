@@ -61,11 +61,11 @@ The Model is agnostic to the UI. It doesn\'t know anything about how the data wi
     *   Handling user actions from the View. This might involve validating user input, updating the Model, or triggering other actions in the application.
     *   Exposing data and commands to the View through *data binding*.
 
-    The ViewModel knows about the View and the data that the View needs, but it doesn\'t know about the specific UI elements that are used to display the data. It also orchestrates the interaction between the View and the Model.
+    The ViewModel knows about the View and the data that the View needs, but it doesn\'t know about the specific UI componentss that are used to display the data. It also orchestrates the interaction between the View and the Model.
 
     *The ViewModel is where we\'ll use `nova-mvvm` to create bindings between the ViewModel and the View, enabling the reactive updates.*
 
-## Why Use MVVM? (Benefits)
+## Why Use MVVM?
 
 The MVVM pattern provides several benefits:
 
@@ -79,7 +79,7 @@ The MVVM pattern provides several benefits:
 
 *Data binding* is a mechanism that allows the View and the ViewModel to automatically synchronize their data. When the data in the ViewModel changes, the View is automatically updated to reflect the changes. Conversely, when the user interacts with the View (e.g., by entering text in a field), the data in the ViewModel is automatically updated.
 
-This data binding is what makes MVVM so powerful and allows for reactive UIs. Instead of manually writing code to update the UI every time the data changes, you simply bind the UI elements to the data in the ViewModel, and the updates happen automatically.
+This data binding is what makes MVVM so powerful and allows for reactive UIs. Instead of manually writing code to update the UI every time the data changes, you simply bind the UI componentss to the data in the ViewModel, and the updates happen automatically.
 
 ## How NOVA Simplifies MVVM
 
@@ -102,22 +102,26 @@ Benefits of Pydantic:
 
 ## Data Binding with NOVA
 
-The **`nova-mvvm`** library greatly simplifies the data synchronization between the View and Model-View for Trame, PyQt, and Panel. The library provides the classes TrameBinding, PyQtBinding, and PanelBinding to connect UI components to Model-View variables. Here, we'll focus on the TrameBinding but all three function similarly.
+The **`nova-mvvm`** library greatly simplifies the data synchronization between the componentes of an MVVM applicationm and provides support for user interfaces utilizing the Trame, PyQt, and Panel graphical frameworks. The library provides several predefined classes including TrameBinding, PyQtBinding, and PanelBinding to connect UI components to model variables. Here, we'll focus on the TrameBinding class, but all three function similarly.
 
 ### How to use TrameBinding
 
-The initial step is to great a BindingInterface. The BindingInterface serves as the foundational layer for how connections are made between variables in the ViewModel and GUI elements in the View. Once a Trame application has started, the BindingInterface can be created with:
+!!!! For each code example, which class are you referring to? Is it View, ViewModel, Model, etc? !!!!
+
+The initial step is to great a BindingInterface. A BindingInterface serves as the foundational layer for how connections are made between variables in the ViewModel and UI components in the View. Once a Trame application has started, the BindingInterface can be created with:
 
 ``` python
 bindingInterface = TrameBinding(self.server.state) # server is the Trame Server
 ```
 
-After the bindingInterface has been created, variables must be added to the interface via the interface\'s new_bind method. The `new_bind` method expects the variable to link, and an optional callback method. The callback method is useful if there are actions to be performed after updates to the UI. In the code snippet below, the `model` variable is added to the binding interface. This `new_bind` method returns a `Communicator`. The `Communicator` is an object which manages the binding and will be used to propgate updates.
+After a BindingInterface has been created, variables must be added to the interface via the interface\'s `new_bind` method. The `new_bind` method expects a variable that will be linked with the UI component, and an optional callback method. The callback method is useful if there are actions to be performed after updates to the UI. In the code snippet below, the `model` variable is added to the binding interface. This `new_bind` method returns a `Communicator`. The `Communicator` is an object which manages the binding and will be used to propgate updates.
 
 ``` python
-# Adding a binding to the Binding Interface
+# Adding a binding to the Binding Interface, returns a Communicator
 self.config_bind = binding.new_bind(self.model)
 ```
+
+!!!! There seems to be text missing here !!!!
 
 ```python
 # Updating the UI connected to a binding.
@@ -125,13 +129,13 @@ def update_view(self) -> None:
     self.config_bind.update_in_view(self.model)
 ```
 
-We\'ve seen how to create a BindingInterface, add a new binding, and how to perform updates. We also need to connect our view component to the Communicator. The Communicator class has a `connect` method. This method accepts a connector object. In the example below, we connect to the `config_bind` communicator object that was created in our ViewModel. We\'re passing in a string as our connector object, but we could pass in a callable object instead.
+We\'ve seen how to create a BindingInterface, add a new binding, and how to perform updates. We also need to connect our view component to the Communicator. The Communicator class has a `connect` method. This method accepts a connector object. In the example below, we connect to the `config_bind` Communicator object that was created in our ViewModel. We\'re passing in a string as our connector object, but we could pass in a callable object instead. !!!!!!THIS IS CONFUSING TO ME. WHERE DOES THIS CONFIG STRING COME FROM?!!!!! 
 
 ```python
 self.view_model.config_bind.connect("config")
 ```
 
-Finally, we connect a GUI element to the connector object. The template application uses the *`nova-trame`* library which we\'ll work with in the next episode. For now, just note that InputField is a UI element that is being connected to the binding in our ViewModel
+Finally, we connect a UI component to the connector object. The template application uses the *`nova-trame`* library which we\'ll work with in the next episode. For now, just note that InputField is a UI components that is being connected to the binding in our ViewModel
 
 ```python
 InputField(v_model="config.username")
@@ -151,9 +155,9 @@ Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate P
         self.update_view()
 
     ```
-**2. Updating our Fractal Class for pydantaic and MVVM (`src/nova/tutorial/models/fractal.py**
+**2. Updating our Fractal Class for pydantaic and MVVM (`src/nova/tutorial/models/fractal.py`):**
 
-*   **Adding new imports**: We need to add some imports for pydantic and working with base64 encondings to deal with the image.
+*   **Adding new imports**: We need to add some imports for pydantic and working with base64 encodings to deal with the image.
 
     ```python
     from base64 import b64encode
@@ -230,6 +234,8 @@ Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate P
 
 ## Running the application
 
+!!!! You need more explanation of why you added view related code but here you say we have not created a UI yet. !!!!
+
 To run the code, use the following command in the top level of your `nova_tutorial` project:
 
 ```bash
@@ -237,6 +243,8 @@ poetry run app
 ```
 
 You should see `Fractal tool finished successfully.` printed to the console, although we have not created a UI yet.
+
+!!!! Formatting messed up below !!!!
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Trigger Pydantic Validation Error (Programmatic)**
