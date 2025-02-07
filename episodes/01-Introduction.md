@@ -25,11 +25,11 @@ exercises: 0
 
 # 1. Introduction to NOVA and NDIP
 
-Welcome to the NOVA tutorial! This guide will walk you through the process of building interactive tools for **neutron analysis** using the NOVA platform. You will learn how to create a web application that leverages the NOVA libraries to simplify interaction with the Neutron Data Interpretation Platform (NDIP).
+Welcome to the NOVA tutorial! This guide will walk you through the process of building interactive tools for the analysis and visualization of neutron scattering data using the NOVA platform. You will learn how to create a web application that leverages the NOVA libraries to simplify interaction with the Neutron Data Interpretation Platform (NDIP).
 
 ## What is NDIP?
 
-The Neutron Data Interpretation Platform (NDIP) is a workflow management system built on top of the Galaxy platform. It is designed to enable modular scientific workflows for the analysis and interpretation of **neutron data**. NDIP provides a range of services including automated data ingestion, job submission, and computational resource management, and visualization and analysis tools. The analysis of neutron data often involves complex, multi-step workflows that include data reduction, correction, analysis algorithms, and visualization. NDIP streamlines these processes by providing a platform to manage and automate these workflows, ensuring reproducibility and efficiency.
+NDIP is a workflow management system built on top of the Galaxy platform. It is designed to enable modular scientific workflows for the analysis and interpretation of **neutron scattering data**. NDIP provides a range of services including automated data ingestion, job submission, computational resource management, and visualization and analysis tools. The analysis of neutron scattering data often involves complex, multi-step workflows that include data reduction, correction, analysis algorithms, and visualization. NDIP streamlines these processes by providing a platform to manage and automate these workflows, ensuring reproducibility and efficiency.
 
 ## What is NOVA?
 
@@ -37,7 +37,7 @@ NOVA is a framework that aims to simplify the development of applications that i
 
 *   **`nova-galaxy`**: This library simplifies interaction with the NDIP platform\'s APIs. It allows developers to easily connect to NDIP, **submit jobs, handle parameters, and monitor job progress.**
 
-*   **`nova-trame`**: This library facilitates the creation of interactive user interfaces using Trame. Trame is a powerful Python framework for building web-based UIs and visualizations. `nova-trame` provides a consistent look and feel for NOVA applications by simplifying interactions with Trame components (such as Vuetify).
+*   **`nova-trame`**: This library facilitates the creation of interactive user interfaces using Trame, a powerful Python framework for building web-based UIs and visualizations. `nova-trame` provides a consistent look and feel for NOVA applications by simplifying interactions with Trame components (such as Vuetify).
 
 *   **`nova-mvvm`**: This library simplifies implementation of the Model-View-ViewModel (MVVM) design pattern. By utilizing this library, users can create structured applications that are more testable and easier to maintain.
 
@@ -68,10 +68,13 @@ In this tutorial, you will learn how to use these three core NOVA libraries to b
 *   Connect to NDIP.
 *   Reference job definitions from tool XML files.
 *   Set parameters for those tools.
-*   Submit jobs to NDIP.
-*   Monitor the progress of your submitted jobs.
+*   Run the tools using the supplied paramters.
+*   Monitor the progress of the running tools.
+*   Obtain output from the tool when it completes.
+*   Create user interfaces to enable access to NDIP tools
+*   Add visualizations to the user interface
 
-We\'ll be using example tools from neutron scattering as a demonstration for this tutorial, however, the lessons learned here can be applied to a wide variety of neutron analysis applications. This hands-on tutorial will guide you through each step of the process, empowering you to build your own interactive tools for neutron data analysis and management.
+We\'ll be using example tools as a demonstration for this tutorial, however, the lessons learned here can be applied to a wide variety of neutron scattering data analysis applications. This hands-on tutorial will guide you through each step of the process, empowering you to build your own interactive tools.
 
 ## Code Examples Directory
 
@@ -103,7 +106,7 @@ This structure ensures that each code example is isolated and runnable, making i
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
-- NDIP is a workflow management system used for analsyis and interpretation of neutron data.
-- NDIP has a range of services and tools to enable.
-- NOVA is a set of libraries that provide a framework to simplify the development of applications for NDIP
+- NDIP is a workflow management system used for analsyis and interpretation of neutron scattering data.
+- NDIP has a range of services and tools to enable the creation of complex workdlows for data analysis.
+- NOVA is a set of libraries that provide a framework to simplify the development of interactive applications for NDIP
 ::::::::::::::::::::::::::::::::::::::::::::::::::
