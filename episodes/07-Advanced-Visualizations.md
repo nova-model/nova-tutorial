@@ -33,6 +33,63 @@ In this section, we will look at a selection of the libraries that integrate wel
 
 The complete code for this episode is available in the `code/episode_7` directory. This code defines a Trame application that presents three views (one each for Plotly, PyVista, and VTK) that the user can choose between with a tab widget.
 
+## Setup
+
+Let's start by setting up a new application from the template.
+
+```bash
+copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git viz_tutorial
+cd viz_tutorial
+poetry install
+poetry run app
+```
+
+Since we've already discussed the data bindings, please copy `src/nova_tutorial/view_models/main.py`, `src/nova_tutorial/views/tabs_panel.py`, and `src/nova_tutorial/views/tab_content_panel.py` into your application. If you want to run the application now, you'll need to comment out the references to classes we'll be building below.
+
+We'll also need to stub out each of the classes we'll build so that the application can be run after each step.
+
+**1. `PlotlyView` (`src/nova_tutorial/views/plotly.py`):**
+
+```python
+class PlotlyView:
+    pass
+```
+
+**2. `PlotlyConfig` (`src/nova_tutorial/models/plotly.py`):**
+
+```python
+class PlotlyConfig:
+    pass
+```
+
+**3. `PyVistaView` (`src/nova_tutorial/views/pyvista.py`):**
+
+```python
+class PyVistaView:
+    pass
+```
+
+**4. `PyVistaConfig` (`src/nova_tutorial/models/pyvista.py`):**
+
+```python
+class PyVistaConfig:
+    pass
+```
+
+**5. `VTKView` (`src/nova_tutorial/views/vtk.py`):**
+
+```python
+class VTKView:
+    pass
+```
+
+**6. `VTKConfig` (`src/nova_tutorial/models/vtk.py`):**
+
+```python
+class VTKConfig:
+    pass
+```
+
 ## Plotly (2D)
 
 Trame provides a library called [trame-plotly](https://github.com/Kitware/trame-plotly) for connecting Trame and [Plotly](https://plotly.com/python/). You can install it with:
@@ -43,7 +100,7 @@ poetry add plotly trame-plotly
 
 Now, we can create a view that displays a Plotly figure.
 
-**1. `PlotlyView` View Class (`src/nova_tutorial/views/plotly.py`):**
+**7. `PlotlyView` View Class (`src/nova_tutorial/views/plotly.py`):**
 
 *   **Imports**:  Pay special attention to the plotly import. This module contains a Trame widget that will allow us to quickly add a Plotly chart to our view.
 
@@ -101,7 +158,7 @@ Now, we can create a view that displays a Plotly figure.
 
 As with our previous examples, there is a corresponding model.
 
-**2. `PlotlyConfig` Model Class (src/nova_tutorial/models/plotly.py):**
+**8. `PlotlyConfig` Model Class (src/nova_tutorial/models/plotly.py):**
 
 *   **Imports**:  The graph_objects module is how we will define the content for our chart. The iris module defines an example dataset.
 
@@ -156,7 +213,9 @@ As with our previous examples, there is a corresponding model.
             return figure
     ```
 
-As with our other examples, the view model connects these two classes together. You can review the view model code for this example in `src/nova_tutorial/view_models/visualization.py`.
+Now, if you run the application you should see the following in the Plotly tab:
+
+![Plotly chart](fig/plotly.png)
 
 ## PyVista (3D)
 
@@ -170,7 +229,7 @@ PyVista contains built-in Trame support, but we still need to install the Trame 
 
 Now we can set up our view.
 
-**3. `PyVistaView` View Class (`src/nova_tutorial/views/pyvista.py`):**
+**9. `PyVistaView` View Class (`src/nova_tutorial/views/pyvista.py`):**
 
 *   **Imports:**  `plotter_ui` contains the Trame widget for PyVista.
 
@@ -228,7 +287,7 @@ Now we can set up our view.
                 self.view_model.render_pyvista(self.plotter)
     ```
 
-**4. `PyVistaConfig` Model Class (`src/nova_tutorial/models/pyvista.py`):**
+**10. `PyVistaConfig` Model Class (`src/nova_tutorial/models/pyvista.py`):**
 
 *   **Imports:**  `download_knee_full` yields a 3D dataset that is suitable for volume rendering. You can find more datasets in PyVista\'s [Dataset Gallery](https://docs.pyvista.org/api/examples/dataset_gallery).
 
@@ -266,6 +325,16 @@ Now we can set up our view.
             plotter.view_isometric()
     ```
 
+::::::::::::::::::::::::::: callout
+
+PyVista's volume rendering engine isn't currently suitable for large data. If you find yourself running into performance issues, then you should likely switch over to using VTK directly.
+
+:::::::::::::::::::::::::::::::::::
+
+Now, if you run the application you should see the following in the PyVista tab:
+
+![PyVista chart](fig/pyvista.png)
+
 ## VTK (3D)
 
 If you have prior experience with VTK then you may prefer to work with it directly. You can get started with it by installing the Python VTK bindings and the Trame widget for VTK.
@@ -276,7 +345,7 @@ poetry add trame-vtk vtk
 
 Since we\'ve seen plenty of examples of UI controls at this point, we've omitted them for this example so that we can focus on the VTK boilerplate needed to get started.
 
-**5. `VTKView` View Class (`src/nova_tutorial/views/vtk.py`):**
+**11. `VTKView` View Class (`src/nova_tutorial/views/vtk.py`):**
 
 *   **Imports:**  The `vtkRenderingVolumeOpenGL2` import is necessary despite being unreferenced.
 
@@ -334,7 +403,7 @@ Since we\'ve seen plenty of examples of UI controls at this point, we've omitted
             self.render_window.Render()
     ```
 
-**6. `VTKConfig` Model Class (`src/nova_tutorial/models/vtk.py`):**
+**12. `VTKConfig` Model Class (`src/nova_tutorial/models/vtk.py`):**
 
 *   **Imports:**  We are only using PyVista to get an example dataset. There are two references to it as we use `KNEE_DATA` to compute min/max bounds for the data and `KNEE_DATAFILE` to pass the data file into a VTK reader. The FixedPointVolumeRayCastMapper is CPU-based, but other mappers are available if you need GPU support.
 
@@ -385,18 +454,22 @@ Since we\'ve seen plenty of examples of UI controls at this point, we've omitted
             return self.volume
     ```
 
+Now, if you run the application you should see the following in the VTK tab:
+
+![VTK chart](fig/vtk.png)
+
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Plotly Box Plot**
 Add a box plot to the available plot types. Hint: you shouldn\'t need to change anything in the view class to do this.
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  challenge
-**PyVista clim Control** 
+**PyVista clim Control**
 Add control(s) to the UI to control the `clim` argument for the `add_volume` method.
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  challenge
-**Investigate the lookup table and piecewise function** 
+**Investigate the lookup table and piecewise function**
 We didn\'t look at `VTKConfig.init_lut` or `VTKConfig.init_pwf` during the tutorial. Read through these methods and then trys manipulating the opacity of the rendering.
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 

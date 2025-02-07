@@ -15,9 +15,4 @@ class FractalTab:
             "Run Fractal",
             click=self.view_model.run_fractal # calls the run_fractal_tool method
         )
-        vuetify.VImg(
-            v_model="config.image_path",
-            src=self.view_model.image_path,
-            max_height="400",
-            max_width="400"
-        )
+        vuetify.VImg(src=("config.fractal.image_data",), height="400", width="400")

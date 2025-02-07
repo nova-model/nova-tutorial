@@ -8,7 +8,7 @@ from nova.trame.view.layouts import GridLayout, HBoxLayout
 from pyvista.trame.ui import plotter_ui
 from trame.widgets import vuetify3 as vuetify
 
-from nova_tutorial.view_models.visualization import VisualizationViewModel
+from nova_tutorial.view_models.main import VisualizationViewModel
 
 
 class PyVistaView:

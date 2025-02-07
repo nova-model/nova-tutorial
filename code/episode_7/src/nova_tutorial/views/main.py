@@ -7,7 +7,7 @@ from nova.trame import ThemedApp
 from trame.app import get_server
 from trame.widgets import vuetify3 as vuetify
 
-from nova_tutorial.view_models.visualization import VisualizationViewModel
+from nova_tutorial.view_models.main import VisualizationViewModel
 from nova_tutorial.views.plotly import PlotlyView
 from nova_tutorial.views.pyvista import PyVistaView
 from nova_tutorial.views.vtk import VTKView
