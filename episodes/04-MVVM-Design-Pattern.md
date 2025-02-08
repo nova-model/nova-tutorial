@@ -141,52 +141,68 @@ InputField(v_model="config.username")
 
 Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate Pydantic for data validation.
 
-**1. Adding Fractal to the ViewModel (`src/nova_tutorial/view_models/main.py`):**
+**1. Adding Fractal to the ViewModel (`src/nova_tutorial/app/view_models/main.py`):**
 
-*   **Running our Model**:  We start by adding a method to our ViewModel which will run the Fractal tool.
+*   **Running our Model**:  We start by adding a method to bottom of our ViewModel which will run the Fractal tool.
 
-    ```python
+```python
     def run_fractal(self) -> None:
         self.model.fractal.run_fractal_tool()
         self.update_view()
 
-    ```
-**2. Updating our Fractal Class for pydantaic and MVVM (`src/nova/tutorial/models/fractal.py**
+```
+**2. Updating our Fractal Class for pydantaic and MVVM (`src/nova_tutorial/app/models/fractal.py**
 
-*   **Adding new imports**: We need to add some imports for pydantic and working with base64 encondings to deal with the image.
+*   **Adding new imports**: We need to add some imports for pydantic and working with base64 encondings to deal with the image. Modify your import block to match below.
 
-    ```python
+```python
+    import os
     from base64 import b64encode
     from typing import Literal
 
     from pydantic import BaseModel, Field
-    ```
+    from nova.galaxy import Connection, Parameters, Tool
+```
 
-*   **Update class variables:** Now we'll update fractal_type to support pydantic and add an image variable to store the image. Modify the variable declarations to the following: 
+*   **Update class variables:** Now we'll update fractal_type and other class variables to support pydantic. We'll also add an image variable to store the image. Modify the variable declarations to the following: 
 
-    ```python
+```python
     class Fractal(BaseModel):
         fractal_type: Literal["mandelbrot", "julia", "random", "markus"] = Field(default="mandelbrot")
         galaxy_url: str = Field(default_factory=lambda: os.getenv("GALAXY_URL"), description="NDIP Galaxy URL")
         galaxy_key: str = Field(default_factory=lambda: os.getenv("GALAXY_API_KEY"), description="NDIP Galaxy API Key")
 
         image_data: str = Field(default="", description="Base64 encoded PNG")
-    ```
+```
 
 *   **Decode the image data:** Finally, we need to decode the image that we receive as the output from the tool execution. Modify the section where we execute the tool to the following:
 
-    ```python
+```python
             output.get_dataset("output").download("tmp.png")
 
             with open("tmp.png", "rb") as image_file:
                 self.image_data = f"data:image/png;base64,{b64encode(image_file.read()).decode()}"
-    ```
+```
 
-**3. Creating a FractalTab (`src/nova_tutorial/views/fractal_tab.py`):**
+**3. Updating our MainModel Class to add the new Fractal Class (`src/nova_tutorial/app/models/main_model.py**
+*   **Add Fractal to imports**: Add an import for the Fractal class into our MainModel.
+
+```python
+from .fractal import Fractal  # Import Fractal
+```
+
+*   **Add the Fractal Model to the MainModel**: Modify the end of the MainModel class so that it matches the code below. 
+
+```python
+    password: str = Field(default="test_password", title="User Password")
+    fractal: Fractal = Field(default_factory=Fractal) #Add Fractal Model
+```
+
+**4. Creating a FractalTab (`src/nova_tutorial/app/views/fractal_tab.py`):**
 
 *   **Create a fractal tab**: Create a new file and add the following code:
 
-    ```python
+```python
     from trame.widgets import vuetify3 as vuetify
 
     from nova.trame.view.components import InputField
@@ -205,21 +221,28 @@ Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate P
                 click=self.view_model.run_fractal # calls the run_fractal_tool method
             )
             vuetify.VImg(src=("config.fractal.image_data",), height="400", width="400")
-    ```
-**4. Modify the tab panel (`src/nova_tutorial/views/tab_panel.py`):**
-    Modify the tab panel to add our new Fractal tab
+```
 
-    ```python
+**5. Modify the tab panel (`src/nova_tutorial/app/views/tabs_panel.py`):**
+*   **Add Fractal Tab to the tab panel**: Modify the tab panel to add our new Fractal tab
+
+```python
         with vuetify.VTabs(v_model=("active_tab", 0), classes="pl-5"):
             vuetify.VTab("Fractal", value=1)  # Add Fractal Tab
             vuetify.VTab("Sample Tab 1", value=2)
             vuetify.VTab("Sample Tab 2", value=3)
-    ```
+```
 
-**5. Modify the tab panel content (`src/nova_tutorial/views/tab_content_panel.py`):**
-    Add our new Fractal Tab to the tab content panel.
+**6. Modify the tab panel content (`src/nova_tutorial/app/views/tab_content_panel.py`):**
+*   **Add FractalTab to imports**: Import the newly created FractalTab class into our tab_content_panel.
 
-    ```python
+```python
+from .fractal_tab import FractalTab  # Import the FractalTab
+```
+
+*   **Add the Fractal Tab to our existing tabs**: Add the Fractal Tab lines to the vuetify.VWindow section and modify the values.
+
+```python
         with vuetify.VWindow(v_model="active_tab"):
             with vuetify.VWindowItem(value=1):
                 FractalTab(self.view_model)  # Add FractalTab
@@ -227,7 +250,31 @@ Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate P
             SampleTab1()
             with vuetify.VWindowItem(value=3):
                 SampleTab2()
-    ```
+```
+
+**7. `main.py` - Calling the Model (`src/nova_tutorial/app/main.py`):**
+
+We are now going to modify the existing `main.py` file. Change the main method to match the code below.
+
+*   **Instantiate and Run**: In the `main()` function, we create an instance of `Fractal` and call the `run_fractal_tool()` method, wrapped in a `try...except` block for basic error handling:
+```python
+import sys
+from .models.fractal import Fractal
+
+
+def main() -> None:
+    kwargs = {}
+    from .views.main import MainApp
+
+    app = MainApp()
+    for arg in sys.argv[2:]:
+        try:
+            key, value = arg.split("=")
+            kwargs[key] = int(value)
+        except Exception:
+            pass
+    app.server.start(**kwargs)
+```
 
 ## Running the application
 
@@ -241,7 +288,7 @@ You should see `Fractal tool finished successfully.` printed to the console, alt
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Trigger Pydantic Validation Error (Programmatic)**
-    *   In `FractalViewModel` in `src/nova_tutorial/view_models/fractal_view_model.py`, modify the `update_fractal_programmatically` function from the previous exercise to use an *invalid* fractal type:
+    *   In `FractalViewModel` in `src/nova_tutorial/app/view_models/fractal_view_model.py`, modify the `update_fractal_programmatically` function from the previous exercise to use an *invalid* fractal type:
         ```python
         def update_fractal_programmatically(new_type: str):
             self.fractal_type = new_type # Use the setter which includes validation
@@ -260,7 +307,7 @@ You should see `Fractal tool finished successfully.` printed to the console, alt
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Inspect ViewModel State**
-    *   In `src/nova_tutorial/view_models/fractal_view_model.py`, add `print` statements within the `FractalViewModel.__init__` method to print the initial values of `self._fractal_type`, `self._job_status`, and `self._message`.
+    *   In `src/nova_tutorial/app/view_models/fractal_view_model.py`, add `print` statements within the `FractalViewModel.__init__` method to print the initial values of `self._fractal_type`, `self._job_status`, and `self._message`.
     *   Run the application (`poetry run app`). Observe the output in the console. Verify that the initial values are printed as expected.
     *   Now, modify the `FractalViewModel.__init__` method to change the initial value of `self._message` to "Application starting...". Run the application again and confirm that the printed initial message has changed.
 
@@ -268,7 +315,7 @@ You should see `Fractal tool finished successfully.` printed to the console, alt
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Programmatic State Update and Binding:**
-    *   In `FractalViewModel` in `src/nova_tutorial/view_models/fractal_view_model.py`, after the line `self.fractal_type_bind = binding.new_bind(...)` in `__init__`, add the following lines:
+    *   In `FractalViewModel` in `src/nova_tutorial/app/view_models/fractal_view_model.py`, after the line `self.fractal_type_bind = binding.new_bind(...)` in `__init__`, add the following lines:
         ```python
         print("Initial fractal type:", self._fractal_type) # Print initial value
 

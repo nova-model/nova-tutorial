@@ -26,7 +26,7 @@ exercises: 3
 # Using NDIP for Backend Computations
 In this section, we will start using the `nova-galaxy` library to interact with the NDIP platform and run a neutron analysis tool.  First, ensure you have set your `GALAXY_URL` and `GALAXY_API_KEY` as environment variables, as explained in the notes at the end of this episode.  We also need to add `nova-galaxy` as a project dependency.
 
-From the command line, type `poetry add nova-galaxy@^0.4.0`. This command will add the nova-galaxy library to the pyproject.toml file as a project dependency. Then run `poetry install` to update your project dependencies.
+From the command line, type `poetry add nova-galaxy@^0.7.0`. This command will add the nova-galaxy library to the pyproject.toml file as a project dependency. Then run `poetry install` to update your project dependencies.
 
 ## Interacting with NDIP via `nova-galaxy`
 
@@ -60,6 +60,7 @@ To get started, let\'s create the Fractal class. Create an empty file at `src/no
 *   **Imports**:  The `Fractal Class` will start by importing the necessary classes from `nova-galaxy`:
 
     ```python
+    import os
     from nova.galaxy import Connection, Parameters, Tool
     ```
 
@@ -77,23 +78,25 @@ To get started, let\'s create the Fractal class. Create an empty file at `src/no
 
     *   **Instantiate `Connection`, `Tool`, and `Parameters`**: We create instances of the `Connection`, `Tool`, and `Parameters` classes:
         ```python
-        conn = Connection(galaxy_url=self.galaxy_url, galaxy_key=self.galaxy_key)
-        tool = Tool(id="neutrons_fractal")
-        params = Parameters()
-        params.add_input(name="option", value=self.fractal_type)
+        def run_fractal_tool(self):
+            conn = Connection(galaxy_url=self.galaxy_url, galaxy_key=self.galaxy_key)
+            tool = Tool(id="neutrons_fractal")
+            params = Parameters()
+            params.add_input(name="option", value=self.fractal_type)
 
         ```
         Note that we create a `Tool` object with the `id="neutrons_fractal"`. This tells `nova-galaxy` which NDIP tool we want to run. The obvious question at this point is how do we know the id of the tool and what parameters it expects? We can look at the tool\'s launch page in calvera for some hints but ultimately we have to look at the tool\'s [xml file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads). 
 
     *   **Connect and Run the Tool**:  The `with conn.connect() as galaxy_connection:` block establishes a connection to NDIP and ensures proper handling of the connection:
-        ```python
-        with conn.connect() as galaxy_connection:
-            data_store = galaxy_connection.create_data_store(name="fractal_store")
-            data_store.persist()
-            print("Executing fractal tool. This might take a few minutes.")
-            output = tool.run(data_store, params)
-            output.get_dataset("output").download("image.png")
 
+        ```python
+            with conn.connect() as galaxy_connection:
+                data_store = galaxy_connection.create_data_store(name="fractal_store")
+                data_store.persist()
+                print("Executing fractal tool. This might take a few minutes.")
+                output = tool.run(data_store, params)
+                output.get_dataset("output").download("tmp.png")
+            print("Fractal tool finished successfully.")
         ```
 
 
@@ -103,13 +106,15 @@ We are now going to modify the existing `main.py` file. Change the main method t
 
 *   **Instantiate and Run**: In the `main()` function, we create an instance of `Fractal` and call the `run_fractal_tool()` method, wrapped in a `try...except` block for basic error handling:
     ```python
-    def main():
+    import sys
+    from .models.fractal import Fractal
+
+    def main() -> None:
         fractal = Fractal()
         try:
             fractal.run_fractal_tool()
         except Exception as e:
             print(f"Error running fractal tool: {e}")
-
     ```
 
 ## Running the tool
@@ -147,10 +152,10 @@ If a tool run results in a `Dataset` or `DatasetCollection`, an `Output` is retu
 
 In the Fractal example, the Tool.run comman returns an instance of the `Output` class which we save to the variable `output`. The Fractal tool [xml file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads) defines that successful execution of the tool will result in a `Dataset` named `output`. This `Dataset` is then downloaded to the local file path `image.png`.
 
-    ```python
-        output = tool.run(data_store, params)
-        output.get_dataset("output").download("image.png")
-    ```
+```python
+    output = tool.run(data_store, params)
+    output.get_dataset("output").download("image.png")
+```
 
 The Outputs can be used by the rest of your application, saved, or simply discarded. A copy of the Datasets and DatasetCollections also resides on the NDIP platform, so it is not necessary to maintain a local copy.
 

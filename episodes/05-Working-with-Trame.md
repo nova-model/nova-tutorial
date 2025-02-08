@@ -75,7 +75,7 @@ Layouts are responsible for arraging your content in a consistent manner. In Tra
 
 `nova-trame` provides a basic layout and theme that you can access via the `ThemedApp` class. The template app will setup your main view class to inherit from `ThemedApp` already, so let\'s look at how the layout is defined and how we can add content to slots.
 
-**1. `nova_tutorial/views/main.py`:**
+**1. `nova_tutorial/app/views/main.py`:**
 
 ```python
 class MainApp(ThemedApp):
@@ -215,7 +215,7 @@ For a more detailed explanation of how to work with our layout and theme, please
 
 Now, let\'s add some UI components to the Sample Tabs in our application to demonstrate how to use these components. We\'ll modify the `sample_tab_1.py` and `sample_tab_2.py` files to include these components.
 
-**2. `nova_tutorial/views/sample_tab_1.py` (Modify):**
+**2. `nova_tutorial/app/views/sample_tab_1.py` (Modify):**
 
 We\'ll add an `InputField` and a `VBoxLayout` to this tab.
 
@@ -239,7 +239,7 @@ class SampleTab1:
             RemoteFileInput(v_model="config.file", base_paths=["/SNS"])
 ```
 
-**3. `nova_tutorial/views/sample_tab_2.py` (Modify):**
+**3. `nova_tutorial/app/views/sample_tab_2.py` (Modify):**
 
 We\'ll add a `GridLayout` and an `InputField` to this tab.
 
