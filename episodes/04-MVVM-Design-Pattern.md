@@ -156,23 +156,22 @@ Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate P
 *   **Adding new imports**: We need to add some imports for pydantic and working with base64 encondings to deal with the image. Modify your import block to match below.
 
 ```python
-    import os
-    from base64 import b64encode
-    from typing import Literal
+import os
+from base64 import b64encode
+from typing import Literal
 
-    from pydantic import BaseModel, Field
-    from nova.galaxy import Connection, Parameters, Tool
+from pydantic import BaseModel, Field
+from nova.galaxy import Connection, Parameters, Tool
 ```
 
 *   **Update class variables:** Now we'll update fractal_type and other class variables to support pydantic. We'll also add an image variable to store the image. Modify the variable declarations to the following: 
 
 ```python
-    class Fractal(BaseModel):
-        fractal_type: Literal["mandelbrot", "julia", "random", "markus"] = Field(default="mandelbrot")
-        galaxy_url: str = Field(default_factory=lambda: os.getenv("GALAXY_URL"), description="NDIP Galaxy URL")
-        galaxy_key: str = Field(default_factory=lambda: os.getenv("GALAXY_API_KEY"), description="NDIP Galaxy API Key")
-
-        image_data: str = Field(default="", description="Base64 encoded PNG")
+class Fractal(BaseModel):
+    fractal_type: Literal["mandelbrot", "julia", "random", "markus"] = Field(default="mandelbrot")
+    galaxy_url: str = Field(default_factory=lambda: os.getenv("GALAXY_URL"), description="NDIP Galaxy URL")
+    galaxy_key: str = Field(default_factory=lambda: os.getenv("GALAXY_API_KEY"), description="NDIP Galaxy API Key")
+    image_data: str = Field(default="", description="Base64 encoded PNG")
 ```
 
 *   **Decode the image data:** Finally, we need to decode the image that we receive as the output from the tool execution. Modify the section where we execute the tool to the following:
@@ -203,24 +202,23 @@ from .fractal import Fractal  # Import Fractal
 *   **Create a fractal tab**: Create a new file and add the following code:
 
 ```python
-    from trame.widgets import vuetify3 as vuetify
+from trame.widgets import vuetify3 as vuetify
 
-    from nova.trame.view.components import InputField
-    from nova_tutorial.app.view_models.main import MainViewModel
+from nova.trame.view.components import InputField
+from nova_tutorial.app.view_models.main import MainViewModel
 
-    class FractalTab:
+class FractalTab:
+    def __init__(self, view_model: MainViewModel) -> None:
+        self.view_model = view_model
+        self.create_ui()
 
-        def __init__(self, view_model: MainViewModel) -> None:
-            self.view_model = view_model
-            self.create_ui()
-
-        def create_ui(self) -> None:
-            InputField(v_model="config.fractal.fractal_type")
-            vuetify.VBtn(
-                "Run Fractal",
-                click=self.view_model.run_fractal # calls the run_fractal_tool method
-            )
-            vuetify.VImg(src=("config.fractal.image_data",), height="400", width="400")
+    def create_ui(self) -> None:
+        InputField(v_model="config.fractal.fractal_type")
+        vuetify.VBtn(
+            "Run Fractal",
+            click=self.view_model.run_fractal # calls the run_fractal_tool method
+        )
+        vuetify.VImg(src=("config.fractal.image_data",), height="400", width="400")
 ```
 
 **5. Modify the tab panel (`src/nova_tutorial/app/views/tabs_panel.py`):**
@@ -243,13 +241,13 @@ from .fractal_tab import FractalTab  # Import the FractalTab
 *   **Add the Fractal Tab to our existing tabs**: Add the Fractal Tab lines to the vuetify.VWindow section and modify the values.
 
 ```python
-        with vuetify.VWindow(v_model="active_tab"):
-            with vuetify.VWindowItem(value=1):
-                FractalTab(self.view_model)  # Add FractalTab
-            with vuetify.VWindowItem(value=2):
-            SampleTab1()
-            with vuetify.VWindowItem(value=3):
-                SampleTab2()
+                    with vuetify.VWindow(v_model="active_tab"):
+                        with vuetify.VWindowItem(value=1):
+                            FractalTab(self.view_model)  # Add FractalTab
+                        with vuetify.VWindowItem(value=2):
+                            SampleTab1()
+                        with vuetify.VWindowItem(value=3):
+                            SampleTab2()
 ```
 
 **7. `main.py` - Calling the Model (`src/nova_tutorial/app/main.py`):**

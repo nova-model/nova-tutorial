@@ -165,43 +165,43 @@ After the user selects a file, the `v_model` will store a path to the file.
 
 *   **`GridLayout`:** Creates a grid layout with a specified number of columns. This is useful for arranging UI elements in a structured grid. You can use the `row_span` and `column_span` attributes to control how many rows and columns each element spans.
 
-    ```python
-    from nova.trame.view import layouts
-    from trame.widgets import vuetify3 as vuetify
+```python
+from nova.trame.view import layouts
+from trame.widgets import vuetify3 as vuetify
 
-    with layouts.GridLayout(columns=2):
-        vuetify.VTextField(label="First Name")
-        vuetify.VTextField(label="Last Name")
-        vuetify.VTextField(label="Email")
-        vuetify.VTextField(label="Phone Number")
-    ```
+with layouts.GridLayout(columns=2):
+    vuetify.VTextField(label="First Name")
+    vuetify.VTextField(label="Last Name")
+    vuetify.VTextField(label="Email")
+    vuetify.VTextField(label="Phone Number")
+```
 
     This code creates a grid with two columns and arranges the text fields in the grid.
 
 *   **`VBoxLayout`:** Creates a vertical box layout, stacking its children vertically. This is useful for creating simple vertical layouts.
 
-    ```python
-    from nova.trame.view import layouts
-    from trame.widgets import vuetify3 as vuetify
+```python
+from nova.trame.view import layouts
+from trame.widgets import vuetify3 as vuetify
 
-    with layouts.VBoxLayout():
-        vuetify.VTextField(label="Address Line 1")
-        vuetify.VTextField(label="Address Line 2")
-        vuetify.VTextField(label="City")
-    ```
+with layouts.VBoxLayout():
+    vuetify.VTextField(label="Address Line 1")
+    vuetify.VTextField(label="Address Line 2")
+    vuetify.VTextField(label="City")
+```
 
     This code creates a vertical layout and stacks the text fields vertically.
 
 *   **`HBoxLayout`:** Creates a horizontal box layout, stacking its children horizontally. This is useful for creating simple horizontal layouts.
 
-    ```python
-    from nova.trame.view import layouts
-    from trame.widgets import vuetify3 as vuetify
+```python
+from nova.trame.view import layouts
+from trame.widgets import vuetify3 as vuetify
 
-    with layouts.HBoxLayout():
-        vuetify.VTextField(label="First Name")
-        vuetify.VTextField(label="Last Name")
-    ```
+with layouts.HBoxLayout():
+    vuetify.VTextField(label="First Name")
+    vuetify.VTextField(label="Last Name")
+```
 
     This code creates a horizontal layout and stacks the text fields horizontally.
 

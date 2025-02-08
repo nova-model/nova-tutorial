@@ -59,63 +59,63 @@ To get started, let\'s create the Fractal class. Create an empty file at `src/no
 
 *   **Imports**:  The `Fractal Class` will start by importing the necessary classes from `nova-galaxy`:
 
-    ```python
-    import os
-    from nova.galaxy import Connection, Parameters, Tool
-    ```
+```python
+import os
+from nova.galaxy import Connection, Parameters, Tool
+```
 
 *   **`__init__` method**:  In the `__init__` method, we initialize the `Fractal` class. Note how we retrieve `GALAXY_URL` and `GALAXY_API_KEY` from environment variables. This establishes how we will connect to NDIP:
 
-    ```python
-    class Fractal:
-        def __init__(self):
-            self.fractal_type = "mandelbrot"  # Default fractal type
-            self.galaxy_url = os.getenv("GALAXY_URL")
-            self.galaxy_key = os.getenv("GALAXY_API_KEY")
-    ```
+```python
+class Fractal:
+    def __init__(self):
+        self.fractal_type = "mandelbrot"  # Default fractal type
+        self.galaxy_url = os.getenv("GALAXY_URL")
+        self.galaxy_key = os.getenv("GALAXY_API_KEY")
+```
 
 *   **`run_fractal_tool` method**: This method encapsulates the logic for running the `fractal` tool. Let\'s examine the key steps within this method:
 
     *   **Instantiate `Connection`, `Tool`, and `Parameters`**: We create instances of the `Connection`, `Tool`, and `Parameters` classes:
-        ```python
-        def run_fractal_tool(self):
-            conn = Connection(galaxy_url=self.galaxy_url, galaxy_key=self.galaxy_key)
-            tool = Tool(id="neutrons_fractal")
-            params = Parameters()
-            params.add_input(name="option", value=self.fractal_type)
+    
+```python
+    def run_fractal_tool(self):
+        conn = Connection(galaxy_url=self.galaxy_url, galaxy_key=self.galaxy_key)
+        tool = Tool(id="neutrons_fractal")
+        params = Parameters()
+        params.add_input(name="option", value=self.fractal_type)
+```
 
-        ```
-        Note that we create a `Tool` object with the `id="neutrons_fractal"`. This tells `nova-galaxy` which NDIP tool we want to run. The obvious question at this point is how do we know the id of the tool and what parameters it expects? We can look at the tool\'s launch page in calvera for some hints but ultimately we have to look at the tool\'s [xml file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads). 
+Note that we create a `Tool` object with the `id="neutrons_fractal"`. This tells `nova-galaxy` which NDIP tool we want to run. The obvious question at this point is how do we know the id of the tool and what parameters it expects? We can look at the tool\'s launch page in calvera for some hints but ultimately we have to look at the tool\'s [xml file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads). 
 
-    *   **Connect and Run the Tool**:  The `with conn.connect() as galaxy_connection:` block establishes a connection to NDIP and ensures proper handling of the connection:
+*   **Connect and Run the Tool**:  The `with conn.connect() as galaxy_connection:` block establishes a connection to NDIP and ensures proper handling of the connection:
 
-        ```python
-            with conn.connect() as galaxy_connection:
-                data_store = galaxy_connection.create_data_store(name="fractal_store")
-                data_store.persist()
-                print("Executing fractal tool. This might take a few minutes.")
-                output = tool.run(data_store, params)
-                output.get_dataset("output").download("tmp.png")
-            print("Fractal tool finished successfully.")
-        ```
-
+```python
+        with conn.connect() as galaxy_connection:
+            data_store = galaxy_connection.create_data_store(name="fractal_store")
+            data_store.persist()
+            print("Executing fractal tool. This might take a few minutes.")
+            output = tool.run(data_store, params)
+            output.get_dataset("output").download("tmp.png")
+        print("Fractal tool finished successfully.")
+```
 
 **2. `main.py` - Calling the Model (`src/nova_tutorial/app/main.py`):**
 
 We are now going to modify the existing `main.py` file. Change the main method to match the code below.
 
 *   **Instantiate and Run**: In the `main()` function, we create an instance of `Fractal` and call the `run_fractal_tool()` method, wrapped in a `try...except` block for basic error handling:
-    ```python
-    import sys
-    from .models.fractal import Fractal
+```python
+import sys
+from .models.fractal import Fractal
 
-    def main() -> None:
-        fractal = Fractal()
-        try:
-            fractal.run_fractal_tool()
-        except Exception as e:
-            print(f"Error running fractal tool: {e}")
-    ```
+def main() -> None:
+    fractal = Fractal()
+    try:
+        fractal.run_fractal_tool()
+    except Exception as e:
+        print(f"Error running fractal tool: {e}")
+```
 
 ## Running the tool
 
