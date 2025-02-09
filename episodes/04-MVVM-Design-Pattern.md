@@ -40,6 +40,7 @@ MVVM is an architectural design pattern specifically designed for applications w
 ![](fig/mvvm.png)
 
 The MVVM pattern consists of three core components:
+
 *   **Model:** The Model represents the *data* and the *business logic* of the application. It\'s responsible for:
     *   Data storage (e.g., reading from and writing to a database, a file, or an API).
     *   Data validation (ensuring the data is in a valid state).
@@ -52,18 +53,18 @@ The Model is agnostic to the UI. It doesn\'t know anything about how the data wi
     *   Capturing user input (e.g., button clicks, text entered in a field, selections from a dropdown).
     *   Presenting the application\'s visual appearance.
 
-    The View is *passive*. It doesn\'t contain any business logic or data manipulation code. It simply displays the data provided to it and relays user actions to the ViewModel.
+The View is *passive*. It doesn\'t contain any business logic or data manipulation code. It simply displays the data provided to it and relays user actions to the ViewModel.
 
-    In our NOVA tutorial, the View will be built using Trame and Vuetify components, leveraging the styling and structure provided by `nova-trame`.
+In our NOVA tutorial, the View will be built using Trame and Vuetify components, leveraging the styling and structure provided by `nova-trame`.
 
 *   **ViewModel:** The ViewModel acts as an *intermediary* between the Model and the View. It\'s responsible for:
     *   Preparing data from the Model for display in the View. This might involve formatting the data, combining data from multiple sources, or creating derived data.
     *   Handling user actions from the View. This might involve validating user input, updating the Model, or triggering other actions in the application.
     *   Exposing data and commands to the View through *data binding*.
 
-    The ViewModel knows about the View and the data that the View needs, but it doesn\'t know about the specific UI elements that are used to display the data. It also orchestrates the interaction between the View and the Model.
+The ViewModel knows about the View and the data that the View needs, but it doesn\'t know about the specific UI elements that are used to display the data. It also orchestrates the interaction between the View and the Model.
 
-    *The ViewModel is where we\'ll use `nova-mvvm` to create bindings between the ViewModel and the View, enabling the reactive updates.*
+The ViewModel is where we\'ll use `nova-mvvm` to create bindings between the ViewModel and the View, enabling the reactive updates.
 
 ## Why Use MVVM? (Benefits)
 
