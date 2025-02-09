@@ -32,9 +32,9 @@ For this tutorial, we will be using calvera-test.ornl.gov as our galaxy endpoint
 1.  **Set `GALAXY_URL`:** Set the `GALAXY_URL` environment variable to the URL of your NDIP instance. Replace `<your_ndip_url>` with the actual URL:
 
     ```bash
-    export GALAXY_URL=<your_ndip_url>  # Linux/macOS
-    set GALAXY_URL=<your_ndip_url>     # Windows (Command Prompt)
-    $env:GALAXY_URL="<your_ndip_url>"  # Windows (PowerShell)
+    export GALAXY_URL=calvera-test.ornl.gov  # Linux/macOS
+    set GALAXY_URL=calvera-test.ornl.gov     # Windows (Command Prompt)
+    $env:GALAXY_URL="calvera-test.ornl.gov"  # Windows (PowerShell)
     ```
 
 2.  **Set `GALAXY_API_KEY`:** Set the `GALAXY_API_KEY` environment variable to your NDIP API key. Replace `<your_api_key>` with your actual API key:
@@ -47,7 +47,16 @@ For this tutorial, we will be using calvera-test.ornl.gov as our galaxy endpoint
 
     **Important:** For security reasons, it is recommended to avoid hardcoding your API key directly in your code. Using environment variables is a more secure and flexible approach.
 
-## 3. Verify Your Setup
+## 3. Getting your Galaxy API Key
+
+In order to run the code examples in this tutorial, a Galaxy API Key is required. NDIP Access is required to retrieve an API Key. The steps to retrieve your API Key are:
+
+1. Navigate to (calvera-test.ornl.gov)[calvera-test.ornl.gov]
+2. Under the Users dropdown menu, choose preferences
+3. Select "Manage API Key"
+4. You should now be on the "Manage API Key" page where you can view/copy the API Key.
+
+## 4. Verify Your Setup
 
 To ensure your setup is correct, run the following command in your terminal within the `nova_tutorial` directory:
 
