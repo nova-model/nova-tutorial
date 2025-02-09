@@ -45,19 +45,7 @@ NOVA is a framework that aims to simplify the development of applications that i
 
 To better understand how NOVA works with NDIP, consider this simplified architecture:
 
-NOTE: THIS WILL BE REPLACED WITH AN ACTUAL DIAGRAM ONCE CHANGES SETTLE
-```
-User Application (Built with NOVA)
-    |  (Leverages)
-    V
-NOVA Framework
-+-----------------+   +-----------------+   +-----------------+
-|   nova-galaxy   |---|   nova-trame    |---|   nova-mvvm     |  (NOVA Libraries)
-+-----------------+   +-----------------+   +-----------------+
-    |  (Interacts with)
-    V
-NDIP Platform (Neutron Data Interpretation Platform)
-```
+![](fig/Nova_Architecture.png)
 
 In essence, you will build your **User Application** using the **NOVA Libraries**, which in turn will interact with the **NDIP Platform** to perform neutron data analysis tasks.
 
@@ -75,6 +63,15 @@ In this tutorial, you will learn how to use these three core NOVA libraries to b
 *   Add visualizations to the user interface
 
 We\'ll be using example tools as a demonstration for this tutorial, however, the lessons learned here can be applied to a wide variety of neutron scattering data analysis applications. This hands-on tutorial will guide you through each step of the process, empowering you to build your own interactive tools.
+
+## Downloading the tutorial repository
+
+The tutorial is hosted on the ORNL gitlab at [https://code.ornl.gov/ndip/public-packages/nova-carpentry-tutorial](https://code.ornl.gov/ndip/public-packages/nova-carpentry-tutorial). The simplest and recommended way to download the tutorial repository is by using git and the command:
+```bash
+git clone https://code.ornl.gov/ndip/public-packages/nova-carpentry-tutorial.git
+```
+
+It is also possible to download a zipped copy of the repository directly from the repository\'s gitlab web site.
 
 ## Code Examples Directory
 
