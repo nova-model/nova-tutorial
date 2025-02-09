@@ -36,7 +36,7 @@ pages:
   - docker run -v `pwd`/public:/app/site/build tutorial bash
   - cp $CALVERA_DOCS_SSH_KEY key && chmod 600 key
   - cat key
-  - rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i key" public/ cloud@10.64.195.250:/home/cloud/calvera_docs/nova-tutorial/tutorial
+  - rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i key" public/ cloud@10.64.195.250:/home/cloud/nova-tutorial/tutorial
   artifacts:
     paths:
       - public
