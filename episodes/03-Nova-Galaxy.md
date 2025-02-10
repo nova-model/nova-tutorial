@@ -23,7 +23,8 @@ exercises: 3
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-# Using NDIP for Backend Computations
+# 3. Programming with NDIP
+
 In this section, we will start using the `nova-galaxy` library to interact with the NDIP platform and run a neutron analysis tool.  First, ensure you have set your `GALAXY_URL` and `GALAXY_API_KEY` as environment variables, as explained in the notes at the end of this episode.  We also need to add `nova-galaxy` as a project dependency.
 
 From the command line, type `poetry add nova-galaxy@^0.7.0`. This command will add the nova-galaxy library to the pyproject.toml file as a project dependency. Then run `poetry install` to update your project dependencies.

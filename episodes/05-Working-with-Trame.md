@@ -28,7 +28,7 @@ exercises: 3
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-# 5. Web-based User Interface Development with Trame
+# 5. Web-based User Interface Development
 
 In this section, we will dive into Trame and the `nova-trame` library to build interactive web-based user interfaces for our NOVA applications. We\'ll explore how `nova-trame` simplifies UI development within the NOVA ecosystem and how to use common layout components.
 
