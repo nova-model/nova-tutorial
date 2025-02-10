@@ -18,18 +18,29 @@ Before proceeding, ensure you have met the following prerequisites:
 *   **A Text Editor or IDE:** You will need a text editor or IDE (such as VS Code, Sublime Text, or Atom) for writing code.
 *   **Familiarity with the Command Line:** You will need to be comfortable using the command line or terminal.
 
-## 2. Configure Environment Variables
+## 2. Getting your Galaxy API Key
 
-The NOVA framework requires you to set environment variables for your NDIP URL and API key. These variables are used to authenticate with the NDIP platform.
+In order to run the code examples in this tutorial, an API Key is required. An API key is obtained from the NDIP instance directly. 
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
-For this tutorial, we will be using calvera-test.ornl.gov as our galaxy endpoint. Please use that for your GALAXY_URL environment variable. For NDIP, calvera-test is platform that we use for testing and development of platform tools. Once tools are mature and ready for users, they'll be migrated to calvera.ornl.gov. This process is explained in more detail at the end of the tutorial.
+For this tutorial, we will be using [https://calvera-test.ornl.gov](calvera-test) as our NDIP instance. This is the instance that is used for testing and development of platform and NOVA tools. Once tools are mature and ready for users, they'll be migrated to [https://calvera.ornl.gov](calver). This process is explained in more detail at the end of the tutorial.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
+The steps to retrieve your API Key are:
 
-1.  **Set `GALAXY_URL`:** Set the `GALAXY_URL` environment variable to the URL of your NDIP instance. Replace `<your_ndip_url>` with the actual URL:
+1. Navigate to [https://calvera-test.ornl.gov](calvera-test.ornl.gov)
+2. Log in using your UCAMS id if necessary
+3. Under the Users dropdown menu, choose preferences
+4. Select "Manage API Key"
+5. You should now be on the "Manage API Key" page where you can view/copy the API Key.
+
+## 3. Configure Environment Variables
+
+The NOVA framework requires you to set environment variables for your NDIP URL and API key. These variables are used to authenticate with the NDIP platform.
+
+1.  **Set `GALAXY_URL`:** Set the `GALAXY_URL` environment variable to the URL of your NDIP instance, in this case calvera-test.ornl.gov:
 
     ```bash
     export GALAXY_URL=calvera-test.ornl.gov  # Linux/macOS
@@ -47,14 +58,6 @@ For this tutorial, we will be using calvera-test.ornl.gov as our galaxy endpoint
 
     **Important:** For security reasons, it is recommended to avoid hardcoding your API key directly in your code. Using environment variables is a more secure and flexible approach.
 
-## 3. Getting your Galaxy API Key
-
-In order to run the code examples in this tutorial, a Galaxy API Key is required. NDIP Access is required to retrieve an API Key. The steps to retrieve your API Key are:
-
-1. Navigate to (calvera-test.ornl.gov)[calvera-test.ornl.gov]
-2. Under the Users dropdown menu, choose preferences
-3. Select "Manage API Key"
-4. You should now be on the "Manage API Key" page where you can view/copy the API Key.
 
 ## 4. Verify Your Setup
 
