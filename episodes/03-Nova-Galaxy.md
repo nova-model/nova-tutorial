@@ -53,6 +53,45 @@ The basic workflow for running a tool with `nova-galaxy` involves these steps:
 3.  **Set Parameters**: Create a `Parameters` instance and add the necessary input parameters and their values for the tool.
 4.  **Run the Tool**: Use the `tool.run()` method to submit the job to NDIP. This typically involves creating a datastore to hold the job\'s input and output data.
 
+## Understanding an NDIP tool
+
+NDIP tools consist of two parts. The first component is the core logic of the tool which will be containerized and run by NDIP. This is the component that we will be focusing on throughout the tutorial and containerization will be discussed in Episode 8. The second component is the tool\'s XML file which is added to the [Galaxy Tool Repository](https://code.ornl.gov/ndip/galaxy-tools). The XML file is responsible for describing the tool\'s inputs, outputs, location, how it is executed, and other details to NDIP.
+
+Let\'s take a look key parts of the [XML file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads) for the Fractal Tool that we will use shortly.
+
+The first line gives the name, version, and unique id for a tool. This ID is used in the example below to tell NDIP which tool we are attempting to use.
+```
+<tool id="neutrons_fractal" name="Fractals" version="0.2.0" python_template_version="3.5">
+```
+
+This line tells NDIP where the tool\'s container can be found.
+```
+        <container type="docker">savannah.ornl.gov/ndip/tool-sources/playground/fractal:0.1</container>
+```
+
+This section defines the tool\'s inputs. In this example, the tool requires an input by the name `Option`. The valid values for `Option` are `mandlebrot`, `julia`, `random`, and `markus`.
+
+```
+    <inputs>
+        <param name="option" type="select" display="radio" label="Select Option">
+            <option value="mandelbrot" selected="true">Mandelbrot Set</option>
+            <option value="julia">Julia Set Animation</option>
+            <option value="random">Random Walk</option>
+            <option value="markus">Markus-Lyapunov Fractal</option>
+        </param>
+    </inputs>
+```
+
+This section describes the output from the tool. The Fractal tool results in a single output file named `output`. Tool outputs will be discussed more below.
+```
+    <outputs>
+        <data auto_format="true" name="output" label="$option">
+        </data>
+    </outputs>
+```
+
+A comprehensive list of tools, and links to their XML, can be found in Calvera's documentation on the [tools](https://calvera.ornl.gov/docs/tools/) page.
+
 ## Setting up the Fractal tool
 
 Let\'s create a `Fractal` class that uses `nova-galaxy` to run the `neutrons_fractal` tool on NDIP. You can find the complete code for this episode in the `code/episode_3` directory.
@@ -195,6 +234,7 @@ In both cases, an error is received from the ndip-galaxy library. When changing 
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
+*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - Tools are run remotely on the NDIP platform

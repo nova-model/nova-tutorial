@@ -101,6 +101,7 @@ This structure ensures that each code example is isolated and runnable, making i
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
+*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - NDIP is a workflow management system used for analsyis and interpretation of neutron scattering data.

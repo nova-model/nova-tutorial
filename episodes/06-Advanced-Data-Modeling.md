@@ -410,3 +410,11 @@ In the GUI application, set the port to the default value if a user enters an in
 - Pydantic supports complex data structures and custom data validation logic.
 - The NOVA Framework supports Pydantic models to automatically validate UI elements.
 ::::::::::::::::::::::::::::::::::::::::::::::::::
+
+## References
+
+*   **Nova Documentation**: https://nova-application-development.readthedocs.io/en/latest/
+*   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
+*   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
+*   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
+*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/

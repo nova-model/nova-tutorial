@@ -391,6 +391,8 @@ Experiment with customizing the appearance of the Vuetify components using the v
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
 *   **Vuetify Documentation**: https://vuetifyjs.com/en/
+*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
+
 ```
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
