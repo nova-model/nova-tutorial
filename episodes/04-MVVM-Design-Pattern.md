@@ -103,7 +103,7 @@ Benefits of Pydantic:
 
 ## Data Binding with NOVA
 
-The **`nova-mvvm`** library greatly simplifies the data synchronization between the components of an MVVM application and provides support for user interfaces utilizing the Trame, PyQt, and Panel graphical frameworks. The library provides several predefined classes including TrameBinding, PyQtBinding, and PanelBinding to connect UI components to model variables. Here, we'll focus on the TrameBinding class, but all three function similarly.
+The **`nova-mvvm`** library greatly simplifies the data synchronization between the components of an MVVM application and provides support for user interfaces utilizing the Trame, PyQt, and Panel graphical frameworks. The library provides several predefined classes including TrameBinding, PyQtBinding, and PanelBinding to connect UI components to model variables. Here, we\'ll focus on the TrameBinding class, but all three function similarly.
 
 ### How to use TrameBinding
 

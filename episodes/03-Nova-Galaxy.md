@@ -25,9 +25,12 @@ exercises: 3
 
 # 3. Programming with NDIP
 
-In this section, we will start using the `nova-galaxy` library to interact with the NDIP platform and run a neutron analysis tool.  First, ensure you have set your `GALAXY_URL` and `GALAXY_API_KEY` as environment variables, as explained in the notes at the end of this episode.  We also need to add `nova-galaxy` as a project dependency.
+In this section, we will start using the `nova-galaxy` library to interact with the NDIP platform and run a neutron analysis tool.  First, ensure you have set your `GALAXY_URL` and `GALAXY_API_KEY` as environment variables, as explained in the Summary and Setup Episode.  We also need to add `nova-galaxy` as a project dependency.
+
+:::::::::::::::::::::::::::::::::::::::  callout
 
 From the command line, type `poetry add nova-galaxy@^0.7.0`. This command will add the nova-galaxy library to the pyproject.toml file as a project dependency. Then run `poetry install` to update your project dependencies.
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Interacting with NDIP via `nova-galaxy`
 
@@ -130,16 +133,6 @@ poetry run app
 
 You should see `Fractal tool finished successfully.` printed to the console.
 
-## Asynchronous tool execution
-
-At times, it may be desirable to execute a tool or workflow without waiting on the result. The class Tool method run has an optional `wait` parameter. The default is true so that the tool is run in a blocking manner. However, by setting the parameter to false, the tool will be run asynchronously in a non-blocking manner.
-
-```
-            output = tool.run(data_store, params, wait=False)
-```
-
-Note, when run in this manner, output will be `None`. In order to retrieve results, you can use `tool.get_results()`. If the tool has not finished execution, this will also return `None`. As soon as results are available, the method will provide the results, exactly like the blocking execution.
-
 ## Tool output
 
 Tool execution often results in some type of output. In the Fractal example, the tool output is a singular image file. A tool can have multiple outputs and sometimes these outputs are grouped together in a collection. In `nova-galaxy`, a singular file is called a Dataset and a group of files is called a DatasetCollection. The `Dataset` and `DatasetCollection` classes support the following methods:
@@ -150,7 +143,7 @@ Tool execution often results in some type of output. In the Fractal example, the
 
 If a tool run results in a `Dataset` or `DatasetCollection`, an `Output` is returned from the run method. `Output` is an encapsulation of the output datasets and collections from a Tool. A tool execution can result in multiple `Dataset` and `DatasetCollection`, therefore, these are all grouped in the `Outputs` class for easier consumption.
 
-In the Fractal example, the Tool.run comman returns an instance of the `Output` class which we save to the variable `output`. The Fractal tool [xml file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads) defines that successful execution of the tool will result in a `Dataset` named `output`. This `Dataset` is then downloaded to the local file path `image.png`.
+In the Fractal example, the Tool.run command returns an instance of the `Output` class which we save to the variable `output`. The Fractal tool [xml file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads) defines that successful execution of the tool will result in a `Dataset` named `output`. This `Dataset` is then downloaded to the local file path `image.png`.
 
 ```python
     output = tool.run(data_store, params)
@@ -158,6 +151,20 @@ In the Fractal example, the Tool.run comman returns an instance of the `Output` 
 ```
 
 The Outputs can be used by the rest of your application, saved, or simply discarded. Outputs is also iterable, so you can use a for-loop to loop through all the contained datasets and collections. If your Datastore is persisted (using the persist() method), then a copy of the Datasets and DatasetCollections will reside on the NDIP platform, so it is not necessary to maintain a local copy.
+
+## Asynchronous tool execution
+
+At times, it may be desirable to execute a tool or workflow without waiting on the result. The class Tool method run has an optional `wait` parameter. The default is true so that the tool is run in a blocking manner. However, by setting the parameter to false, the tool will be run asynchronously in a non-blocking manner. It is beyond the scope of this episode, but if you were to attempt modify the example to run the tool asynchronously, your code might look something like this.
+
+```python
+            tool.run(data_store, params, wait=False)
+
+    def check_for_output(self, tool):
+        if(tool.get_results()):
+            output.get_dataset("output").download("image.png")
+```
+
+Note, when run in this manner, output will be `None`. In order to retrieve results, you can use `tool.get_results()`. If the tool has not finished execution, this will also return `None`. As soon as results are available, the method will provide the results, exactly like the blocking execution.
 
 ## Next Steps
 
