@@ -1,5 +1,5 @@
 ---
-title: "Web-based User Interface Development with Trame"
+title: "Web-based User Interface Development"
 teaching: 20
 exercises: 3
 ---
