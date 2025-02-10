@@ -62,11 +62,11 @@ In our NOVA tutorial, the View will be built using Trame and Vuetify components,
     *   Handling user actions from the View. This might involve validating user input, updating the Model, or triggering other actions in the application.
     *   Exposing data and commands to the View through *data binding*.
 
-The ViewModel knows about the View and the data that the View needs, but it doesn\'t know about the specific UI elements that are used to display the data. It also orchestrates the interaction between the View and the Model.
+The ViewModel knows about the View and the data that the View needs, but it doesn\'t know about the specific UI components that are used to display the data. It also orchestrates the interaction between the View and the Model.
 
 The ViewModel is where we\'ll use `nova-mvvm` to create bindings between the ViewModel and the View, enabling the reactive updates.
 
-## Why Use MVVM? (Benefits)
+## Why Use MVVM?
 
 The MVVM pattern provides several benefits:
 
@@ -80,7 +80,7 @@ The MVVM pattern provides several benefits:
 
 *Data binding* is a mechanism that allows the View and the ViewModel to automatically synchronize their data. When the data in the ViewModel changes, the View is automatically updated to reflect the changes. Conversely, when the user interacts with the View (e.g., by entering text in a field), the data in the ViewModel is automatically updated.
 
-This data binding is what makes MVVM so powerful and allows for reactive UIs. Instead of manually writing code to update the UI every time the data changes, you simply bind the UI elements to the data in the ViewModel, and the updates happen automatically.
+This data binding is what makes MVVM so powerful and allows for reactive UIs. Instead of manually writing code to update the UI every time the data changes, you simply bind the UI components to the data in the ViewModel, and the updates happen automatically.
 
 ## How NOVA Simplifies MVVM
 
@@ -103,22 +103,24 @@ Benefits of Pydantic:
 
 ## Data Binding with NOVA
 
-The **`nova-mvvm`** library greatly simplifies the data synchronization between the View and Model-View for Trame, PyQt, and Panel. The library provides the classes TrameBinding, PyQtBinding, and PanelBinding to connect UI components to Model-View variables. Here, we'll focus on the TrameBinding but all three function similarly.
+The **`nova-mvvm`** library greatly simplifies the data synchronization between the componentes of an MVVM applicationm and provides support for user interfaces utilizing the Trame, PyQt, and Panel graphical frameworks. The library provides several predefined classes including TrameBinding, PyQtBinding, and PanelBinding to connect UI components to model variables. Here, we'll focus on the TrameBinding class, but all three function similarly.
 
 ### How to use TrameBinding
 
-The initial step is to great a BindingInterface. The BindingInterface serves as the foundational layer for how connections are made between variables in the ViewModel and GUI elements in the View. Once a Trame application has started, the BindingInterface can be created with:
+The initial step is to great a BindingInterface. A BindingInterface serves as the foundational layer for how connections are made between variables in the ViewModel and UI components in the View. Once a Trame application has started, the BindingInterface can be created in the View with:
 
-``` python
+```python
 bindingInterface = TrameBinding(self.server.state) # server is the Trame Server
 ```
 
-After the bindingInterface has been created, variables must be added to the interface via the interface\'s new_bind method. The `new_bind` method expects the variable to link, and an optional callback method. The callback method is useful if there are actions to be performed after updates to the UI. In the code snippet below, the `model` variable is added to the binding interface. This `new_bind` method returns a `Communicator`. The `Communicator` is an object which manages the binding and will be used to propgate updates.
+After a BindingInterface has been created, variables must be added to the interface via the interface\'s `new_bind` method. The `new_bind` method expects a variable that will be linked with the UI component, and an optional callback method. The callback method is useful if there are actions to be performed after updates to the UI. In the code snippet below, we've passed the Binding Interface to the ViewModel. The ViewModel adds the `model` variable to the binding interface. This `new_bind` method returns a `Communicator`. The `Communicator` is an object which manages the binding and will be used to propgate updates.
 
-``` python
-# Adding a binding to the Binding Interface
-self.config_bind = binding.new_bind(self.model)
+```python
+# Adding a binding to the Binding Interface, returns a Communicator
+self.config_bind = bindingInterface.new_bind(self.model)
 ```
+
+The `self.config_bind` object is a `Communicator` and is used to update the View. When the ViewModel needs to tell the View to perform an Update, it calls the `update_in_view` method of the `Communicator`. For the `self.config_bind` object, the ViewModel would make a call like below. It is common practice for the ViewModel to have a method such as update_view, where ViewModel would update many objects. However, there are also times when it is appropriate to only update a singular object.
 
 ```python
 # Updating the UI connected to a binding.
@@ -126,13 +128,15 @@ def update_view(self) -> None:
     self.config_bind.update_in_view(self.model)
 ```
 
-We\'ve seen how to create a BindingInterface, add a new binding, and how to perform updates. We also need to connect our view component to the Communicator. The Communicator class has a `connect` method. This method accepts a connector object. In the example below, we connect to the `config_bind` communicator object that was created in our ViewModel. We\'re passing in a string as our connector object, but we could pass in a callable object instead.
+We\'ve seen how to create a BindingInterface, add a new binding, and how to perform updates. We also need to connect our View components to the Communicators. The Communicator class has a `connect` method. This method accepts a callable object or a string. In the example below, we connect to the `config_bind` Communicator object that was created in our ViewModel. We\'re passing in a string as our connector object, but we could pass in a callable object instead.
+
+!!!!!!THIS IS CONFUSING TO ME. WHERE DOES THIS CONFIG STRING COME FROM? I haven't forgot this, just making a sepearate issue for it because it's just a confusing topic and I'm working on the wording. Will circle back.!!!!!
 
 ```python
 self.view_model.config_bind.connect("config")
 ```
 
-Finally, we connect a GUI element to the connector object. The template application uses the *`nova-trame`* library which we\'ll work with in the next episode. For now, just note that InputField is a UI element that is being connected to the binding in our ViewModel
+Finally, we connect a UI component to the connector object. The template application uses the *`nova-trame`* library which we\'ll work with in the next episode. For now, just note that InputField is a UI components that is being connected to the binding in our ViewModel
 
 ```python
 InputField(v_model="config.username")
@@ -151,10 +155,9 @@ Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate P
         self.model.fractal.run_fractal_tool()
         self.update_view()
 
-```
 **2. Updating our Fractal Class for pydantaic and MVVM (`src/nova_tutorial/app/models/fractal.py**
 
-*   **Adding new imports**: We need to add some imports for pydantic and working with base64 encondings to deal with the image. Modify your import block to match below.
+*   **Adding new imports**: We need to add some imports for pydantic and working with base64 encodings to deal with the image. Modify your import block to match below.
 
 ```python
 import os
@@ -173,6 +176,9 @@ class Fractal(BaseModel):
     galaxy_url: str = Field(default_factory=lambda: os.getenv("GALAXY_URL"), description="NDIP Galaxy URL")
     galaxy_key: str = Field(default_factory=lambda: os.getenv("GALAXY_API_KEY"), description="NDIP Galaxy API Key")
     image_data: str = Field(default="", description="Base64 encoded PNG")
+
+    def set_fractal_type(self, fractal_type: str):
+        self.fractal_type = fractal_type
 ```
 
 *   **Decode the image data:** Finally, we need to decode the image that we receive as the output from the tool execution. Modify the section where we execute the tool to the following:
@@ -283,52 +289,34 @@ To run the code, use the following command in the top level of your `nova_tutori
 poetry run app
 ```
 
-You should see `Fractal tool finished successfully.` printed to the console, although we have not created a UI yet.
+The application should launch a tab in your web browser. The GUI will have a `FRACTAL` tab and a few sample tabs which were created by the template application. The run button on the `Fractal` tab can be used to launch the `Fractal` NDIP tool. The tool will take a few minutes to complete but when it does, the resulting `Fractal` image will be displayed.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Trigger Pydantic Validation Error (Programmatic)**
-    *   In `FractalViewModel` in `src/nova_tutorial/app/view_models/fractal_view_model.py`, modify the `update_fractal_programmatically` function from the previous exercise to use an *invalid* fractal type:
-        ```python
-        def update_fractal_programmatically(new_type: str):
-            self.fractal_type = new_type # Use the setter which includes validation
-            print("Attempted to set fractal type programmatically to:", new_type)
-            print("Current fractal type (after attempt):", self._fractal_type) # Print value after attempt
-            print("Current message:", self._message) # Print message
+*   In `Fractal` in `src/nova_tutorial/app/models/fractal.py`, modify the `set_fractal_type` function from the previous exercise to use an *invalid* fractal type:
 
-        update_fractal_programmatically("invalid-fractal-type") # Programmatically update to invalid type
-        ```
-    *   Run the application (`poetry run app`). Observe the console output. Verify that:
-        *   The message "Attempted to set fractal type programmatically to: invalid-fractal-type" is printed.
-        *   The "Current fractal type (after attempt):" is still "mandelbrot" indicating the invalid update was rejected.
-        *   The "Current message:" now contains a "Validation Error" message from Pydantic.
+```python
+    def set_fractal_type(self, fractal_type: str):
+        self.fractal_type = "bad_type" # Use the setter which includes validation
+
+        print("Attempted to set fractal type programmatically to:", new_type)
+        print("Current fractal type (after attempt):", self._fractal_type) # Print value after attempt
+        print("Current message:", self._message) # Print message
+```
+
+*   Run the application (`poetry run app`). Observe the console output. Verify that:
+*   The message "Attempted to set fractal type programmatically to: invalid-fractal-type" is printed.
+*   The "Current fractal type (after attempt):" is still "mandelbrot" indicating the invalid update was rejected.
+*   The "Current message:" now contains a "Validation Error" message from Pydantic.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Inspect ViewModel State**
-    *   In `src/nova_tutorial/app/view_models/fractal_view_model.py`, add `print` statements within the `FractalViewModel.__init__` method to print the initial values of `self._fractal_type`, `self._job_status`, and `self._message`.
-    *   Run the application (`poetry run app`). Observe the output in the console. Verify that the initial values are printed as expected.
-    *   Now, modify the `FractalViewModel.__init__` method to change the initial value of `self._message` to "Application starting...". Run the application again and confirm that the printed initial message has changed.
 
-::::::::::::::::::::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::::::::  challenge
-**Programmatic State Update and Binding:**
-    *   In `FractalViewModel` in `src/nova_tutorial/app/view_models/fractal_view_model.py`, after the line `self.fractal_type_bind = binding.new_bind(...)` in `__init__`, add the following lines:
-        ```python
-        print("Initial fractal type:", self._fractal_type) # Print initial value
-
-        def update_fractal_programmatically(new_type: str):
-            self.fractal_type = new_type # Use the setter to trigger validation and updates
-            print("Fractal type updated programmatically to:", self._fractal_type)
-
-        update_fractal_programmatically("julia") # Programmatically update fractal_type
-        print("Fractal type after programmatic update:", self._fractal_type)
-        ```
-    *   Run the application (`poetry run app`). Observe the console output. Verify that:
-        *   The initial fractal type is printed as "mandelbrot".
-        *   The message "Fractal type updated programmatically to: julia" is printed.
-        *   The final fractal type (after programmatic update) is printed as "julia".
+*   In `src/nova_tutorial/app/view_models/main.py`, add `print` statements within the `MainViewModel.__init__` method to print the initial values of `self.fractal`, `self.fractal.galaxy_url`, and `self.fractal.fractal_type`.
+*   Run the application (`poetry run app`). Observe the output in the console. Verify that the initial values are printed as expected.
+*   Now, modify the `MainViewModel.__init__` method to change the initial value of `self.fractal.fractal_type` to "julia". Run the application again and confirm that the printed message has changed.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
