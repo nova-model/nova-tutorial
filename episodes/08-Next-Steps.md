@@ -3,7 +3,7 @@ title: "Development Cycle and Next Steps"
 teaching: 10
 exercises: 0
 ---
-# Next Steps
+# 8. Development Cycle and Next Steps
 
 In this section, we will look at other resources you may want to integrate with your application and outline the process for taking an application like the one we\'ve created in this tutorial and deploying it to the NOVA/NDIP platform. While we won\'t actually perform the deployment in this tutorial, we will cover the key steps and resources involved.
 

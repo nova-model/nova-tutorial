@@ -36,37 +36,37 @@ The setup section detailed the prerequisites required for the tutorial. One of t
 To clone the template application, run the following command:
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/python.git nova_tutorial
+copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git nova_tutorial
 ```
 
 This command will download the template to a directory called `nova_tutorial`. Copier will prompt you with a series of questions. Please answer the questions as follows:
 
-*   **What is the name of your project?**
+*   **What is your project name?**
 
     > Enter `Nova Tutorial`
 
-*   **What is your python package name?**
+*   **What is your Python package name (use Python naming conventions)?**
 
     > Press enter to accept the default.
 
 *   **Do you want to install Mantid for your project?**
-    
+
     > Enter `no`
 
 *   ** Are you developing a GUI application using MVVM pattern?**
-    
+
     > Enter `yes`
 
 *   ** Which library will you use?**
-    
+
     > Select `Trame`
 
 *   **Do you want a template with multiple tabs?
-    
+
     > Enter `yes`
 
-*   **Publish to pypi?**
-    
+*   **Publish to PyPI?**
+
     > Enter `no`
 
 *   **Publish documentation to readthedocs.io?**
@@ -104,7 +104,7 @@ The template creates a basic project structure to help get you started quickly. 
 
 *   `nova_tutorial/`: The root directory of your project
 *   `nova_tutorial/src/`: Contains your application code
-*   `nova_tutorial/src/nova_tutorial/`: The name of your python package
+*   `nova_tutorial/src/nova_tutorial/`: The name of your Python package
 *   `nova_tutorial/tests/`: Contains your application\'s unit tests.
 *   `nova_tutorial/README.md`: A readme file.
 
@@ -114,7 +114,7 @@ In the following sections, we will start adding code to this structure to build 
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## **Run the Initial Tests** 
+## **Run the Initial Tests**
 
 The template comes with a basic test suite using `pytest`. Navigate to the `nova_tutorial` directory in your terminal and run the tests using the command `pytest`.  Examine the output.  Where are the tests located?  What does a successful test look like? Modify the test to intentionally fail. Observe the error message. Remember to revert the changes so that the tests pass again..
 
