@@ -47,7 +47,7 @@ To better understand how NOVA works with NDIP, consider this simplified architec
 
 ![](fig/Nova_Architecture.png)
 
-In essence, you will build your **User Application** using the **NOVA Libraries**, which in turn will interact with the **NDIP Platform** to perform neutron data analysis tasks. NOVA applications do not require a GUI to leverage NDIP. We'll demonstrate this in Episode 3, where we\'ll use 'nova-galaxy' to create a simple python script which connects to NDIP and launches a tool. In episode 4, we\'ll extend that python script to include a simple GUI with the support of 'nova-trame' and 'nova-mvvm'. 
+In essence, you will build your **User Application** using the **NOVA Libraries**, which in turn will interact with the **NDIP Platform** to perform neutron data analysis tasks. NOVA applications do not require a GUI to leverage NDIP. We'll demonstrate this in Episode 3, where we\'ll use 'nova-galaxy' to create a simple python script which connects to NDIP and launches a tool. In episode 4, we\'ll extend that python script to include a simple GUI with the support of 'nova-trame' and 'nova-mvvm'.
 
 ## What Will You Learn?
 
@@ -56,7 +56,7 @@ In this tutorial, you will learn how to use these three core NOVA libraries to b
 *   Connect to NDIP.
 *   Reference job definitions from tool XML files.
 *   Set parameters for those tools.
-*   Run the tools using the supplied paramters.
+*   Run the tools using the supplied parameters.
 *   Monitor the progress of the running tools.
 *   Obtain output from the tool when it completes.
 *   Create user interfaces to enable access to NDIP tools
@@ -104,6 +104,6 @@ This structure ensures that each code example is isolated and runnable, making i
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - NDIP is a workflow management system used for analsyis and interpretation of neutron scattering data.
-- NDIP has a range of services and tools to enable the creation of complex workdlows for data analysis.
+- NDIP has a range of services and tools to enable the creation of complex workflows for data analysis.
 - NOVA is a set of libraries that provide a framework to simplify the development of interactive applications for NDIP
 ::::::::::::::::::::::::::::::::::::::::::::::::::

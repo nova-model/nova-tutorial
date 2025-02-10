@@ -103,7 +103,7 @@ Benefits of Pydantic:
 
 ## Data Binding with NOVA
 
-The **`nova-mvvm`** library greatly simplifies the data synchronization between the componentes of an MVVM applicationm and provides support for user interfaces utilizing the Trame, PyQt, and Panel graphical frameworks. The library provides several predefined classes including TrameBinding, PyQtBinding, and PanelBinding to connect UI components to model variables. Here, we'll focus on the TrameBinding class, but all three function similarly.
+The **`nova-mvvm`** library greatly simplifies the data synchronization between the components of an MVVM application and provides support for user interfaces utilizing the Trame, PyQt, and Panel graphical frameworks. The library provides several predefined classes including TrameBinding, PyQtBinding, and PanelBinding to connect UI components to model variables. Here, we'll focus on the TrameBinding class, but all three function similarly.
 
 ### How to use TrameBinding
 
@@ -154,6 +154,7 @@ Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate P
     def run_fractal(self) -> None:
         self.model.fractal.run_fractal_tool()
         self.update_view()
+```
 
 **2. Updating our Fractal Class for pydantaic and MVVM (`src/nova_tutorial/app/models/fractal.py**
 
@@ -168,7 +169,7 @@ from pydantic import BaseModel, Field
 from nova.galaxy import Connection, Parameters, Tool
 ```
 
-*   **Update class variables:** Now we'll update fractal_type and other class variables to support pydantic. We'll also add an image variable to store the image. Modify the variable declarations to the following: 
+*   **Update class variables:** Now we'll update fractal_type and other class variables to support pydantic. We'll also add an image variable to store the image. Modify the variable declarations to the following:
 
 ```python
 class Fractal(BaseModel):
@@ -197,7 +198,7 @@ class Fractal(BaseModel):
 from .fractal import Fractal  # Import Fractal
 ```
 
-*   **Add the Fractal Model to the MainModel**: Modify the end of the MainModel class so that it matches the code below. 
+*   **Add the Fractal Model to the MainModel**: Modify the end of the MainModel class so that it matches the code below.
 
 ```python
     password: str = Field(default="test_password", title="User Password")
@@ -261,7 +262,8 @@ from .fractal_tab import FractalTab  # Import the FractalTab
 
 We are now going to modify the existing `main.py` file. Change the main method to match the code below.
 
-*   **Instantiate and Run**: In the `main()` function, we create an instance of `Fractal` and call the `run_fractal_tool()` method, wrapped in a `try...except` block for basic error handling:
+*   **Instantiate and Run**: In the `main()` function, we no longer need to setup the Fractal tool as it's managed via our MVVM application now.
+
 ```python
 import sys
 from .models.fractal import Fractal
@@ -290,6 +292,11 @@ poetry run app
 ```
 
 The application should launch a tab in your web browser. The GUI will have a `FRACTAL` tab and a few sample tabs which were created by the template application. The run button on the `Fractal` tab can be used to launch the `Fractal` NDIP tool. The tool will take a few minutes to complete but when it does, the resulting `Fractal` image will be displayed.
+
+::::::::::::::::::::::::::::::::::::::::: callout
+If you don't want Trame to launch a tab by default, you can instead run ```poetry run app --server```.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Trigger Pydantic Validation Error (Programmatic)**
