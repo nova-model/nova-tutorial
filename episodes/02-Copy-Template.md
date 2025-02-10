@@ -83,7 +83,7 @@ If your application requires Mantid, you can enter Yes and Mantid will be added 
 
 ## Install Project Dependencies
 
-1.  **Clone the Template:**  Follow the instructions in the "Getting Started with a Template Application" episode to clone the NOVA template using `copier`.  This will create a new directory (e.g., `nova_tutorial`) containing your project files.
+1.  **Clone the Template:**  Follow the instructions in the "Getting Started with a Template Application" section to clone the NOVA template using `copier`.  This will create a new directory (e.g., `nova_tutorial`) containing your project files.
 2.  **Navigate to the Project Directory:**  Open your terminal and navigate to the newly created project directory:
 
     ```bash
