@@ -164,7 +164,7 @@ At times, it may be desirable to execute a tool or workflow without waiting on t
             output.get_dataset("output").download("image.png")
 ```
 
-Note, when run in this manner, output will be `None`. In order to retrieve results, you can use `tool.get_results()`. If the tool has not finished execution, this will also return `None`. As soon as results are available, the method will provide the results, exactly like the blocking execution.
+Note, when run in this manner, the output of tool.run() will be `None`. In order to retrieve results, you can use `tool.get_results()`. If the tool has not finished execution, this will also return `None`. As soon as results are available, the method will provide the results, exactly like the blocking execution.
 
 ## Next Steps
 
