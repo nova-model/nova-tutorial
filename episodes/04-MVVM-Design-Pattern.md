@@ -262,7 +262,8 @@ from .fractal_tab import FractalTab  # Import the FractalTab
 
 We are now going to modify the existing `main.py` file. Change the main method to match the code below.
 
-*   **Instantiate and Run**: In the `main()` function, we create an instance of `Fractal` and call the `run_fractal_tool()` method, wrapped in a `try...except` block for basic error handling:
+*   **Instantiate and Run**: In the `main()` function, we no longer need to setup the Fractal tool as it's managed via our MVVM application now.
+
 ```python
 import sys
 from .models.fractal import Fractal
