@@ -41,7 +41,7 @@ def main() -> None:
     # Example input
     user_data = {
         "id": 2,
-        "name": "Alice",
+        "name": "alice",
         "addresses": [{"street": "123 Main St", "city": "New York", "zip_code": "10001", "type": "home"}],
     }
 
