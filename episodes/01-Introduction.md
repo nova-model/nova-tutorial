@@ -37,7 +37,7 @@ NOVA is a framework that aims to simplify the development of applications that i
 
 *   **`nova-galaxy`**: This library simplifies interaction with the NDIP platform\'s APIs. It allows developers to easily connect to NDIP, **submit jobs, handle parameters, and monitor job progress.**
 
-*   **`nova-trame`**: This library facilitates the creation of interactive user interfaces using Trame, a powerful Python framework for building web-based UIs and visualizations. `nova-trame` provides a consistent look and feel for NOVA applications by simplifying interactions with Trame components (such as Vuetify).
+*   **`nova-trame`**: This library facilitates the creation of interactive user interfaces using Trame, a powerful Python framework for building web-based GUIs and visualizations. `nova-trame` provides a consistent look and feel for NOVA applications by simplifying interactions with Trame components (such as Vuetify).
 
 *   **`nova-mvvm`**: This library simplifies implementation of the Model-View-ViewModel (MVVM) design pattern. By utilizing this library, users can create structured applications that are more testable and easier to maintain.
 
@@ -47,7 +47,7 @@ To better understand how NOVA works with NDIP, consider this simplified architec
 
 ![](fig/Nova_Architecture.png)
 
-In essence, you will build your **User Application** using the **NOVA Libraries**, which in turn will interact with the **NDIP Platform** to perform neutron data analysis tasks.
+In essence, you will build your **User Application** using the **NOVA Libraries**, which in turn will interact with the **NDIP Platform** to perform neutron data analysis tasks. NOVA applications do not require a GUI to leverage NDIP. We'll demonstrate this in Episode 3, where we\'ll use 'nova-galaxy' to create a simple python script which connects to NDIP and launches a tool. In episode 4, we\'ll extend that python script to include a simple GUI with the support of 'nova-trame' and 'nova-mvvm'. 
 
 ## What Will You Learn?
 
