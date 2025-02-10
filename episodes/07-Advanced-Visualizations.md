@@ -27,7 +27,7 @@ exercises: 1
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-# Advanced Visualizations
+# 7. Advanced Visualizations
 
 In this section, we will look at a selection of the libraries that integrate well with Trame for producing more sophisticated visualizations of your data. Specifically, we will look at Plotly for interactive 2D charts, PyVista for interactive 3D visualizations, and VTK for advanced 3D visualizations.
 
