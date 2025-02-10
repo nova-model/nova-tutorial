@@ -1,5 +1,5 @@
 ---
-title: "Invoking an NDIP tool"
+title: "Programming with NDIP"
 teaching: 10
 exercises: 3
 ---
@@ -51,11 +51,11 @@ The basic workflow for running a tool with `nova-galaxy` involves these steps:
 
 ## Setting up the Fractal tool
 
-Let\'s create a `Fractal` class that uses `nova-galaxy` to run the `neutrons_fractal` tool on NDIP. You can find the complete code for this episode in the `code/episode_3` directory. 
+Let\'s create a `Fractal` class that uses `nova-galaxy` to run the `neutrons_fractal` tool on NDIP. You can find the complete code for this episode in the `code/episode_3` directory.
 
 **1. `Fractal` Class (`src/nova_tutorial/app/models/fractal.py`):**
 
-To get started, let\'s create the Fractal class. Create an empty file at `src/nova_tutorial/app/models/fractal.py`. Add the following pieces of code to the newly created file. 
+To get started, let\'s create the Fractal class. Create an empty file at `src/nova_tutorial/app/models/fractal.py`. Add the following pieces of code to the newly created file.
 
 *   **Imports**:  The `Fractal Class` will start by importing the necessary classes from `nova-galaxy`:
 
@@ -77,7 +77,7 @@ class Fractal:
 *   **`run_fractal_tool` method**: This method encapsulates the logic for running the `fractal` tool. Let\'s examine the key steps within this method:
 
     *   **Instantiate `Connection`, `Tool`, and `Parameters`**: We create instances of the `Connection`, `Tool`, and `Parameters` classes:
-    
+
 ```python
     def run_fractal_tool(self):
         conn = Connection(galaxy_url=self.galaxy_url, galaxy_key=self.galaxy_key)
@@ -86,7 +86,7 @@ class Fractal:
         params.add_input(name="option", value=self.fractal_type)
 ```
 
-Note that we create a `Tool` object with the `id="neutrons_fractal"`. This tells `nova-galaxy` which NDIP tool we want to run. The obvious question at this point is how do we know the id of the tool and what parameters it expects? We can look at the tool\'s launch page in calvera for some hints but ultimately we have to look at the tool\'s [xml file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads). 
+Note that we create a `Tool` object with the `id="neutrons_fractal"`. This tells `nova-galaxy` which NDIP tool we want to run. The obvious question at this point is how do we know the id of the tool and what parameters it expects? We can look at the tool\'s launch page in calvera for some hints but ultimately we have to look at the tool\'s [xml file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads).
 
 *   **Connect and Run the Tool**:  The `with conn.connect() as galaxy_connection:` block establishes a connection to NDIP and ensures proper handling of the connection:
 
@@ -164,7 +164,7 @@ The Outputs can be used by the rest of your application, saved, or simply discar
 In this section, you learned how to use the `nova-galaxy` library to run a tool on NDIP. In the next sections, we will expand on this to create a full user interface to make this functionality accessible to the end user.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
-**Run with Different Fractal Types** 
+**Run with Different Fractal Types**
 Modify the `FractalViewModel` class to default to a different fractal type (e.g., "julia"). Run the application again and verify that it still works.
 
 :::::::::::::::  solution
