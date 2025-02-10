@@ -38,7 +38,7 @@ We will be using the following key classes from `nova-galaxy` in this episode:
 *   **`Connection`**:  The main entry point for interacting with NDIP. You instantiate the `Connection` class with your NDIP URL and API key to establish a connection.
 *   **`Tool`**: Represents a tool available on the NDIP platform. You can define a `Tool` object by its ID (which corresponds to a tool XML definition in NDIP).
 *   **`Parameters`**:  Used to define the input parameters for a tool. You add parameters to a `Parameters` object, specifying the parameter names and values.
-*   **`Datastore`**: Configures Galaxy to group outputs of a tool to group outputs of a tool together.
+*   **`Datastore`**: Configures Galaxy to group outputs of a tool to group outputs of a tool together. Should not directly instantiated. Instead use Connection.create_data_store() after starting a connection.
 *   **`Output`**: Contains the output datasets and collections for a tool.
 *   **`Dataset`**: A singular file which can be uploaded to Galaxy to be used in tools or downloaded from Galaxy to local storage.
 *   **`DatasetCollection`**: A group of files which can be uploaded to Galaxy to be used in tools or downloaded from Galaxy to local storage.
@@ -101,6 +101,8 @@ Note that we create a `Tool` object with the `id="neutrons_fractal"`. This tells
         print("Fractal tool finished successfully.")
 ```
 
+The line `data_store.persist()` saves your datastore after the "with" block is exited. Without calling this method, all tools, running or finished, along with their results will be discarded after the "with" block finishes execution.
+
 **2. `main.py` - Calling the Model (`src/nova_tutorial/app/main.py`):**
 
 We are now going to modify the existing `main.py` file. Change the main method to match the code below.
@@ -136,6 +138,8 @@ At times, it may be desirable to execute a tool or workflow without waiting on t
             output = tool.run(data_store, params, wait=False)
 ```
 
+Note, when run in this manner, output will be `None`. In order to retrieve results, you can use `tool.get_results()`. If the tool has not finished execution, this will also return `None`. As soon as results are available, the method will provide the results, exactly like the blocking execution.
+
 ## Tool output
 
 Tool execution often results in some type of output. In the Fractal example, the tool output is a singular image file. A tool can have multiple outputs and sometimes these outputs are grouped together in a collection. In `nova-galaxy`, a singular file is called a Dataset and a group of files is called a DatasetCollection. The `Dataset` and `DatasetCollection` classes support the following methods:
@@ -153,7 +157,7 @@ In the Fractal example, the Tool.run comman returns an instance of the `Output` 
     output.get_dataset("output").download("image.png")
 ```
 
-The Outputs can be used by the rest of your application, saved, or simply discarded. A copy of the Datasets and DatasetCollections also resides on the NDIP platform, so it is not necessary to maintain a local copy.
+The Outputs can be used by the rest of your application, saved, or simply discarded. Outputs is also iterable, so you can use a for-loop to loop through all the contained datasets and collections. If your Datastore is persisted (using the persist() method), then a copy of the Datasets and DatasetCollections will reside on the NDIP platform, so it is not necessary to maintain a local copy.
 
 ## Next Steps
 
