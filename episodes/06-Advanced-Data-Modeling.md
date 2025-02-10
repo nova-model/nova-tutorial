@@ -58,17 +58,33 @@ Key Features of Pydantic:
 *   **Improved Code Readability:** Makes code easier to understand and maintain by explicitly defining data models. Type hints make it clear what type of data is expected for each field.
 
 
-## Setup I
+## Create a new CLI project
 
 Let\'s start by setting up a new application from the template. 
 
-Create a CLI project answering the `copier` questions, use `Advanced Pydantic` for the project name and use defaults for all other questions.
+To clone the template application, run the following command:
 
 ```bash
 copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git advanced_pydantic
+```
+
+This command will download the template to a directory called `advanced_pydantic`. Copier will prompt you with a series of questions. Please answer the questions as follows:
+
+*   **What is your project name?**
+
+    > Enter `Advanced Pydantic`
+
+*   **All other questions**
+
+    > Press enter to accept the default.
+
+After that, go into the created folder and install project dependencies:
+
+```bash
 cd advanced_pydantic
 poetry install
 ```
+
 
 ## How Pydantic Works
 
@@ -182,7 +198,7 @@ poetry run app
 For easier integration with the NOVA framework, where model field information is used for displaying and validating GUI elements, we recommend avoiding overly complex nested structures. In particular, lists of lists are currently not supported.
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Implement custom validation logic for a single field.
+## Implement custom validation logic for a single field
 
 Sometimes, simple validation like checking the minimum length is not enough. In such cases, you can write a custom validation function for a specific field.
 
@@ -221,7 +237,7 @@ Note that we used the mode="**after**" option for the validator. This ensures th
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-## Implement custom validation logic for the whole model.
+## Implement custom validation logic for the whole model
 
 In some cases, you may need to validate the entire model, not just individual fields. This can be done by writing a custom validation function for the whole model using the `@model_validator` decorator.
 
@@ -255,17 +271,57 @@ def main() -> None:
 
 This code will raise a ValueError because the name ("alice") does not start with a capital letter, while the id is even.
 
-## Setup II
+## Create a simple Trame application
 
-Now, let\'s create a simple Trame GUI, use `Trame With Pydantic` for the project name, 
-set up a Trame-based GUI application based on MVVM and use defaults for all other questions.
+Now, let\'s create a simple Trame-based GUI application.
+
+To clone the template application, run the following command:
 
 ```bash
-cd .. # if you are in advanced_pydantic folder
 copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git pydantic_mvvm
+```
+
+This command will download the template to a directory called `pydantic_mvvm`. Copier will prompt you with a series of questions. Please answer the questions as follows:
+
+*   **What is your project name?**
+
+    > Enter `Advanced Pydantic`
+
+*   **What is your Python package name (use Python naming conventions)?**
+
+    > Press enter to accept the default.
+
+*   **Do you want to install Mantid for your project?**
+
+    > Enter `n`
+
+*   **Are you developing a GUI application using MVVM pattern?**
+
+    > Enter `y`
+
+*   **Which library will you use?**
+
+    > Select `Trame`
+
+*   **Do you want a template with multiple tabs?**
+
+    > Enter `n`
+
+*   **Publish to PyPI?**
+
+    > Enter `n`
+
+*   **Publish documentation to readthedocs.io?**
+
+    > Enter `n`
+
+After that, go into the created folder and install project dependencies:
+
+```bash
 cd pydantic_mvvm
 poetry install
 ```
+
 
 ## Using Pydantic models in NOVA framework
 
@@ -294,7 +350,7 @@ class MainViewModel:
         self.settings_bind = binding.new_bind(self.settings)
         
     def update_view(self):
-        self.settings_bind.update_view(self.settings)
+        self.settings_bind.update_in_view(self.settings)
 ```
 
 In your view, remove all other fields and add the following InputField (modify `src/trame_with_pydantic/app/views/main.py`):
@@ -331,6 +387,22 @@ class MainViewModel:
 ```
 
 The function will receive a dictionary containing lists of updated or invalid fields. Note that if a validation error occurs, the model will not be updated, leading to a discrepancy between the values displayed in the UI and those in the model.
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+**Model validation**
+Change the model validation rule so that it does not allow user `alice`.
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+**Pydantic Field**
+Add another Pydantic field - a float value that should be positive, to the model.
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+**Value auto fix**
+In the GUI application, set the port to the default value if a user enters an incorrect value in the interface.
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - Data Validation has many key benefits, such as protecting against errors, data corruption, and vulnerabilities. 

@@ -21,4 +21,4 @@ class MainViewModel:
             print(f"model fields updated: {results['updated']}")
 
     def update_view(self) -> None:
-        self.settings_bind.update_view(self.settings)
+        self.settings_bind.update_in_view(self.settings)
