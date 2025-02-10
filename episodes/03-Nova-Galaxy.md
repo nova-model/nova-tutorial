@@ -128,11 +128,6 @@ poetry run app
 
 You should see `Fractal tool finished successfully.` printed to the console.
 
-::::::::::::::::::::::::::::::::::::::::: callout
-By default, trame will open a new tab in the browser and bring it to focus. If this is undesired behavior, it can be prevented by using ```poetry run app --server```.
-
-::::::::::::::::::::::::::::::::::::::::::::::::::
-
 ## Asynchronous tool execution
 
 At times, it may be desirable to execute a tool or workflow without waiting on the result. The class Tool method run has an optional `wait` parameter. The default is true so that the tool is run in a blocking manner. However, by setting the parameter to false, the tool will be run asynchronously in a non-blocking manner.

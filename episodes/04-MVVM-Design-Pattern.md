@@ -292,6 +292,11 @@ poetry run app
 
 The application should launch a tab in your web browser. The GUI will have a `FRACTAL` tab and a few sample tabs which were created by the template application. The run button on the `Fractal` tab can be used to launch the `Fractal` NDIP tool. The tool will take a few minutes to complete but when it does, the resulting `Fractal` image will be displayed.
 
+::::::::::::::::::::::::::::::::::::::::: callout
+If you don't want Trame to launch a tab by default, you can instead run ```poetry run app --server```.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Trigger Pydantic Validation Error (Programmatic)**
 *   In `Fractal` in `src/nova_tutorial/app/models/fractal.py`, modify the `set_fractal_type` function from the previous exercise to use an *invalid* fractal type:
