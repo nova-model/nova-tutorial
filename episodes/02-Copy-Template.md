@@ -176,6 +176,7 @@ The template includes a basic GitLab CI configuration file (`.gitlab-ci.yml`).  
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
+*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - Nova provides a template application to help get started developing your application.

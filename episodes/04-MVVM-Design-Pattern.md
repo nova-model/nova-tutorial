@@ -336,6 +336,7 @@ If you don't want Trame to launch a tab by default, you can instead run ```poetr
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
+*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - MVVM stands for Model, View, View-Model.

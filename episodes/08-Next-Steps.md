@@ -88,9 +88,9 @@ After performing these steps, your application will be available to NDIP users.
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
+*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
 
 By following the steps outlined in this section, you can deploy your own applications to the NDIP platform and make them available to the wider scientific community.
-```
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - Tools must be containerized to run on NDIP.
