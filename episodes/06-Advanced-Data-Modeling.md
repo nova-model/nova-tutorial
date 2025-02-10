@@ -136,7 +136,7 @@ class Address(BaseModel):
 
 2. Using the Address Model as a Nested Field (modify User model in `src/advanced_pydantic/main.py`).
 
-The User model now contains:
+Update the User model so that it now contains:
 
 - id: An integer that must be greater than 0 (default is 1).
 - name: A required string with at least 1 character (default is "someName").
@@ -269,9 +269,9 @@ poetry install
 
 ## Using Pydantic models in NOVA framework
 
-One of the great features of the NOVA Framework is that it allows to leverage Pydantic models to automatically validation UI elements. Let\'s walk through what that looks like in code.
+One of the great features of the NOVA Framework is that it allows an application to leverage Pydantic models to automatically validate UI elements. Let\'s walk through what that looks like in code.
 
-First, let\'s add the following model (create `src/trame_with_pydantic/app/models/settings.py`):
+First, let\'s add the following Model (create `src/trame_with_pydantic/app/models/settings.py`):
 
 ```python
 from pydantic import BaseModel, Field
@@ -280,7 +280,7 @@ class SettingsModel(BaseModel):
     port: int = Field(default=8080, gt=0, lt=65536, title="Port Number", description="The port to listen on.", examples=["12345"])
 ```
 
-Then in your viewmodel, you create binding for this model (modify `src/trame_with_pydantic/app/view_models/main.py`, clean up code created by tempalte engine, we don't need it for this example):
+Then in your ViewModel, you createa binding for this Model (modify `src/trame_with_pydantic/app/view_models/main.py` and clean up the code created by the template engine, we don't need it for this example):
 
 ```python
 from typing import Any, Dict
@@ -297,7 +297,7 @@ class MainViewModel:
         self.settings_bind.update_view(self.settings)
 ```
 
-And in your view, remove all other fields and add the following InputField (modify `src/trame_with_pydantic/app/views/main.py`):
+In your view, remove all other fields and add the following InputField (modify `src/trame_with_pydantic/app/views/main.py`):
 
 ```python
 ...
@@ -306,7 +306,7 @@ And in your view, remove all other fields and add the following InputField (modi
             InputField(v_model="settings.port")
 ```
 
-Notice how you don\'t need to pass any attributes to `InputField` other than `v_model`. The `InputField` automatically retrieves the `title`, `description` and `examples` and uses these values for label, hint and empty value.
+Notice how you don\'t need to pass any attributes to `InputField` other than `v_model`. The `InputField` automatically retrieves the `title`, `description` and `examples`. The values are used for label, hint and empty value.
 
 The InputField also performs automatic validation for this field. If you enter an invalid port number into the InputField, the InputField will change state to invalid and the label will turn red.
 
@@ -331,3 +331,10 @@ class MainViewModel:
 ```
 
 The function will receive a dictionary containing lists of updated or invalid fields. Note that if a validation error occurs, the model will not be updated, leading to a discrepancy between the values displayed in the UI and those in the model.
+
+:::::::::::::::::::::::::::::::::::::::: keypoints
+- Data Validation has many key benefits, such as protecting against errors, data corruption, and vulnerabilities. 
+- Pydantic is a powerful Python library used to define data models and enforce data validation.
+- Pydantic supports complex data structures and custom data validation logic.
+- The NOVA Framework supports Pydantic models to automatically validate UI elements.
+::::::::::::::::::::::::::::::::::::::::::::::::::
