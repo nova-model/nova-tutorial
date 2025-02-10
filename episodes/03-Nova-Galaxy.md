@@ -155,7 +155,7 @@ In the Fractal example, the Tool.run comman returns an instance of the `Output` 
     output.get_dataset("output").download("image.png")
 ```
 
-The Outputs can be used by the rest of your application, saved, or simply discarded. If your Datastore is persisted (using the persist() method), then a copy of the Datasets and DatasetCollections will reside on the NDIP platform, so it is not necessary to maintain a local copy.
+The Outputs can be used by the rest of your application, saved, or simply discarded. Outputs is also iterable, so you can use a for-loop to loop through all the contained datasets and collections. If your Datastore is persisted (using the persist() method), then a copy of the Datasets and DatasetCollections will reside on the NDIP platform, so it is not necessary to maintain a local copy.
 
 ## Next Steps
 
