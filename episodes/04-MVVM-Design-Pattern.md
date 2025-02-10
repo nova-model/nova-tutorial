@@ -103,7 +103,7 @@ Benefits of Pydantic:
 
 ## Data Binding with NOVA
 
-The **`nova-mvvm`** library greatly simplifies the data synchronization between the components of an MVVM application and provides support for user interfaces utilizing the Trame, PyQt, and Panel graphical frameworks. The library provides several predefined classes including TrameBinding, PyQtBinding, and PanelBinding to connect UI components to model variables. Here, we'll focus on the TrameBinding class, but all three function similarly.
+The **`nova-mvvm`** library greatly simplifies the data synchronization between the components of an MVVM application and provides support for user interfaces utilizing the Trame, PyQt, and Panel graphical frameworks. The library provides several predefined classes including TrameBinding, PyQtBinding, and PanelBinding to connect UI components to model variables. Here, we will focus on the TrameBinding class, but all three function similarly.
 
 ### How to use TrameBinding
 
@@ -156,7 +156,7 @@ Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate P
         self.update_view()
 ```
 
-**2. Updating our Fractal Class for pydantaic and MVVM (`src/nova_tutorial/app/models/fractal.py**
+**2. Updating our Fractal Class for pydantaic and MVVM (`src/nova_tutorial/app/models/fractal.py`)**
 
 *   **Adding new imports**: We need to add some imports for pydantic and working with base64 encodings to deal with the image. Modify your import block to match below.
 
@@ -169,7 +169,7 @@ from pydantic import BaseModel, Field
 from nova.galaxy import Connection, Parameters, Tool
 ```
 
-*   **Update class variables:** Now we'll update fractal_type and other class variables to support pydantic. We'll also add an image variable to store the image. Modify the variable declarations to the following:
+*   **Update class variables:** Now we will update fractal_type and other class variables to support pydantic. We will also add an image variable to store the image. Modify the variable declarations to the following:
 
 ```python
 class Fractal(BaseModel):
@@ -191,7 +191,8 @@ class Fractal(BaseModel):
                 self.image_data = f"data:image/png;base64,{b64encode(image_file.read()).decode()}"
 ```
 
-**3. Updating our MainModel Class to add the new Fractal Class (`src/nova_tutorial/app/models/main_model.py**
+**3. Updating our MainModel Class to add the new Fractal Class (`src/nova_tutorial/app/models/main_model.py`)**
+
 *   **Add Fractal to imports**: Add an import for the Fractal class into our MainModel.
 
 ```python
@@ -230,6 +231,7 @@ class FractalTab:
 ```
 
 **5. Modify the tab panel (`src/nova_tutorial/app/views/tabs_panel.py`):**
+
 *   **Add Fractal Tab to the tab panel**: Modify the tab panel to add our new Fractal tab
 
 ```python
@@ -240,6 +242,7 @@ class FractalTab:
 ```
 
 **6. Modify the tab panel content (`src/nova_tutorial/app/views/tab_content_panel.py`):**
+
 *   **Add FractalTab to imports**: Import the newly created FractalTab class into our tab_content_panel.
 
 ```python
