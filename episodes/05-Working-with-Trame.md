@@ -121,7 +121,7 @@ The `with` syntax is used by Trame to add content to a slot. This allows your vi
 
 Here is a layout diagram showing all of the available slots in `ThemedApp`:
 
-![The `nova-trame` slot diagram for its default layout](https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/_images/layout.png)
+![The `nova-trame` slot diagram for its default layout](fig/layout.png)
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
@@ -222,7 +222,7 @@ We\'ll add an `InputField` and a `VBoxLayout` to this tab.
 ```python
 """Module for the Sample Tab 1."""
 
-from nova.trame.view.components import InputField
+from nova.trame.view.components import InputField, RemoteFileInput
 from nova.trame.view import layouts
 from trame.widgets import vuetify3 as vuetify
 
@@ -236,10 +236,27 @@ class SampleTab1:
         with layouts.VBoxLayout(classes="ma-2"):
             InputField(v_model="config.username", label="Username")
             vuetify.VCheckbox(label="Remember me")
-            RemoteFileInput(v_model="config.file", base_paths=["/SNS"])
+            RemoteFileInput(v_model="config.file", base_paths=["/HFIR", "/SNS"])
 ```
 
-**3. `nova_tutorial/app/views/sample_tab_2.py` (Modify):**
+Since `config.file` doesn't exist yet, we\'ll need to add it to the model.
+
+**3. `nova_tutorial/app/models/main_model.py` (Modify):**
+
+```python
+    username: str = Field(
+        default="test_name",
+        min_length=1,
+        title="User Name",
+        description="Please provide the name of the user",
+        examples=["user"],
+    )
+    password: str = Field(default="test_password", title="User Password")
+    file: str = Field(default="", title="Select a File")
+    fractal: Fractal = Field(default_factory=Fractal)
+```
+
+**4. `nova_tutorial/app/views/sample_tab_2.py` (Modify):**
 
 We\'ll add a `GridLayout` and an `InputField` to this tab.
 
@@ -269,10 +286,88 @@ In `SampleTab1`, we\'ve used a `VBoxLayout` to vertically stack the `InputField`
 To run the code, use the following command in the top level of your `nova_tutorial` project:
 
 ```bash
-poetry run start
+poetry run app
 ```
 
 You should now see the simple UI. When you click the "Sample Tab 1" and "Sample Tab 2" tabs, you should now see the updated content with the new UI components.
+
+## Advanced Topics (Asynchronicity & Conditional Rendering)
+
+Now that we understand the basics of working with Trame, let\'s make the view for the fractal tab a bit more intuitive for the user by giving them a visual indicator that the job is running.
+
+**5. `nova_tutorial/app/views/fractal_tab.py` (Modify):**
+
+```python
+    def __init__(self, view_model: MainViewModel) -> None:
+        self.view_model = view_model
+        self.view_model.running_bind.connect("running")
+        self.create_ui()
+
+    def create_ui(self) -> None:
+        InputField(v_model="config.fractal.fractal_type", classes="mb-2")
+        vuetify.VProgressCircular(v_if="running", indeterminate=True)
+        vuetify.VBtn(
+            "Run Fractal",
+            v_else=True,
+            click=self.view_model.run_fractal # calls the run_fractal_tool method
+        )
+        vuetify.VImg(src=("config.fractal.image_data",), height="400", width="400")
+```
+
+We will need to add a data binding for `running`, as well. We choose to place this directly in the view model as this is not relevant to running the fractal tool on NDIP.
+
+**6. `nova_tutorial/app/view_models/main.py` (Modify):**
+
+```python
+    def __init__(self, model: MainModel, binding: BindingInterface):
+        self.model = model
+        self.running = False
+
+        # here we create a bind that connects ViewModel with View. It returns a communicator object,
+        # that allows to update View from ViewModel (by calling update_view).
+        # self.model will be updated automatically on changes of connected fields in View,
+        # but one also can provide a callback function if they want to react to those events
+        # and/or process errors.
+        self.config_bind = binding.new_bind(self.model, callback_after_update=self.change_callback)
+        self.running_bind = binding.new_bind()
+
+    def update_view(self) -> None:
+        self.config_bind.update_in_view(self.model)
+        self.running_bind.update_in_view(self.running)
+```
+
+Finally, we manipulate our new view state based on the current status of the tool. Because the fractal tool takes a long time to complete, we offload it to a background thread. If we do not do this, then Trame will not update the view until the tool has finished running, which defeats the purpose of this change.
+
+```python
+    def run_fractal(self) -> None:
+        self.running = True
+        self.update_view()
+
+        # update_view won't take effect until this method returns a value, so we must offload this long-running task to
+        # a background thread for our conditional rendering to work.
+        fractal_tool_thread = Thread(target=self.run_fractal_in_background, daemon=True)
+        fractal_tool_thread.start()
+
+        # We also need to know when the tool is done running so that we can
+        create_task(self.monitor_fractal())
+
+    def run_fractal_in_background(self) -> None:
+        self.model.fractal.run_fractal_tool()
+        self.running = False
+
+    async def monitor_fractal(self) -> None:
+        while self.running:
+            await sleep(0.1)
+        self.update_view()
+```
+
+::::::::::::::::::::::::::::::::: callout
+With any Trame or `nova-trame` component, you can use the `v_if`, `v_else_if`, and `v_else` arguments to only show the component in the interface when a condition is true. The condition can be a reference to your model, similar to the `v_model` argument, or it can be a full JavaScript expression for complex use cases.
+:::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::: callout
+One major caveat when working with Trame is that Trame itself runs in the main thread of your application. Since Trame is responsible for syncing state between the server and the user interface, if you run a long, CPU-bound task in the main thread then Trame will freeze and your user interface will likely crash. If you need to run a long job (for example, a Mantid command that takes several minutes), then it is your responsibility to ensure that the task is run in a separate thread.
+:::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Explore the `InputField` Component**

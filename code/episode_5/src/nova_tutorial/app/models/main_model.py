@@ -22,5 +22,5 @@ class MainModel(BaseModel):
         examples=["user"],
     )
     password: str = Field(default="test_password", title="User Password")
-    fractal: Fractal = Field(default_factory=Fractal)
     file: str = Field(default="", title="Select a File")
+    fractal: Fractal = Field(default_factory=Fractal)
