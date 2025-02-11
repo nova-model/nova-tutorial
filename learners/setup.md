@@ -24,13 +24,13 @@ In order to run the code examples in this tutorial, an API Key is required. An A
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
-For this tutorial, we will be using [https://calvera-test.ornl.gov](calvera-test) as our NDIP instance. This is the instance that is used for testing and development of platform and NOVA tools. Once tools are mature and ready for users, they'll be migrated to [https://calvera.ornl.gov](calvera). This process is explained in more detail at the end of the tutorial.
+For this tutorial, we will be using [https://calvera-test.ornl.gov](https://calvera-test.ornl.gov) as our NDIP instance. This is the instance that is used for testing and development of platform and NOVA tools. Once tools are mature and ready for users, they'll be migrated to [https://calvera.ornl.gov](https://calvera.ornl.gov). This process is explained in more detail at the end of the tutorial.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 The steps to retrieve your API Key are:
 
-1. Navigate to [https://calvera-test.ornl.gov](calvera-test.ornl.gov)
+1. Navigate to [https://calvera-test.ornl.gov](https://calvera-test.ornl.gov)
 2. Log in using your UCAMS id if necessary
 3. Under the Users dropdown menu, choose preferences
 4. Select "Manage API Key"
