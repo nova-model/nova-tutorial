@@ -1,6 +1,6 @@
 ---
 title: "Programming with NDIP"
-teaching: 10
+teaching: 45
 exercises: 3
 ---
 
