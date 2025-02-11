@@ -1,6 +1,6 @@
 ---
 title: "Advanced Visualizations"
-teaching: 10
+teaching: 60
 exercises: 1
 ---
 
