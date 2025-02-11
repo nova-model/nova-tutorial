@@ -1,7 +1,7 @@
 ---
 title: "User Interface Best Practices: The MVVM Design Pattern"
-teaching: 10
-exercises: 0
+teaching: 45
+exercises: 2
 ---
 
 ::::::::::::::::::::::::::::::::::::::: objectives
