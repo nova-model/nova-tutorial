@@ -146,7 +146,7 @@ InputField(v_model="config.username")
 
 Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate Pydantic for data validation.
 
-**1. Adding Fractal to the ViewModel (`src/nova_tutorial/app/view_models/main.py`):**
+**1. Adding Fractal to the ViewModel (`src/nova_tutorial/app/view_models/main.py`) (Modify):**
 
 *   **Running our Model**:  We start by adding a method to bottom of our ViewModel which will run the Fractal tool.
 
@@ -156,7 +156,7 @@ Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate P
         self.update_view()
 ```
 
-**2. Updating our Fractal Class for pydantaic and MVVM (`src/nova_tutorial/app/models/fractal.py`)**
+**2. Updating our Fractal Class for pydantaic and MVVM (`src/nova_tutorial/app/models/fractal.py`) (Modify)**
 
 *   **Adding new imports**: We need to add some imports for pydantic and working with base64 encodings to deal with the image. Modify your import block to match below.
 
@@ -191,7 +191,7 @@ class Fractal(BaseModel):
                 self.image_data = f"data:image/png;base64,{b64encode(image_file.read()).decode()}"
 ```
 
-**3. Updating our MainModel Class to add the new Fractal Class (`src/nova_tutorial/app/models/main_model.py`)**
+**3. Updating our MainModel Class to add the new Fractal Class (`src/nova_tutorial/app/models/main_model.py`) (Modify):**
 
 *   **Add Fractal to imports**: Add an import for the Fractal class into our MainModel.
 
@@ -206,7 +206,7 @@ from .fractal import Fractal  # Import Fractal
     fractal: Fractal = Field(default_factory=Fractal) #Add Fractal Model
 ```
 
-**4. Creating a FractalTab (`src/nova_tutorial/app/views/fractal_tab.py`):**
+**4. Creating a FractalTab (`src/nova_tutorial/app/views/fractal_tab.py`) (Create):**
 
 *   **Create a fractal tab**: Create a new file and add the following code:
 
@@ -230,7 +230,7 @@ class FractalTab:
         vuetify.VImg(src=("config.fractal.image_data",), height="400", width="400")
 ```
 
-**5. Modify the tab panel (`src/nova_tutorial/app/views/tabs_panel.py`):**
+**5. Modify the tab panel (`src/nova_tutorial/app/views/tabs_panel.py`) (Modify):**
 
 *   **Add Fractal Tab to the tab panel**: Modify the tab panel to add our new Fractal tab
 
@@ -241,7 +241,7 @@ class FractalTab:
             vuetify.VTab("Sample Tab 2", value=3)
 ```
 
-**6. Modify the tab panel content (`src/nova_tutorial/app/views/tab_content_panel.py`):**
+**6. Modify the tab panel content (`src/nova_tutorial/app/views/tab_content_panel.py`) (Modify):**
 
 *   **Add FractalTab to imports**: Import the newly created FractalTab class into our tab_content_panel.
 
@@ -261,7 +261,7 @@ from .fractal_tab import FractalTab  # Import the FractalTab
                             SampleTab2()
 ```
 
-**7. `main.py` - Calling the Model (`src/nova_tutorial/app/main.py`):**
+**7. `main.py` - Calling the Model (`src/nova_tutorial/app/main.py`) (Modify):**
 
 We are now going to modify the existing `main.py` file. Change the main method to match the code below.
 
@@ -303,6 +303,7 @@ If you don't want Trame to launch a tab by default, you can instead run ```poetr
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Trigger Pydantic Validation Error (Programmatic)**
+
 *   In `Fractal` in `src/nova_tutorial/app/models/fractal.py`, modify the `set_fractal_type` function from the previous exercise to use an *invalid* fractal type:
 
 ```python

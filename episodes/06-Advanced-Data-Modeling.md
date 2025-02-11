@@ -90,7 +90,7 @@ poetry install
 
 Pydantic uses Python type hints to define data models. When you create an instance of a Pydantic model, Pydantic automatically validates the input data against the defined types and constraints.
 
-Here\'s a simple example (add this code to `src/advanced_pydantic/main.py`):
+1. Create a User Model (`src/advanced_pydantic/main.py`) (Modify):
 
 ```python
 from pydantic import BaseModel, Field
@@ -104,7 +104,7 @@ In this example, we define a `User` model with two fields: `id` and `name`. We u
 
 When you create an instance of the `User` model, Pydantic automatically validates the input data.
 
-Modify the main function in `src/advanced_pydantic/main.py`
+2. Create an instance of a User (`src/advanced_pydantic/main.py`) (Modify):
 
 ```python
 from pydantic import ValidationError
@@ -130,7 +130,7 @@ If the input data is invalid, Pydantic raises a `ValidationError` exception with
 
 When working with structured data, it\'s common to have nested objects. For example, a User model from the above example might have multiple Address entries. In Pydantic, we can achieve this by creating nested models.
 
-1. Creating the Address Model (add code to `src/advanced_pydantic/main.py`).
+1. Creating the Address Model (`src/advanced_pydantic/main.py`) (Modify).
 
 The Address model represents a simple address with three fields:
 
@@ -150,7 +150,7 @@ class Address(BaseModel):
     type: Literal["home", "work"] = Field()
 ```
 
-2. Using the Address Model as a Nested Field (modify User model in `src/advanced_pydantic/main.py`).
+2. Using the Address Model as a Nested Field (`src/advanced_pydantic/main.py`) (Modify).
 
 Update the User model so that it now contains:
 
@@ -167,7 +167,7 @@ class User(BaseModel):
     addresses: List[Address] = Field(min_length=1)
 ```
 
-now you can try to test the model. Modify the main function in `src/advanced_pydantic/main.py`
+3. Test the model (`src/advanced_pydantic/main.py`) (Modify).
 
 ```python    
 def main() -> None:
@@ -202,7 +202,9 @@ For easier integration with the NOVA framework, where model field information is
 
 Sometimes, simple validation like checking the minimum length is not enough. In such cases, you can write a custom validation function for a specific field.
 
-For example, let\'s say we have a User model where only even IDs are allowed. We can enforce this constraint using the `@field_validator decorator` (modify `src/advanced_pydantic/main.py`):
+For example, let\'s say we have a User model where only even IDs are allowed. We can enforce this constraint using the `@field_validator decorator`.
+
+4. Using the `@field_validator decorator` (`src/advanced_pydantic/main.py`) (Modify):
 
 ```python
 from pydantic import BaseModel, Field, field_validator
@@ -241,7 +243,9 @@ Note that we used the mode="**after**" option for the validator. This ensures th
 
 In some cases, you may need to validate the entire model, not just individual fields. This can be done by writing a custom validation function for the whole model using the `@model_validator` decorator.
 
-For example, let\'s say we have a User model where the name and id must meet specific conditions together. For instance, we only allow users with even IDs to have names that start with a capital letter. We can enforce this logic using a @model_validator (modify `src/advanced_pydantic/main.py`):
+For example, let\'s say we have a User model where the name and id must meet specific conditions together. For instance, we only allow users with even IDs to have names that start with a capital letter. We can enforce this logic using a @model_validator.
+
+5. Using the `@model_validator decorator` (`src/advanced_pydantic/main.py`) (Modify):
 
 ```python
 from pydantic import BaseModel, Field, model_validator
@@ -327,7 +331,7 @@ poetry install
 
 One of the great features of the NOVA Framework is that it allows an application to leverage Pydantic models to automatically validate UI elements. Let\'s walk through what that looks like in code.
 
-First, let\'s add the following Model (create `src/trame_with_pydantic/app/models/settings.py`):
+1. First, let\'s add the following Model (`src/trame_with_pydantic/app/models/settings.py`) (Create):
 
 ```python
 from pydantic import BaseModel, Field
@@ -336,7 +340,9 @@ class SettingsModel(BaseModel):
     port: int = Field(default=8080, gt=0, lt=65536, title="Port Number", description="The port to listen on.", examples=["12345"])
 ```
 
-Then in your ViewModel, you createa binding for this Model (modify `src/trame_with_pydantic/app/view_models/main.py` and clean up the code created by the template engine, we don't need it for this example):
+2. Create a binding for the model (`src/trame_with_pydantic/app/view_models/main.py`) (Modify):
+
+In your ViewModel, create a binding for this Model and clean up the code created by the template engine, we don't need it for this example):
 
 ```python
 from typing import Any, Dict
@@ -353,7 +359,7 @@ class MainViewModel:
         self.settings_bind.update_in_view(self.settings)
 ```
 
-In your view, remove all other fields and add the following InputField (modify `src/trame_with_pydantic/app/views/main.py`):
+3. In your view, remove all other fields and add the following InputField (`src/trame_with_pydantic/app/views/main.py`) (Modify):
 
 ```python
 ...
@@ -370,7 +376,9 @@ In that fashion, the `InputField` seamlessly pulls information from your code\'s
 
 ### Using callbacks in ViewModel to react to validation errors
 
-Sometimes, you may want to respond to UI validation errors beyond just marking a field as invalid (which happens automatically). In such cases, you can add a callback to the `new_bind` function (modify `src/trame_with_pydantic/app/view_models/main.py`):
+Sometimes, you may want to respond to UI validation errors beyond just marking a field as invalid (which happens automatically). In such cases, you can add a callback to the `new_bind` function.
+
+4. Using callbacks with `new_bind` (`src/trame_with_pydantic/app/view_models/main.py`) (modify):
 
 ```python
 class MainViewModel:
