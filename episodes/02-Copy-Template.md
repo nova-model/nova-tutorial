@@ -1,6 +1,6 @@
 ---
 title: "Getting Started with a Template Application"
-teaching: 10
+teaching: 15
 exercises: 3
 ---
 
