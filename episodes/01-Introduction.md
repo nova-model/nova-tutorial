@@ -1,6 +1,6 @@
 ---
 title: "Introduction to NOVA and NDIP"
-teaching: 10
+teaching: 20
 exercises: 0
 ---
 
