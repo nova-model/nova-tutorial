@@ -1,6 +1,6 @@
 ---
 title: "Advanced Data Validation with Pydantic"
-teaching: 20
+teaching: 60
 exercises: 0
 ---
 
