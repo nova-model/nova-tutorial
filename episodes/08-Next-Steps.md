@@ -1,6 +1,6 @@
 ---
 title: "Development Cycle and Next Steps"
-teaching: 10
+teaching: 20
 exercises: 0
 ---
 # 8. Development Cycle and Next Steps
