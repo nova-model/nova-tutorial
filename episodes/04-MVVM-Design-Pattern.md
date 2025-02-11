@@ -103,17 +103,19 @@ Benefits of Pydantic:
 
 ## Data Binding with NOVA
 
-The **`nova-mvvm`** library greatly simplifies the data synchronization between the components of an MVVM application and provides support for user interfaces utilizing the Trame, PyQt, and Panel graphical frameworks. The library provides several predefined classes including TrameBinding, PyQtBinding, and PanelBinding to connect UI components to model variables. Here, we will focus on the TrameBinding class, but all three function similarly.
+The **`nova-mvvm`** library greatly simplifies the data synchronization between the components of an MVVM application and provides support for user interfaces utilizing the Trame, PyQt, and Panel graphical frameworks. The library provides several predefined classes including TrameBinding, PyQtBinding, and PanelBinding to connect UI components to model variables. 
+
+The rest of this tutorial focuses on building Trame GUI applications using `nova-trame` and `nova-mvvm`. Therefore, we will focus on the TrameBinding class, but all three function similarly.
 
 ### How to use TrameBinding
 
-The initial step is to great a BindingInterface. A BindingInterface serves as the foundational layer for how connections are made between variables in the ViewModel and UI components in the View. Once a Trame application has started, the BindingInterface can be created in the View with:
+The initial step is to create a BindingInterface. A BindingInterface serves as the foundational layer for how connections are made between variables in the ViewModel and UI components in the View. Once a Trame application has started, the BindingInterface can be created in the View with:
 
 ```python
 bindingInterface = TrameBinding(self.server.state) # server is the Trame Server
 ```
 
-After a BindingInterface has been created, variables must be added to the interface via the interface\'s `new_bind` method. The `new_bind` method expects a variable that will be linked with the UI component, and an optional callback method. The callback method is useful if there are actions to be performed after updates to the UI. In the code snippet below, we've passed the Binding Interface to the ViewModel. The ViewModel adds the `model` variable to the binding interface. This `new_bind` method returns a `Communicator`. The `Communicator` is an object which manages the binding and will be used to propgate updates.
+After a BindingInterface has been created, variables must be added to the interface via the interface\'s `new_bind` method. The `new_bind` method expects a variable that will be linked to a UI component, and an optional callback method. The callback method is useful if there are actions to be performed after updates to the UI. In the code snippet below, we've passed the Binding Interface to the ViewModel. The ViewModel adds the `model` variable to the binding interface. This `new_bind` method returns a `Communicator`. The `Communicator` is an object which manages the binding and will be used to propgate updates.
 
 ```python
 # Adding a binding to the Binding Interface, returns a Communicator
@@ -128,9 +130,7 @@ def update_view(self) -> None:
     self.config_bind.update_in_view(self.model)
 ```
 
-We\'ve seen how to create a BindingInterface, add a new binding, and how to perform updates. We also need to connect our View components to the Communicators. The Communicator class has a `connect` method. This method accepts a callable object or a string. In the example below, we connect to the `config_bind` Communicator object that was created in our ViewModel. We\'re passing in a string as our connector object, but we could pass in a callable object instead.
-
-!!!!!!THIS IS CONFUSING TO ME. WHERE DOES THIS CONFIG STRING COME FROM? I haven't forgot this, just making a sepearate issue for it because it's just a confusing topic and I'm working on the wording. Will circle back.!!!!!
+We\'ve seen how to create a BindingInterface, add a new binding, and how to perform updates. We also need to connect our View components to the Communicators. The Communicator class has a `connect` method. This method accepts a callable object or a string. If you pass a callable object, such as a method, that object will be called whenever the binding\'s update_in_view method is called. An example of this can be seen when working with Plotly in Episode 7. In the example below, we connect to the `config_bind` Communicator object that was created in our ViewModel. When a string is passed to the connect method, that string will be used as the unique name of our connector. In this example, we pass in the string `config` but you are free to use any string that is not already in use as a connector. 
 
 ```python
 self.view_model.config_bind.connect("config")
