@@ -289,7 +289,7 @@ This command will download the template to a directory called `pydantic_mvvm`. C
 
 *   **What is your project name?**
 
-    > Enter `Advanced Pydantic`
+    > Enter `Trame with Pydantic`
 
 *   **What is your Python package name (use Python naming conventions)?**
 
@@ -353,15 +353,18 @@ from ..models.settings import SettingsModel
 class MainViewModel:
     def __init__(self, _, binding: BindingInterface):
         self.settings = SettingsModel()
-        self.settings_bind = binding.new_bind(self.settings)
-        
-    def update_view(self):
-        self.settings_bind.update_in_view(self.settings)
+        self.settings_bind = binding.new_bind(self.settings)        
 ```
 
 3. In your view, remove all other fields and add the following InputField (`src/trame_with_pydantic/app/views/main.py`) (Modify):
 
 ```python
+
+    def __init__(self) -> None:
+        ....
+        self.view_model.settings_bind.connect("settings")
+        ....
+
 ...
     with layout.content:
         with vuetify.VRow(align="center", classes="mt-4"):
