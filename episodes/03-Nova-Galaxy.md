@@ -25,11 +25,16 @@ exercises: 3
 
 # 3. Programming with NDIP
 
-In this section, we will start using the `nova-galaxy` library to interact with the NDIP platform and run a neutron analysis tool.  First, ensure you have set your `GALAXY_URL` and `GALAXY_API_KEY` as environment variables, as explained in the Summary and Setup Episode.  We also need to add `nova-galaxy` as a project dependency.
+In this episode, we will start using the `nova-galaxy` library to interact with the NDIP platform and run a neutron analysis tool. First, ensure you have set your `GALAXY_URL` and `GALAXY_API_KEY` as environment variables, as explained in the Summary and Setup Episode.  We also need to add `nova-galaxy` as a project dependency.
 
 :::::::::::::::::::::::::::::::::::::::  callout
 
 From the command line, type `poetry add nova-galaxy@^0.7.0`. This command will add the nova-galaxy library to the pyproject.toml file as a project dependency. Then run `poetry install` to update your project dependencies.
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::  callout
+
+The `nova-galaxy` library allows us to create powerful python scripts which can leverage NDIP to run tools and workflows, upload data, download results, and more. Although future episodes of this tutorial largely focus on the creation of GUI applications, a GUI is not required to create powerful applications backed by NDIP. 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Interacting with NDIP via `nova-galaxy`
@@ -237,6 +242,7 @@ In both cases, an error is received from the ndip-galaxy library. When changing 
 *   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
+- Nova-Galaxy can be used to create powerful python scripts which leverage the functionality of NDIP.
 - Tools are run remotely on the NDIP platform
 - Nova-Galaxy is used to connect to NDIP and run tools
 - The fractal tool is started remotely and run on NDIP.
