@@ -96,7 +96,7 @@ A comprehensive list of tools, and links to their XML, can be found in Calvera's
 
 Let\'s create a `Fractal` class that uses `nova-galaxy` to run the `neutrons_fractal` tool on NDIP. You can find the complete code for this episode in the `code/episode_3` directory.
 
-**1. `Fractal` Class (`src/nova_tutorial/app/models/fractal.py`):**
+**1. `Fractal` Class (`src/nova_tutorial/app/models/fractal.py`) (Create):**
 
 To get started, let\'s create the Fractal class. Create an empty file at `src/nova_tutorial/app/models/fractal.py`. Add the following pieces of code to the newly created file.
 
@@ -145,7 +145,7 @@ Note that we create a `Tool` object with the `id="neutrons_fractal"`. This tells
 
 The line `data_store.persist()` saves your datastore after the "with" block is exited. Without calling this method, all tools, running or finished, along with their results will be discarded after the "with" block finishes execution.
 
-**2. `main.py` - Calling the Model (`src/nova_tutorial/app/main.py`):**
+**2. `main.py` - Calling the Model (`src/nova_tutorial/app/main.py`) (Modify):**
 
 We are now going to modify the existing `main.py` file. Change the main method to match the code below.
 

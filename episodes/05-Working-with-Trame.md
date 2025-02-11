@@ -75,7 +75,7 @@ Layouts are responsible for arraging your content in a consistent manner. In Tra
 
 `nova-trame` provides a basic layout and theme that you can access via the `ThemedApp` class. The template app will setup your main view class to inherit from `ThemedApp` already, so let\'s look at how the layout is defined and how we can add content to slots.
 
-**1. `nova_tutorial/app/views/main.py`:**
+**1. `src/nova_tutorial/app/views/main.py` (Modify):**
 
 ```python
 class MainApp(ThemedApp):
@@ -215,7 +215,7 @@ For a more detailed explanation of how to work with our layout and theme, please
 
 Now, let\'s add some UI components to the Sample Tabs in our application to demonstrate how to use these components. We\'ll modify the `sample_tab_1.py` and `sample_tab_2.py` files to include these components.
 
-**2. `nova_tutorial/app/views/sample_tab_1.py` (Modify):**
+**2. `src/nova_tutorial/app/views/sample_tab_1.py` (Modify):**
 
 We\'ll add an `InputField` and a `VBoxLayout` to this tab.
 
@@ -241,7 +241,7 @@ class SampleTab1:
 
 Since `config.file` doesn't exist yet, we\'ll need to add it to the model.
 
-**3. `nova_tutorial/app/models/main_model.py` (Modify):**
+**3. `src/nova_tutorial/app/models/main_model.py` (Modify):**
 
 ```python
     username: str = Field(
@@ -256,7 +256,7 @@ Since `config.file` doesn't exist yet, we\'ll need to add it to the model.
     fractal: Fractal = Field(default_factory=Fractal)
 ```
 
-**4. `nova_tutorial/app/views/sample_tab_2.py` (Modify):**
+**4. `src/nova_tutorial/app/views/sample_tab_2.py` (Modify):**
 
 We\'ll add a `GridLayout` and an `InputField` to this tab.
 
@@ -295,7 +295,7 @@ You should now see the simple UI. When you click the "Sample Tab 1" and "Sample 
 
 Now that we understand the basics of working with Trame, let\'s make the view for the fractal tab a bit more intuitive for the user by giving them a visual indicator that the job is running.
 
-**5. `nova_tutorial/app/views/fractal_tab.py` (Modify):**
+**5. `src/nova_tutorial/app/views/fractal_tab.py` (Modify):**
 
 ```python
     def __init__(self, view_model: MainViewModel) -> None:
@@ -316,7 +316,7 @@ Now that we understand the basics of working with Trame, let\'s make the view fo
 
 We will need to add a data binding for `running`, as well. We choose to place this directly in the view model as this is not relevant to running the fractal tool on NDIP.
 
-**6. `nova_tutorial/app/view_models/main.py` (Modify):**
+**6. `src/nova_tutorial/app/view_models/main.py` (Modify):**
 
 ```python
     def __init__(self, model: MainModel, binding: BindingInterface):

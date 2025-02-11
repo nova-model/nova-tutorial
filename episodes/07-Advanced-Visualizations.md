@@ -91,7 +91,7 @@ The pandas install is only necessary for loading example data from Plotly, which
 
 Now, we can create a view that displays a Plotly figure.
 
-**1. `PlotlyView` View Class (`src/viz_examples/views/plotly.py`):**
+**1. `PlotlyView` View Class (`src/viz_examples/views/plotly.py`) (Create):**
 
 *   **Imports**:  Pay special attention to the plotly import. This module contains a Trame widget that will allow us to quickly add a Plotly chart to our view.
 
@@ -151,7 +151,7 @@ class PlotlyView:
 
 As with our previous examples, there is a corresponding model.
 
-**2. `PlotlyConfig` Model Class (src/viz_examples/models/plotly.py):**
+**2. `PlotlyConfig` Model Class (src/viz_examples/models/plotly.py) (Create):**
 
 *   **Imports**:  The graph_objects module is how we will define the content for our chart. The iris module defines an example dataset.
 
