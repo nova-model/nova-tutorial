@@ -24,7 +24,7 @@ In order to run the code examples in this tutorial, an API Key is required. An A
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
-For this tutorial, we will be using [https://calvera-test.ornl.gov](calvera-test) as our NDIP instance. This is the instance that is used for testing and development of platform and NOVA tools. Once tools are mature and ready for users, they'll be migrated to [https://calvera.ornl.gov](calver). This process is explained in more detail at the end of the tutorial.
+For this tutorial, we will be using [https://calvera-test.ornl.gov](calvera-test) as our NDIP instance. This is the instance that is used for testing and development of platform and NOVA tools. Once tools are mature and ready for users, they'll be migrated to [https://calvera.ornl.gov](calvera). This process is explained in more detail at the end of the tutorial.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
