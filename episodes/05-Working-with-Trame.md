@@ -1,6 +1,6 @@
 ---
 title: "Web-based User Interface Development"
-teaching: 20
+teaching: 35
 exercises: 3
 ---
 
