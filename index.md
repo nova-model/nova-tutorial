@@ -2,9 +2,9 @@
 site: sandpaper::sandpaper_site
 ---
 
-# NOVA Tutorial: Building Interactive Neutron Analysis Tools
+# Neutrons Open Visualization and Analysis Framework Tutorial
 
-This tutorial guides you through the process of building interactive web applications for neutron data analysis using the NOVA *framework*. It leverages the Model-View-ViewModel (MVVM) architectural pattern and three key NOVA libraries: `nova-galaxy`, `nova-trame`, and `nova-mvvm`, to simplify interaction with the Neutron Data Interpretation Platform (NDIP).
+This tutorial guides you through the process of building applications for neutron data analysis using the NOVA *framework*. NOVA provides key components to create applications that range from simple scripts, all the way to full user interfaces with advanced visualization capabilities. It leverages a Model-View-ViewModel (MVVM) architectural pattern and three key NOVA libraries: `nova-galaxy`, `nova-trame`, and `nova-mvvm`, to simplify interaction with the Neutron Data Interpretation Platform (NDIP).
 
 **Key Learning Objectives:**
 
