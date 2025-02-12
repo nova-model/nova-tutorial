@@ -73,7 +73,7 @@ Let\'s explore these components in more detail:
 
 Layouts are responsible for arraging your content in a consistent manner. In Trame, a layout consists of multiple "slots". A slot is a section of the page to which you can add content.
 
-`nova-trame` provides a basic layout and theme that you can access via the `ThemedApp` class. The template app will setup your main view class to inherit from `ThemedApp` already, so let\'s look at how the layout is defined and how we can add content to slots.
+`nova-trame` provides a basic layout and theme that you can access via the `ThemedApp` class. The template app will setup your main view class to inherit from `ThemedApp` already, but to see how it works let\'s try moving the button to run the fractal tool from the fractal tab into `post_content` slot in the layout.
 
 **1. `src/nova_tutorial/app/views/main.py` (Modify):**
 
@@ -85,16 +85,15 @@ class MainApp(ThemedApp):
         super().__init__()
         self.server = get_server(None, client_type="vue3")
         binding = TrameBinding(self.server.state)
-        self.server.state.trame__title = "Nova Tutorial"
         self.view_models = create_viewmodels(binding)
         self.view_model: MainViewModel = self.view_models["main"]
         self.create_ui()
 
     def create_ui(self) -> None:
-        self.state.trame__title = "Nova Tutorial"
+        self.state.trame__title = "Fractal Tool GUI"
 
         with super().create_ui() as layout:
-            layout.toolbar_title.set_text("Nova Tutorial")
+            layout.toolbar_title.set_text("Fractal Tool GUI")
             with layout.pre_content:
                 TabsPanel(self.view_models["main"])
             with layout.content:
@@ -103,8 +102,19 @@ class MainApp(ThemedApp):
                     self.view_models["main"],
                 )
             with layout.post_content:
-                pass
+                vuetify.VBtn(
+                    "Run Fractal",
+                    click=self.view_model.run_fractal # calls the run_fractal_tool method
+                )
             return layout
+```
+
+**2. `src/nova_tutorial/app/views/fractal_tab.py` (Modify):**
+
+```python
+    def create_ui(self) -> None:
+        InputField(v_model="config.fractal.fractal_type")
+        vuetify.VImg(src=("config.fractal.image_data",), height="400", width="400")
 ```
 
 :::::::::::::::::::::::::: callout
@@ -141,9 +151,42 @@ This integration significantly reduces the amount of boilerplate code you need t
 
 The `InputField` also provides debouncing and throttling features that can improve application performance. These features are useful when dealing with user input that triggers frequent updates to the Trame state.
 
+Let\'s change the fractal type field to a dropdown and add a label to it.
+
+**3. `src/nova_tutorial/app/models/fractal.py` (Modify):**
+
+```python
+class Fractal(BaseModel):
+    fractal_type_options: list[str] = ["mandelbrot", "julia", "random", "markus"]
+    fractal_type: str = Field(default="mandelbrot")
+```
+
+**4. `src/nova_tutorial/app/views/fractal_tab.py` (Modify):**
+
+```python
+        InputField(v_model="config.fractal.fractal_type", items="config.fractal.fractal_type_options", type="select")
+```
+
 ### `RemoteFileInput`
 
 The `RemoteFileInput` component allows you to quickly create a widget for the user to find and select files from the computer running your application. This can be powerful if you want to connect your application to the SNS analysis cluster filesystem, for example, as you could use `RemoteFileInput(base_paths=["/HFIR", "/SNS"])` to expose relevant experiment data to users.
+
+**5. `src/nova_tutorial/app/views/sample_tab_1.py` (Modify):**
+
+```python
+from nova.trame.view.components import InputField, RemoteFileInput
+
+
+class SampleTab1:
+    """Sample tab 1 view class. Renders text input for username."""
+
+    def __init__(self) -> None:
+        self.create_ui()
+
+    def create_ui(self) -> None:
+        RemoteFileInput(v_model="file", base_paths=["/HFIR", "/SNS"])
+        InputField(v_model="config.username")
+```
 
 :::::::::::::::::::::::::::::::: callout
 
@@ -176,7 +219,7 @@ with layouts.GridLayout(columns=2):
     vuetify.VTextField(label="Phone Number")
 ```
 
-    This code creates a grid with two columns and arranges the text fields in the grid.
+This code creates a grid with two columns and arranges the text fields in the grid.
 
 *   **`VBoxLayout`:** Creates a vertical box layout, stacking its children vertically. This is useful for creating simple vertical layouts.
 
@@ -190,7 +233,7 @@ with layouts.VBoxLayout():
     vuetify.VTextField(label="City")
 ```
 
-    This code creates a vertical layout and stacks the text fields vertically.
+This code creates a vertical layout and stacks the text fields vertically.
 
 *   **`HBoxLayout`:** Creates a horizontal box layout, stacking its children horizontally. This is useful for creating simple horizontal layouts.
 
@@ -203,83 +246,28 @@ with layouts.HBoxLayout():
     vuetify.VTextField(label="Last Name")
 ```
 
-    This code creates a horizontal layout and stacks the text fields horizontally.
+This code creates a horizontal layout and stacks the text fields horizontally.
 
 By combining these layout components, you can create complex and responsive UI layouts.
 
+As an example, we can use the layout classes to center the "Run Fractal" button.
+
+**6. `src/nova_tutorial/app/views/main.py` (Modify):**
+
+```python
+from nova.trame.view import layouts
+
+...
+
+            with layout.post_content:
+                with layouts.HBoxLayout(classes="my-2", halign="center"):
+                    vuetify.VBtn(
+                        "Run Fractal",
+                        click=self.view_model.run_fractal # calls the run_fractal_tool method
+                    )
+```
+
 For a more detailed explanation of how to work with our layout and theme, please refer to the [`nova-trame documentation`](https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/working_with_trame.html).
-
-###
-
-## Adding More UI Components to the Sample Tabs
-
-Now, let\'s add some UI components to the Sample Tabs in our application to demonstrate how to use these components. We\'ll modify the `sample_tab_1.py` and `sample_tab_2.py` files to include these components.
-
-**2. `src/nova_tutorial/app/views/sample_tab_1.py` (Modify):**
-
-We\'ll add an `InputField` and a `VBoxLayout` to this tab.
-
-```python
-"""Module for the Sample Tab 1."""
-
-from nova.trame.view.components import InputField, RemoteFileInput
-from nova.trame.view import layouts
-from trame.widgets import vuetify3 as vuetify
-
-class SampleTab1:
-    """Sample tab 1 view class. Renders text input for username."""
-
-    def __init__(self) -> None:
-        self.create_ui()
-
-    def create_ui(self) -> None:
-        with layouts.VBoxLayout(classes="ma-2"):
-            InputField(v_model="config.username", label="Username")
-            vuetify.VCheckbox(label="Remember me")
-            RemoteFileInput(v_model="config.file", base_paths=["/HFIR", "/SNS"])
-```
-
-Since `config.file` doesn't exist yet, we\'ll need to add it to the model.
-
-**3. `src/nova_tutorial/app/models/main_model.py` (Modify):**
-
-```python
-    username: str = Field(
-        default="test_name",
-        min_length=1,
-        title="User Name",
-        description="Please provide the name of the user",
-        examples=["user"],
-    )
-    password: str = Field(default="test_password", title="User Password")
-    file: str = Field(default="", title="Select a File")
-    fractal: Fractal = Field(default_factory=Fractal)
-```
-
-**4. `src/nova_tutorial/app/views/sample_tab_2.py` (Modify):**
-
-We\'ll add a `GridLayout` and an `InputField` to this tab.
-
-```python
-"""Module for the Sample Tab 2."""
-
-from nova.trame.view.components import InputField
-from nova.trame.view import layouts
-from trame.widgets import vuetify3 as vuetify
-
-class SampleTab2:
-    """Sample tab 2 view class. Renders text input for user password."""
-
-    def __init__(self) -> None:
-        self.create_ui()
-
-    def create_ui(self) -> None:
-        with layouts.GridLayout(columns=2, classes="ma-2"):
-            InputField(v_model="config.password", label="Password", type="password")
-            vuetify.VSlider(label="Volume")
-```
-
-In `SampleTab1`, we\'ve used a `VBoxLayout` to vertically stack the `InputField` and `VCheckbox` components. In `SampleTab2`, we\'ve used a `GridLayout` to arrange the `InputField` and `VSlider` components in a two-column grid.
 
 ## Running the application
 
@@ -295,7 +283,7 @@ You should now see the simple UI. When you click the "Sample Tab 1" and "Sample 
 
 Now that we understand the basics of working with Trame, let\'s make the view for the fractal tab a bit more intuitive for the user by giving them a visual indicator that the job is running.
 
-**5. `src/nova_tutorial/app/views/fractal_tab.py` (Modify):**
+**7. `src/nova_tutorial/app/views/fractal_tab.py` (Modify):**
 
 ```python
     def __init__(self, view_model: MainViewModel) -> None:
@@ -304,19 +292,14 @@ Now that we understand the basics of working with Trame, let\'s make the view fo
         self.create_ui()
 
     def create_ui(self) -> None:
-        InputField(v_model="config.fractal.fractal_type", classes="mb-2")
+        InputField(v_model="config.fractal.fractal_type", classes="mb-2", items="config.fractal.fractal_type_options", type="select")
         vuetify.VProgressCircular(v_if="running", indeterminate=True)
-        vuetify.VBtn(
-            "Run Fractal",
-            v_else=True,
-            click=self.view_model.run_fractal # calls the run_fractal_tool method
-        )
-        vuetify.VImg(src=("config.fractal.image_data",), height="400", width="400")
+        vuetify.VImg(v_else=True, src=("config.fractal.image_data",), height="400", width="400")
 ```
 
 We will need to add a data binding for `running`, as well. We choose to place this directly in the view model as this is not relevant to running the fractal tool on NDIP.
 
-**6. `src/nova_tutorial/app/view_models/main.py` (Modify):**
+**8. `src/nova_tutorial/app/view_models/main.py` (Modify):**
 
 ```python
     def __init__(self, model: MainModel, binding: BindingInterface):

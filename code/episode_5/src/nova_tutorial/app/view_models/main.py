@@ -43,6 +43,7 @@ class MainViewModel:
         fractal_tool_thread = Thread(target=self.run_fractal_in_background, daemon=True)
         fractal_tool_thread.start()
 
+        # We also need to know when the tool is done running so that we can know when to update the view.
         create_task(self.monitor_fractal())
 
     def run_fractal_in_background(self) -> None:
