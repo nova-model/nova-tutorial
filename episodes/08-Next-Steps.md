@@ -54,7 +54,7 @@ You can find numerous examples of Galaxy tool XML files in the NDIP GitLab repos
 [https://code.ornl.gov/ndip/galaxy-tools](https://code.ornl.gov/ndip/galaxy-tools)
 
 Detailed documentation on creating tool XML files is available on the Calvera documentation site:
-[calvera.ornl.gov/docs/dev](calvera.ornl.gov/docs/dev)
+[https://calvera.ornl.gov/docs/dev](https://calvera.ornl.gov/docs/dev)
 
 ## Development Lifecycle
 
