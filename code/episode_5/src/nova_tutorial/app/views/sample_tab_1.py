@@ -1,8 +1,7 @@
 """Module for the Sample Tab 1."""
 
 from nova.trame.view.components import InputField, RemoteFileInput
-from nova.trame.view import layouts
-from trame.widgets import vuetify3 as vuetify
+
 
 class SampleTab1:
     """Sample tab 1 view class. Renders text input for username."""
@@ -11,11 +10,5 @@ class SampleTab1:
         self.create_ui()
 
     def create_ui(self) -> None:
-        with layouts.VBoxLayout(classes="ma-2"):  # Overall vertical layout
-            InputField(v_model="config.username", label="Username")
-            with layouts.HBoxLayout():  # Horizontal layout for first and last name
-                InputField(v_model="config.firstName", label="First Name")
-                InputField(v_model="config.lastName", label="Last Name")
-            vuetify.VCheckbox(label="Remember me")
-            vuetify.VSwitch(label="Enable Notifications")
-            RemoteFileInput(v_model="config.file", base_paths=["/SNS"])
+        RemoteFileInput(v_model="file", base_paths=["/HFIR", "/SNS"])
+        InputField(v_model="config.username")
