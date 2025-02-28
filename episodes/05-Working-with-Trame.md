@@ -78,6 +78,22 @@ Layouts are responsible for arraging your content in a consistent manner. In Tra
 **1. `src/nova_tutorial/app/views/main.py` (Modify):**
 
 ```python
+import logging
+
+from nova.mvvm.trame_binding import TrameBinding
+from nova.trame import ThemedApp
+from nova.trame.view import layouts
+from trame.app import get_server
+from trame.widgets import vuetify3 as vuetify
+
+from ..mvvm_factory import create_viewmodels
+from ..view_models.main import MainViewModel
+from .tab_content_panel import TabContentPanel
+from .tabs_panel import TabsPanel
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 class MainApp(ThemedApp):
     """Main application view class. Calls rendering of nested UI elements."""
 

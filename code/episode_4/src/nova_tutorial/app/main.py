@@ -1,7 +1,6 @@
 """Main Application."""
 
 import sys
-from .models.fractal import Fractal
 
 
 def main() -> None:

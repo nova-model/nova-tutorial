@@ -151,7 +151,7 @@ class PlotlyView:
 
 As with our previous examples, there is a corresponding model.
 
-**2. `PlotlyConfig` Model Class (src/viz_examples/models/plotly.py) (Create):**
+**2. `PlotlyConfig` Model Class (src/viz_examples/app/models/plotly.py) (Create):**
 
 *   **Imports**:  The graph_objects module is how we will define the content for our chart. The iris module defines an example dataset.
 
@@ -218,7 +218,7 @@ class PlotlyConfig(BaseModel):
 
 First, let's add replace the sample tabs from the template with the following:
 
-**3. `src/viz_examples/views/tab_content_panel.py` (Modify):**
+**3. `src/app/viz_examples/app/views/tab_content_panel.py` (Modify):**
 
 *   **Import `PlotlyView`**
 
