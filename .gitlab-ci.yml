@@ -46,6 +46,26 @@ pages:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
       when: manual
     - when: on_success
+  tags:
+    - rse-multi-builder
 
+preview:
+  stage: deploy
+  script:
+  - docker build -t tutorial -f dockerfiles/Dockerfile .
+  - mkdir public
+  - docker run -v `pwd`/public:/app/site tutorial Rscript -e "sandpaper::build_lesson()"
+  - cp $CALVERA_DOCS_SSH_KEY key && chmod 600 key
+  - cat key
+  - rsync -avz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i key" public/docs/ cloud@10.64.195.250:/home/cloud/nova-tutorial/tutorial/Preview
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
+    - if: $CI_COMMIT_BRANCH == "Preview"
+      when: manual
+    - when: on_success
   tags:
     - rse-multi-builder
