@@ -5,79 +5,46 @@ exercises: 0
 ---
 # 8. Development Cycle and Next Steps
 
-In this section, we will look at other resources you may want to integrate with your application and outline the process for taking an application like the one we\'ve created in this tutorial and deploying it to the NOVA/NDIP platform. While we won\'t actually perform the deployment in this tutorial, we will cover the key steps and resources involved.
+In this section, we will look at other resources you may want to integrate with your application.
 
 ## ONCat Integration
 
 If needed, you can integrate your application with ONCat via [pyoncat](https://pypi.org/project/pyoncat/2.1/). If you need to access non-public information with the API then you will need to use an authenticated client in `pyoncat`. We strongly recommend you email oncat-support@ornl.gov explaining the use case for your ONCat integration as they can advise you on the most appropriate form of authentication for your application and how to set it up.
 
-## Containerizing Your Application
+## Advanced Container Configurations
 
-The first step in deploying your application to the NOVA/NDIP platform is to package it as a Docker container. Docker containers provide a lightweight and portable way to package your application and all of its dependencies. This ensures that your application will run consistently across different environments.
-
-Fortunately, the template application we used in this tutorial already includes a `Dockerfile` that you can use as a starting point. The Dockerfile is a set of instructions that Docker uses to build your container image.
-
-Here\'s what the Dockerfile typically includes:
-
-* **Base Image:** Specifies the base operating system and environment for your application.
-* **Dependencies:** Describes how to install any required libraries or packages.
-* **Application Files:** Defines how to copy your application code into the container.
-* **Entrypoint:** Sets the command that is run when the container starts.
-
-To containerize your application, you would:
-
-1. Navigate to the top level of your project (where the `dockerfiles` folder is).
-2. Run the docker build command in the following format `docker build -t <your_image_name>:<your_image_tag> -f dockerfiles/Dockerfile .`
-3. Test your docker container using the command `docker run <your_image_name>:<your_image_tag>`.
-4. Push your docker container to a container registry.
-
-After the docker container is deployed to a registry, it can then be used by the platform.
+The basic container configuration we created in Episode 2 works well for most applications, but there are some advanced configurations that may be useful for more complex applications.
 
 ::::::::::::::::::::::::::::::::::::::::: callout
-GPU acceleration in a container is possible but beyond the scope of this tutorial. Typically, a base container is chosen which already has all of the gpu dependencies installed such as ```regproxy.ornl.gov/hub_proxy/kitware/trame:py3.10-glvnd-2024-12```. The team has built similar containers already which can be used as a reference for development, such as, ```https://code.ornl.gov/ndip/trame-apps/ct-scan-visualizer/```
+GPU acceleration in a container is possible but beyond the scope of this tutorial. Typically, a base container is chosen which already has all of the GPU dependencies installed such as ```regproxy.ornl.gov/hub_proxy/kitware/trame:py3.10-glvnd-2024-12```. The team has built similar containers already which can be used as a reference for development, such as ```https://code.ornl.gov/ndip/trame-apps/ct-scan-visualizer/```
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Defining Your Tool with XML
-
-Once your application is containerized, you will also need to define your tool using an XML file. This XML file describes your tool to the NDIP platform, including its inputs, outputs, parameters, and the Docker container image that should be used to run the tool. The NDIP platform makes use of the Galaxy tool framework.
-
-The XML file includes:
-
-*   **Tool ID:** A unique identifier for your tool.
-*   **Name and Description:** User-friendly name and description of the tool.
-*   **Inputs:** Defines the input parameters, including their types, labels, and optional constraints.
-*   **Outputs:** Describes the output files or datasets produced by the tool.
-*   **Container Image:** Specifies the Docker image that should be used to run the tool.
-*   **Command:** Specifies the command line that is executed inside the docker container.
-
-You can find numerous examples of Galaxy tool XML files in the NDIP GitLab repository:
-[https://code.ornl.gov/ndip/galaxy-tools](https://code.ornl.gov/ndip/galaxy-tools)
-
-Detailed documentation on creating tool XML files is available on the Calvera documentation site:
-[https://calvera.ornl.gov/docs/dev](https://calvera.ornl.gov/docs/dev)
 
 ## Development Lifecycle
 
-### How to get a new tool on NDIP
-
-After creating your tool\'s XML file, it needs to be added to the NDIP platform. For testing your tool on the platform, it should be added to the *prototype* branch of the GitLab repository linked above in a repository folder `tools/neutrons`, or it's subfolder. With a git commit, an automated CI job will push your tool to the calvera-test instance. Test your application via the web browser interface. After you\'ve verified that your tool is performing as expected, submit a merge request to the repository\'s *dev* branch and engage with our team.
-
-The *dev* branch is used as a staging branch for tools that are ready to be put in front of users. Tools here will be added to the NDIP production instance, Calvera, during the next deployment.
+As we saw in Episode 2, we can deploy our tools to the NDIP platform by adding XML files to the galaxy-tools repository's prototype branch. Let's discuss what happens after that initial deployment.
 
 ### Continued Development
 
-The process for continuing development on an existing tool is similar to getting a new tool on the platform. You will continue to develop on the *prototype* branch, where you can push and test changes. Once you are satisified with the new version of your tool, submit a merge request to update the tool in the *dev* branch. Our team will review these changes, perform the merge, and the new version of the tool will be updated on the NDIP production instance, Calvera, during the next deployment.
+Once your tool is deployed to the platform, you may want to continue development to fix bugs or add new features. The process for continuing development on an existing tool is similar to getting a new tool on the platform.
 
-## Putting It All Together
+You will continue to develop on the *prototype* branch, where you can push and test changes. Once you are satisfied with the new version of your tool, submit a merge request to update the tool in the *dev* branch. The NDIP team will review these changes, perform the merge, and the new version of the tool will be updated on the NDIP production instance, Calvera, during the next deployment.
 
-Once you have your Docker container and tool XML file, you would:
+### Versioning Your Tools
 
-1. Upload the Docker image to a container registry.
-2. Upload the XML file to the NDIP platform.
-3. Make sure that the API_KEY and GALAXY_URL are passed to the application as environmental variables.
-4. Test your application via the web browser interface.
+As you continue to develop your tool, it's important to keep track of versions. The XML file we created in Episode 2 includes a version attribute that you should update whenever you make significant changes to your tool.
 
-After performing these steps, your application will be available to NDIP users.
+The *dev* branch is used as a staging branch for tools that are ready to be put in front of users. Tools here will be added to the NDIP production instance, Calvera, during the next deployment.
+
+## Future Tool Enhancements
+
+As you become more familiar with NDIP and the Galaxy platform, you might want to explore more advanced features:
+
+- Creating complex workflows that combine multiple tools
+- Integrating with high-performance computing resources
+- Developing specialized data analysis pipelines
+
+These topics are beyond the scope of this introductory tutorial, but the NDIP team is available to help you explore these possibilities as your tools mature.
 
 ## Additional Resources
 
@@ -90,10 +57,11 @@ After performing these steps, your application will be available to NDIP users.
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
 *   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
 
-By following the steps outlined in this section, you can deploy your own applications to the NDIP platform and make them available to the wider scientific community.
+By following this tutorial, you've learned how to create and deploy a NOVA application to the NDIP platform. You can now build on this foundation to create more complex scientific applications that can be easily shared with the wider scientific community.
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - Tools must be containerized to run on NDIP.
-- NDIP requires tools to have an XML file which defines input, outputs, tool id, and the container location.
+- NDIP requires tools to have an XML file which defines inputs, outputs, tool ID, and the container location.
 - Tool XML files must be added to the Galaxy Tools Repository.
+- The development lifecycle involves continuous testing on the prototype branch before promoting to dev.
 ::::::::::::::::::::::::::::::::::::::::::::::::::
