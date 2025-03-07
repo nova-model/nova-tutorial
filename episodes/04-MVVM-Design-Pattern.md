@@ -305,7 +305,7 @@ class Fractal(BaseModel):
 Import and include the `Fractal` model as a field in the `MainModel`.
 
 ```python
-    from .fractal import Fractal  # Import Fractal
+from .fractal import Fractal  # Import Fractal
 
 class MainModel(BaseModel):
     # ... (other fields) ...
@@ -343,8 +343,6 @@ Update the code in the run_fractal method.
 Run the application: `poetry run app`
 
 Now, when you click "Run Fractal," the Fractal tool will execute in Galaxy, and the resulting image will be displayed in the UI.  You can also change the `fractal_type` using the input field. This demonstrates the complete MVVM flow, with data binding, Pydantic validation, and the interaction between the View, ViewModel, and Model.
-
-This revised structure breaks down the implementation into smaller, more manageable steps, with demonstrations after each stage to show the progress and confirm that each part is working as expected. This addresses the feedback about making too many code changes at once and improves the learning experience.
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 If you don't want Trame to launch a tab by default, you can instead run ```poetry run app --server```.
