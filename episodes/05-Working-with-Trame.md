@@ -267,6 +267,14 @@ from nova.trame.view import layouts
                     )
 ```
 
+:::::::::::::::::::::::::::::::::::::::: callout
+
+In the above example, we use the `classes` parameter to `HBoxLayout` to add the `my-2` CSS class to the element. This parameter can be used on any Trame component to customize your interface's appearance without having to write CSS.
+
+The `my-2` class is provided by [Vuetify](https://vuetifyjs.com/) and gives the element vertical margin (space above and below the element). https://vuetifyjs.com/en/styles/spacing documents this class and other classes related to spacing. There are also many other pages on the Vuetify docs describing classes that together give you a wide range of options for customizing your interface.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
 For a more detailed explanation of how to work with our layout and theme, please refer to the [`nova-trame documentation`](https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/working_with_trame.html).
 
 ## Running the application
