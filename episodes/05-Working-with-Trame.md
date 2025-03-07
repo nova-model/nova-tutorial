@@ -200,9 +200,32 @@ class SampleTab1:
         self.create_ui()
 
     def create_ui(self) -> None:
-        RemoteFileInput(v_model="file", base_paths=["/HFIR", "/SNS"])
+        RemoteFileInput(v_model="config.file", base_paths=["/HFIR", "/SNS"])
         InputField(v_model="config.username")
 ```
+
+**6. `src/nova_tutorial/app/models/main_model.py` (Modify):**
+
+Add a `file` field to the `MainModel` to store the selected file path.  We use `Optional[str]` because initially, no file will be selected.
+
+```python
+from pydantic import BaseModel, Field
+from .fractal import Fractal
+
+
+class MainModel(BaseModel):
+    username: str = Field(
+        default="test_name",
+        min_length=1,
+        title="User Name",
+        description="Please provide the name of the user",
+        examples=["user"],
+    )
+    password: str = Field(default="test_password", title="User Password")
+    file: str = Field(default="", title="Select a File")
+    fractal: Fractal = Field(default_factory=Fractal)
+```
+
 
 :::::::::::::::::::::::::::::::: callout
 
@@ -268,7 +291,7 @@ By combining these layout components, you can create complex and responsive UI l
 
 As an example, we can use the layout classes to center the "Run Fractal" button.
 
-**6. `src/nova_tutorial/app/views/main.py` (Modify):**
+**7. `src/nova_tutorial/app/views/main.py` (Modify):**
 
 ```python
 from nova.trame.view import layouts

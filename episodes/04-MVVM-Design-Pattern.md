@@ -142,135 +142,46 @@ Finally, we connect a UI component to the connector object. The template applica
 InputField(v_model="config.username")
 ```
 
+## Project Structure
+
+The template creates a well-organized project structure following best practices, including the Model-View-ViewModel (MVVM) design pattern.  This structure promotes code maintainability, testability, and separation of concerns. Here's a breakdown of the key directories and files:
+
+*   `nova_tutorial/`: The root directory of your project. This is the top-level directory containing all project files and subdirectories.
+
+*   `nova_tutorial/src/`:  This directory contains all the source code for your application.  The separation into `src` helps distinguish your application code from configuration files, tests, and other project-related files that reside in the root.
+
+*   `nova_tutorial/src/nova_tutorial/`: This is the main Python package for your application. Its name (`nova_tutorial` in this case) is used when importing modules within your project.  Inside this directory, you'll find the core application logic, organized according to the MVVM pattern:
+
+    *   `nova_tutorial/src/nova_tutorial/app/`:  This directory contains the main application logic, further subdivided to reflect the MVVM structure.
+
+        *   `nova_tutorial/src/nova_tutorial/app/models/`: **(Model)** This is where you define your data models and business logic. These classes represent the data your application works with and the rules for manipulating that data.
+
+        *   `nova_tutorial/src/nova_tutorial/app/view_models/`: **(ViewModel)** This directory holds the ViewModels. These classes act as intermediaries between the Models and the Views.  They prepare data for display and handle user interactions from the View.
+
+        *   `nova_tutorial/src/nova_tutorial/app/views/`: **(View)** This directory contains the user interface (UI) components.  These are built using Trame and Vuetify (via `nova-trame`).  They are responsible for displaying data and capturing user input.
+
+        *   `nova_tutorial/src/nova_tutorial/app/main.py`: The entry point for your NOVA application.  This file initializes and starts the Trame server and the `MainApp` view.
+
+*   `nova_tutorial/tests/`:  Contains unit tests for your application.  A well-structured project should include tests to ensure code quality and prevent regressions.  The tests are typically organized to mirror the structure of your application code (e.g., tests for models, view models, and potentially UI components).
+
+*   `nova_tutorial/README.md`:  A Markdown file providing a description of your project, instructions for setup and usage, and any other relevant information.
+
+*   `pyproject.toml`:  A configuration file for Poetry, the dependency management and packaging tool used by NOVA.  It specifies project dependencies, build settings, and other metadata.
+
 ## Implementing MVVM with `nova-mvvm` and Pydantic
 
-Let\'s see how to implement the MVVM pattern using `nova-mvvm` and incorporate Pydantic for data validation.
+Let's implement the MVVM pattern, starting with the UI and basic ViewModel connections, and then building up the Model functionality.
 
-**1. Adding Fractal to the ViewModel (`src/nova_tutorial/app/view_models/main.py`) (Modify):**
+**1. Initial Setup and ViewModel Basics**
 
-*   **Running our Model**:  We start by adding a method to bottom of our ViewModel which will run the Fractal tool.
+First, let's simplify our `main.py` and set up the basic structure of our UI and ViewModel interaction. We'll create a button in the UI that, when clicked, will eventually run our Fractal tool. For now, it will just trigger a placeholder method in the ViewModel.
 
-```python
-    def run_fractal(self) -> None:
-        self.model.fractal.run_fractal_tool()
-        self.update_view()
-```
+*   **`main.py` - Simplifying the Application Entry Point (`src/nova_tutorial/app/main.py`) (Modify):**
 
-**2. Updating our Fractal Class for pydantaic and MVVM (`src/nova_tutorial/app/models/fractal.py`) (Modify)**
+We're removing the direct Fractal tool execution from `main()`. The application will now solely focus on launching the NOVA app.
 
-*   **Adding new imports**: We need to add some imports for pydantic and working with base64 encodings to deal with the image. Modify your import block to match below.
-
-```python
-import os
-from base64 import b64encode
-from typing import Literal
-
-from pydantic import BaseModel, Field
-from nova.galaxy import Connection, Parameters, Tool
-```
-
-*   **Update class variables:** Now we will update fractal_type and other class variables to support pydantic. We will also add an image variable to store the image. Modify the variable declarations to the following:
-
-```python
-class Fractal(BaseModel):
-    fractal_type: Literal["mandelbrot", "julia", "random", "markus"] = Field(default="mandelbrot")
-    galaxy_url: str = Field(default_factory=lambda: os.getenv("GALAXY_URL"), description="NDIP Galaxy URL")
-    galaxy_key: str = Field(default_factory=lambda: os.getenv("GALAXY_API_KEY"), description="NDIP Galaxy API Key")
-    image_data: str = Field(default="", description="Base64 encoded PNG")
-
-    def set_fractal_type(self, fractal_type: str):
-        self.fractal_type = fractal_type
-```
-
-*   **Decode the image data:** Finally, we need to decode the image that we receive as the output from the tool execution. Modify the section where we execute the tool to the following:
-
-```python
-            output.get_dataset("output").download("tmp.png")
-
-            with open("tmp.png", "rb") as image_file:
-                self.image_data = f"data:image/png;base64,{b64encode(image_file.read()).decode()}"
-```
-
-**3. Updating our MainModel Class to add the new Fractal Class (`src/nova_tutorial/app/models/main_model.py`) (Modify):**
-
-*   **Add Fractal to imports**: Add an import for the Fractal class into our MainModel.
-
-```python
-from .fractal import Fractal  # Import Fractal
-```
-
-*   **Add the Fractal Model to the MainModel**: Modify the end of the MainModel class so that it matches the code below.
-
-```python
-    password: str = Field(default="test_password", title="User Password")
-    fractal: Fractal = Field(default_factory=Fractal) #Add Fractal Model
-```
-
-**4. Creating a FractalTab (`src/nova_tutorial/app/views/fractal_tab.py`) (Create):**
-
-*   **Create a fractal tab**: Create a new file and add the following code:
-
-```python
-from trame.widgets import vuetify3 as vuetify
-
-from nova.trame.view.components import InputField
-from nova_tutorial.app.view_models.main import MainViewModel
-
-class FractalTab:
-    def __init__(self, view_model: MainViewModel) -> None:
-        self.view_model = view_model
-        self.create_ui()
-
-    def create_ui(self) -> None:
-        InputField(v_model="config.fractal.fractal_type")
-        vuetify.VBtn(
-            "Run Fractal",
-            click=self.view_model.run_fractal # calls the run_fractal_tool method
-        )
-        vuetify.VImg(src=("config.fractal.image_data",), height="400", width="400")
-```
-
-**5. Modify the tab panel (`src/nova_tutorial/app/views/tabs_panel.py`) (Modify):**
-
-*   **Add Fractal Tab to the tab panel**: Modify the tab panel to add our new Fractal tab
-
-```python
-        with vuetify.VTabs(v_model=("active_tab", 0), classes="pl-5"):
-            vuetify.VTab("Fractal", value=1)  # Add Fractal Tab
-            vuetify.VTab("Sample Tab 1", value=2)
-            vuetify.VTab("Sample Tab 2", value=3)
-```
-
-**6. Modify the tab panel content (`src/nova_tutorial/app/views/tab_content_panel.py`) (Modify):**
-
-*   **Add FractalTab to imports**: Import the newly created FractalTab class into our tab_content_panel.
-
-```python
-from .fractal_tab import FractalTab  # Import the FractalTab
-```
-
-*   **Add the Fractal Tab to our existing tabs**: Add the Fractal Tab lines to the vuetify.VWindow section and modify the values.
-
-```python
-                    with vuetify.VWindow(v_model="active_tab"):
-                        with vuetify.VWindowItem(value=1):
-                            FractalTab(self.view_model)  # Add FractalTab
-                        with vuetify.VWindowItem(value=2):
-                            SampleTab1()
-                        with vuetify.VWindowItem(value=3):
-                            SampleTab2()
-```
-
-**7. `main.py` - Calling the Model (`src/nova_tutorial/app/main.py`) (Modify):**
-
-We are now going to modify the existing `main.py` file. Change the main method to match the code below.
-
-*   **Instantiate and Run**: In the `main()` function, we no longer need to setup the Fractal tool as it's managed via our MVVM application now.
-
-```python
+ ```python
 import sys
-from .models.fractal import Fractal
-
 
 def main() -> None:
     kwargs = {}
@@ -286,15 +197,154 @@ def main() -> None:
     app.server.start(**kwargs)
 ```
 
-## Running the application
+*   **Adding a Placeholder Method to the ViewModel (`src/nova_tutorial/app/view_models/main.py`) (Modify):**
 
-To run the code, use the following command in the top level of your `nova_tutorial` project:
+Add a `run_fractal` method to the `MainViewModel`.  For now, it just prints a message to the console. This confirms that the button click is connected to the ViewModel.
 
-```bash
-poetry run app
+```python
+    def run_fractal(self) -> None:
+        print("run_fractal method called!")
 ```
 
-The application should launch a tab in your web browser. The GUI will have a `FRACTAL` tab and a few sample tabs which were created by the template application. The run button on the `Fractal` tab can be used to launch the `Fractal` NDIP tool. The tool will take a few minutes to complete but when it does, the resulting `Fractal` image will be displayed.
+*   **Creating a FractalTab (`src/nova_tutorial/app/views/fractal_tab.py`) (Create):**
+
+This is the UI for our Fractal interaction.  It includes a button that calls the `run_fractal` method in the ViewModel.  We don't have image display yet.
+
+```python
+from trame.widgets import vuetify3 as vuetify
+
+from nova_tutorial.app.view_models.main import MainViewModel
+
+class FractalTab:
+    def __init__(self, view_model: MainViewModel) -> None:
+        self.view_model = view_model
+        self.create_ui()
+
+    def create_ui(self) -> None:
+        InputField(v_model="config.fractal.fractal_type")
+        vuetify.VBtn(
+            "Run Fractal",
+            click=self.view_model.run_fractal
+    )
+```
+
+*   **Modify the tab panel (`src/nova_tutorial/app/views/tabs_panel.py`) (Modify):**
+
+Add the "Fractal" tab to the tab bar.
+
+```python
+        with vuetify.VTabs(v_model=("active_tab", 0), classes="pl-5"):
+            vuetify.VTab("Fractal", value=1)  # Add Fractal Tab
+            vuetify.VTab("Sample Tab 1", value=2)
+            vuetify.VTab("Sample Tab 2", value=3)
+```
+
+*   **Modify the tab panel content (`src/nova_tutorial/app/views/tab_content_panel.py`) (Modify):**
+
+Display the `FractalTab` content when the "Fractal" tab is selected.
+
+```python
+from .fractal_tab import FractalTab  # Import the FractalTab
+
+    # ... (rest of the file) ...
+                    with vuetify.VWindow(v_model="active_tab"):
+                        with vuetify.VWindowItem(value=1):
+                            FractalTab(self.view_model)  # Add FractalTab
+                        with vuetify.VWindowItem(value=2):
+                            SampleTab1()
+                        with vuetify.VWindowItem(value=3):
+                            SampleTab2()
+```
+
+**Demonstration (Initial UI and ViewModel Connection):**
+
+Run the application: `poetry run app`
+
+You should see a new "Fractal" tab in the application.  Click the "Run Fractal" button.  You should see "run_fractal method called!" printed in your terminal. This demonstrates that the button click in the View is successfully triggering the `run_fractal` method in the ViewModel, even though the method doesn't do anything substantial yet. This establishes the basic MVVM wiring.
+
+**2. Fractal Model and Pydantic Integration**
+
+Now, let's build out the `Fractal` model using Pydantic and integrate it into our `MainModel`.
+
+*   **Updating our Fractal Class for pydantaic and MVVM (`src/nova_tutorial/app/models/fractal.py`) (Modify)**
+
+*   **Adding new imports**: Add imports for Pydantic and base64 handling.
+
+```python
+import os
+from base64 import b64encode
+from typing import Literal
+
+from pydantic import BaseModel, Field
+from nova.galaxy import Connection, Parameters, Tool
+ ```
+
+*   **Update class variables:** Use Pydantic's `Field` for type hinting and validation.  Add the `image_data` field.
+
+```python
+class Fractal(BaseModel):
+    fractal_type: Literal["mandelbrot", "julia", "random", "markus"] = Field(default="mandelbrot")
+    galaxy_url: str = Field(default_factory=lambda: os.getenv("GALAXY_URL"), description="NDIP Galaxy URL")
+    galaxy_key: str = Field(default_factory=lambda: os.getenv("GALAXY_API_KEY"), description="NDIP Galaxy API Key")
+    image_data: str = Field(default="", description="Base64 encoded PNG")
+
+    def set_fractal_type(self, fractal_type: str):
+        self.fractal_type = fractal_type
+```
+
+*  **Decode the data:** Update how the image is decoded.
+```python
+            output.get_dataset("output").download("tmp.png")
+
+            with open("tmp.png", "rb") as image_file:
+                self.image_data = f"data:image/png;base64,{b64encode(image_file.read()).decode()}"
+```
+
+*   **Updating our MainModel Class to add the new Fractal Class (`src/nova_tutorial/app/models/main_model.py`) (Modify):**
+
+Import and include the `Fractal` model as a field in the `MainModel`.
+
+```python
+    from .fractal import Fractal  # Import Fractal
+
+class MainModel(BaseModel):
+    # ... (other fields) ...
+    password: str = Field(default="test_password", title="User Password")
+    fractal: Fractal = Field(default_factory=Fractal) #Add Fractal Model
+```
+
+*   **Connect the UI elements in FractalTab (`src/nova_tutorial/app/views/fractal_tab.py`) (Modify):**
+
+Update the create UI section to use InputField and the image.
+```python
+from nova.trame.view.components import InputField
+
+    # ...(rest of file)...
+    def create_ui(self) -> None:
+        InputField(v_model="config.fractal.fractal_type")
+        vuetify.VBtn(
+            "Run Fractal",
+            click=self.view_model.run_fractal
+        )
+        vuetify.VImg(src=("config.fractal.image_data",), height="400", width="400")
+```
+
+* **Add Full Functionality to the View Model (`src/nova_tutorial/app/view_models/main.py`) (Modify)**
+Update the code in the run_fractal method.
+
+```python
+    def run_fractal(self) -> None:
+        self.model.fractal.run_fractal_tool()
+        self.update_view()
+```
+
+**Final Demonstration (Full Application):**
+
+Run the application: `poetry run app`
+
+Now, when you click "Run Fractal," the Fractal tool will execute in Galaxy, and the resulting image will be displayed in the UI.  You can also change the `fractal_type` using the input field. This demonstrates the complete MVVM flow, with data binding, Pydantic validation, and the interaction between the View, ViewModel, and Model.
+
+This revised structure breaks down the implementation into smaller, more manageable steps, with demonstrations after each stage to show the progress and confirm that each part is working as expected. This addresses the feedback about making too many code changes at once and improves the learning experience.
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 If you don't want Trame to launch a tab by default, you can instead run ```poetry run app --server```.
