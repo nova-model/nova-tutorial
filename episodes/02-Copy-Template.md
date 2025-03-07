@@ -190,7 +190,7 @@ docker build -t nova-tutorial:latest -f dockerfiles/Dockerfile .
 This creates a Docker image named `nova-tutorial` with the tag `latest` that contains our application and all its dependencies.
 
 ::::::::::::::::::::::::::::::::::::::::: callout
-Normally, we would push this image to a container registry so that NDIP can access it. However, for this tutorial, we'll skip this step. In a real deployment, you would push the image using a command like `docker push <registry-url>/nova-tutorial:latest`. For the tutorial, we'll use a pre-pushed container.
+Normally, we would push this image to a container registry so that NDIP can access it. However, for this tutorial, we\'ll skip this step. In a real deployment, you would push the image using a command like `docker push <registry-url>/nova-tutorial:latest`. For the tutorial, we\'ll use a pre-pushed container.
 
 When releasing new versions of your tool, you'll want to use versioned tags for your container images, such as `nova-tutorial:1.0.0`, to maintain backward compatibility while allowing for updates.
 ::::::::::::::::::::::::::::::::::::::::::::::::
@@ -215,9 +215,6 @@ git checkout prototype
 Now we'll create an XML file that defines our tool for the NDIP platform. We'll place it in the appropriate directory within the galaxy-tools repository:
 
 ```bash
-# Create the directory if needed
-mkdir -p tools/neutrons/tutorial
-
 # Create the XML file
 touch tools/neutrons/tutorial/<username>_nova_tutorial.xml
 ```
@@ -230,7 +227,7 @@ Now, edit the file and add the following XML content:
 <tool id="<username>_nova_tutorial" tool_type="interactive" name="<Username>'s NOVA Tutorial Tool" version="0.1.0">
     <description>A simple NOVA template application</description>
     <requirements>
-        <container type="docker">ghcr.io/ornl/ndip/nova-tutorial:latest</container>
+        <container type="docker">savannah.ornl.gov/ndip/nova-tutorial:latest</container>
     </requirements>
     <entry_points>
         <entry_point name="NOVA Tutorial" requires_domain="False">
@@ -292,7 +289,7 @@ git add tools/neutrons/tutorial/<username>_nova_tutorial.xml
 git commit -m "Add <username>'s NOVA tutorial tool"
 
 # Push the changes to the prototype branch
-git push origin prototype
+git push
 ```
 
 Once your changes are pushed to the prototype branch, an automated CI job will deploy your tool to the calvera-test instance. You can then access your tool through the NDIP web interface at https://calvera-test.ornl.gov.
