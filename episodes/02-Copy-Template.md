@@ -172,127 +172,93 @@ The template includes a basic GitLab CI configuration file (`.gitlab-ci.yml`).  
 
 ## Deploying Your Tool to NDIP
 
-Now that we have our template application set up, we need to integrate it with the NDIP platform. This involves three main steps:
+Now that we have our template application set up, we need to integrate it with the NDIP platform. The template now includes built-in utilities to streamline this process, handling the GitLab repository setup and Galaxy tool XML management automatically.
 
-1. Building a Docker container for our application
-2. Cloning the galaxy-tools repository
-3. Creating an XML file that defines our tool and adding it to the repository
+### Initialize Your Project Repository
 
-### Building a Docker Container
-
-The template comes with a Dockerfile that we can use to build a container for our application. Let's do that:
+The template comes with a utility script to initialize your Git repository and push it to the correct location in the NDIP GitLab. Run:
 
 ```bash
 cd nova_tutorial
-docker build -t nova-tutorial:latest -f dockerfiles/Dockerfile .
+poetry run init-repo
 ```
 
-This creates a Docker image named `nova-tutorial` with the tag `latest` that contains our application and all its dependencies.
+This script will:
+1. Initialize a Git repository (if not already done)
+2. Set up the remote to point to `https://code.ornl.gov/ndip/tool-sources/tutorial/<username>-nova-tutorial`
+3. Add all project files to the repository
+4. Create an initial commit (if needed)
+5. Push the code to the GitLab repository
 
 ::::::::::::::::::::::::::::::::::::::::: callout
-Normally, we would push this image to a container registry so that NDIP can access it. However, for this tutorial, we\'ll skip this step. In a real deployment, you would push the image using a command like `docker push <registry-url>/nova-tutorial:latest`. For the tutorial, we\'ll use a pre-pushed container.
-
-When releasing new versions of your tool, you'll want to use versioned tags for your container images, such as `nova-tutorial:1.0.0`, to maintain backward compatibility while allowing for updates.
+The repository path is automatically determined based on your answers during the template setup. For tutorial projects, it will use `tutorial/<username>-project-name`, while for non-tutorial projects it will use the project group you specified.
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-### Cloning the Galaxy Tools Repository
+### Continuous Integration and Container Building
 
-To deploy our tool to the NDIP platform, we need to add its XML definition to the galaxy-tools repository. Let's clone the repository and switch to the prototype branch:
+Once your code is pushed to GitLab, the included CI/CD pipeline will automatically build a Docker container for your application. The CI configuration is already set up in the `.gitlab-ci.yml` file and includes:
+
+1. Running tests to verify your code works correctly
+2. Building a Docker image containing your application
+3. Pushing the image to the NDIP container registry (at `code.ornl.gov:4567/ndip/tool-sources/tutorial/<username>-nova-tutorial`)
+
+The Docker image tag is derived from your project's version in `pyproject.toml`. Each time you update the version and push, a new container will be built automatically.
+
+### Tool XML File
+
+The template has already generated a Galaxy tool XML file for your project. You can find this file at:
+
+```
+xml/tool.xml
+```
+
+This file defines how your tool appears and functions within the NDIP platform. It includes:
+
+- A unique tool ID based on your username (for tutorial projects)
+- The correct container reference pointing to your GitLab repository
+- Port and URL configurations for accessing your application
+- Environment variables needed by the NDIP platform
+- Command to run your application inside the container
+- Help and description text for users
+
+### Pushing the Tool XML to Galaxy Tools Repository
+
+To deploy your tool to the NDIP platform, you need to add the XML file to the galaxy-tools repository. The template includes a utility for this:
 
 ```bash
-# Clone the galaxy-tools repository
-git clone https://code.ornl.gov/ndip/galaxy-tools.git
-
-# Navigate to the repository
-cd galaxy-tools
-
-# Check out the prototype branch
-git checkout prototype
+poetry run push-xml
 ```
 
-### Creating and Adding the Tool XML File
+This script will:
+1. Clone the Galaxy tools repository
+2. Copy your tool XML file to the correct location (`tools/neutrons/tutorials/<username>-nova-tutorial.xml` for tutorial projects)
+3. Commit the changes
+4. Push to the `prototype` branch of the galaxy-tools repository
 
-Now we'll create an XML file that defines our tool for the NDIP platform. We'll place it in the appropriate directory within the galaxy-tools repository:
+Once your XML file is pushed to the prototype branch, an automated CI job will deploy your tool to the calvera-test instance. You can then access your tool through the NDIP web interface at https://calvera-test.ornl.gov.
 
-```bash
-# Create the XML file
-touch tools/neutrons/tutorial/<username>_nova_tutorial.xml
-```
+::::::::::::::::::::::::::::::::::::::::: callout
+The tool XML is automatically pushed to the correct location. For tutorial projects, it goes to `tools/neutrons/tutorials/<username>-project-name.xml`, and for regular projects, it goes to `tools/neutrons/project-name.xml`.
+::::::::::::::::::::::::::::::::::::::::::::::::
 
-Replace `<username>` with your username to ensure the tool ID is unique.
+### Understanding Your Tool's Integration
 
-Now, edit the file and add the following XML content:
+Let's understand the key components that make your tool work in NDIP:
 
-```xml
-<tool id="<username>_nova_tutorial" tool_type="interactive" name="<Username>'s NOVA Tutorial Tool" version="0.1.0">
-    <description>A simple NOVA template application</description>
-    <requirements>
-        <container type="docker">savannah.ornl.gov/ndip/nova-tutorial:latest</container>
-    </requirements>
-    <entry_points>
-        <entry_point name="NOVA Tutorial" requires_domain="False">
-            <port>8080</port>
-            <url>app</url>
-        </entry_point>
-    </entry_points>
-    <environment_variables>
-        <environment_variable name="HISTORY_ID">$__history_id__</environment_variable>
-        <environment_variable name="GALAXY_URL">$__galaxy_url__</environment_variable>
-        <environment_variable name="API_KEY" inject="api_key"/>
-    </environment_variables>
-    <command><![CDATA[
-        python -m nova_tutorial.app
-    ]]></command>
-    <help><![CDATA[
-        # NOVA Tutorial Application
-        
-        This is a simple template application created using the NOVA framework.
-        It demonstrates a basic user interface with tabs.
-    ]]></help>
-</tool>
-```
+1. **Repository Structure**:
+   - Your code is hosted at `https://code.ornl.gov/ndip/tool-sources/tutorial/<username>-nova-tutorial`
+   - The Docker container is built automatically by CI and stored at `code.ornl.gov:4567/ndip/tool-sources/tutorial/<username>-nova-tutorial`
 
-Make sure to replace `<username>` with your actual username in both the `id` and `name` attributes to ensure your tool has a unique identifier.
+2. **Tool XML File**:
+   - Defines your tool for Galaxy/NDIP
+   - References your container so NDIP knows which image to run
+   - Configures ports, environment variables, and other runtime settings
+   - Is stored in the galaxy-tools repository at `tools/neutrons/tutorials/<username>-nova-tutorial.xml`
 
-Let's break down the key elements of this XML file:
-
-- `<tool>` element with attributes:
-  - `id`: A unique identifier for your tool (includes your username for uniqueness)
-  - `tool_type="interactive"`: Specifies that this is an interactive tool
-  - `name`: A user-friendly name for the tool
-  - `version`: The tool version
-
-- `<requirements>`: Specifies the Docker container to use
-
-- `<entry_points>`: Defines how users can access the tool
-  - `<port>`: The port the application is running on
-  - `<url>`: The URL path to access the application
-
-- `<environment_variables>`: Critical variables passed to the tool
-  - `HISTORY_ID`: The current Galaxy history ID
-  - `GALAXY_URL`: The Galaxy server URL
-  - `API_KEY`: The user's API key for Galaxy
-
-- `<command>`: The command to run inside the container
-
-- `<help>`: Documentation for the tool
-
-### Committing and Pushing Your Changes
-
-Now that we've created our tool XML file, we need to commit the changes and push them to the prototype branch:
-
-```bash
-# Add the new file to git
-git add tools/neutrons/tutorial/<username>_nova_tutorial.xml
-
-# Commit the changes
-git commit -m "Add <username>'s NOVA tutorial tool"
-
-# Push the changes to the prototype branch
-git push
-```
-
-Once your changes are pushed to the prototype branch, an automated CI job will deploy your tool to the calvera-test instance. You can then access your tool through the NDIP web interface at https://calvera-test.ornl.gov.
+3. **Deployment Process**:
+   - When you push code to your repository → CI builds a new container
+   - When you run `push-xml` → Your tool XML is updated in the galaxy-tools prototype branch
+   - After XML is merged → Your tool appears in the NDIP interface
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 In a production environment, when your tool is ready for users, you would create a merge request from the prototype branch to the dev branch. The NDIP team reviews these changes, merges them, and your tool will be deployed to the production instance during the next deployment.
