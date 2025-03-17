@@ -172,11 +172,67 @@ The template includes a basic GitLab CI configuration file (`.gitlab-ci.yml`).  
 
 ## Deploying Your Tool to NDIP
 
-Now that we have our template application set up, we need to integrate it with the NDIP platform. The template now includes built-in utilities to streamline this process, handling the GitLab repository setup and Galaxy tool XML management automatically.
+Now that we have our template application set up, we need to integrate it with the NDIP platform. The template includes built-in utilities to streamline this process, handling the GitLab repository setup and Galaxy tool XML management.
+
+### Manual Configuration for Tutorial
+
+Since this is a tutorial, we need to modify a few files to properly configure our repository path. In a real project, you would use your own team's project name.
+
+#### Modify Repository Path
+
+1. Open `src/nova_tutorial/scripts/git_utils.py` in your editor and modify the line setting the repository path:
+
+   ```python
+   # Find this line:
+   remote_url += "{{ project_name.lower().replace(' ', '-').replace('_', '-') }}"
+   
+   # Change it to:
+   remote_url += "tutorial/YOUR_USERNAME-nova-tutorial"
+   ```
+   
+   Replace `YOUR_USERNAME` with your actual username (all lowercase).
+
+2. Open `src/nova_tutorial/scripts/xml_utils.py` and update the following:
+
+   ```python
+   # Find these lines:
+   dest_dir = os.path.join(temp_dir, "tools", "neutrons")
+   xml_filename = "{{ project_name.lower().replace(' ', '-').replace('_', '-') }}.xml"
+   
+   # Change them to:
+   dest_dir = os.path.join(temp_dir, "tools", "neutrons", "tutorials")
+   xml_filename = "YOUR_USERNAME-nova-tutorial.xml"
+   
+   # Then find this line:
+   container_path = "ndip/tool-sources/{{ project_name.lower().replace(' ', '-').replace('_', '-') }}"
+   
+   # Change it to:
+   container_path = "ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial"
+   ```
+
+3. Open `xml/tool.xml` and modify the tool ID:
+
+   ```xml
+   <!-- Find this line: -->
+   <tool id="{{ project_name.lower().replace(' ', '-').replace('_', '-') }}" name="{{ project_name }}" version="@TOOL_VERSION@" profile="22.01">
+   
+   <!-- Change it to: -->
+   <tool id="nova-YOUR_USERNAME-tutorial" name="Nova YOUR_USERNAME Tutorial" version="@TOOL_VERSION@" profile="22.01">
+   ```
+
+   And update the repository link in the help section:
+
+   ```xml
+   <!-- Find this line: -->
+   For more information, see the repository: https://code.ornl.gov/ndip/tool-sources/{{ project_name.lower().replace(' ', '-').replace('_', '-') }}
+   
+   <!-- Change it to: -->
+   For more information, see the repository: https://code.ornl.gov/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial
+   ```
 
 ### Initialize Your Project Repository
 
-The template comes with a utility script to initialize your Git repository and push it to the correct location in the NDIP GitLab. Run:
+After making these changes, you can initialize your Git repository and push it to the correct location in the NDIP GitLab:
 
 ```bash
 cd nova_tutorial
@@ -185,14 +241,10 @@ poetry run init-repo
 
 This script will:
 1. Initialize a Git repository (if not already done)
-2. Set up the remote to point to `https://code.ornl.gov/ndip/tool-sources/tutorial/<username>-nova-tutorial`
+2. Set up the remote to point to the configured repository URL
 3. Add all project files to the repository
 4. Create an initial commit (if needed)
 5. Push the code to the GitLab repository
-
-::::::::::::::::::::::::::::::::::::::::: callout
-The repository path is automatically determined based on your answers during the template setup. For tutorial projects, it will use `tutorial/<username>-project-name`, while for non-tutorial projects it will use the project group you specified.
-::::::::::::::::::::::::::::::::::::::::::::::::
 
 ### Continuous Integration and Container Building
 
@@ -200,7 +252,7 @@ Once your code is pushed to GitLab, the included CI/CD pipeline will automatical
 
 1. Running tests to verify your code works correctly
 2. Building a Docker image containing your application
-3. Pushing the image to the NDIP container registry (at `code.ornl.gov:4567/ndip/tool-sources/tutorial/<username>-nova-tutorial`)
+3. Pushing the image to the NDIP container registry (at `code.ornl.gov:4567/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`)
 
 The Docker image tag is derived from your project's version in `pyproject.toml`. Each time you update the version and push, a new container will be built automatically.
 
@@ -214,12 +266,12 @@ xml/tool.xml
 
 This file defines how your tool appears and functions within the NDIP platform. It includes:
 
-- A unique tool ID based on your username (for tutorial projects)
+- A unique tool ID (now manually configured for the tutorial)
 - The correct container reference pointing to your GitLab repository
-- Port and URL configurations for accessing your application
-- Environment variables needed by the NDIP platform
 - Command to run your application inside the container
 - Help and description text for users
+
+After the manual changes we made in the previous step, your tool XML will be correctly configured for the tutorial environment.
 
 ### Pushing the Tool XML to Galaxy Tools Repository
 
@@ -231,14 +283,14 @@ poetry run push-xml
 
 This script will:
 1. Clone the Galaxy tools repository
-2. Copy your tool XML file to the correct location (`tools/neutrons/tutorials/<username>-nova-tutorial.xml` for tutorial projects)
+2. Copy your tool XML file to the correct location (now configured as `tools/neutrons/tutorials/YOUR_USERNAME-nova-tutorial.xml`)
 3. Commit the changes
 4. Push to the `prototype` branch of the galaxy-tools repository
 
 Once your XML file is pushed to the prototype branch, an automated CI job will deploy your tool to the calvera-test instance. You can then access your tool through the NDIP web interface at https://calvera-test.ornl.gov.
 
 ::::::::::::::::::::::::::::::::::::::::: callout
-The tool XML is automatically pushed to the correct location. For tutorial projects, it goes to `tools/neutrons/tutorials/<username>-project-name.xml`, and for regular projects, it goes to `tools/neutrons/project-name.xml`.
+The tool XML utility has been enhanced to check for the existence of your Docker image before proceeding with the push. This helps prevent deployment errors by ensuring your container has been built first.
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ### Understanding Your Tool's Integration
@@ -246,18 +298,18 @@ The tool XML is automatically pushed to the correct location. For tutorial proje
 Let's understand the key components that make your tool work in NDIP:
 
 1. **Repository Structure**:
-   - Your code is hosted at `https://code.ornl.gov/ndip/tool-sources/tutorial/<username>-nova-tutorial`
-   - The Docker container is built automatically by CI and stored at `code.ornl.gov:4567/ndip/tool-sources/tutorial/<username>-nova-tutorial`
+   - Your code is hosted at `https://code.ornl.gov/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`
+   - The Docker container is built automatically by CI and stored at `code.ornl.gov:4567/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`
 
 2. **Tool XML File**:
    - Defines your tool for Galaxy/NDIP
    - References your container so NDIP knows which image to run
-   - Configures ports, environment variables, and other runtime settings
-   - Is stored in the galaxy-tools repository at `tools/neutrons/tutorials/<username>-nova-tutorial.xml`
+   - Configures the command to run your application
+   - Is stored in the galaxy-tools repository at `tools/neutrons/tutorials/YOUR_USERNAME-nova-tutorial.xml`
 
 3. **Deployment Process**:
    - When you push code to your repository → CI builds a new container
-   - When you run `push-xml` → Your tool XML is updated in the galaxy-tools prototype branch
+   - When you run `push-xml` → The utility checks if your container exists and pushes your tool XML to the galaxy-tools prototype branch
    - After XML is merged → Your tool appears in the NDIP interface
 
 ::::::::::::::::::::::::::::::::::::::::: callout
