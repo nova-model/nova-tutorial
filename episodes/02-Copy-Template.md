@@ -184,8 +184,8 @@ Since this is a tutorial, we need to modify a few files to properly configure ou
 
    ```python
    # Find this line:
-   remote_url += "{{ project_name.lower().replace(' ', '-').replace('_', '-') }}"
-   
+   remote_url += "nova-tutorial"
+
    # Change it to:
    remote_url += "tutorial/YOUR_USERNAME-nova-tutorial"
    ```
@@ -197,14 +197,15 @@ Since this is a tutorial, we need to modify a few files to properly configure ou
    ```python
    # Find these lines:
    dest_dir = os.path.join(temp_dir, "tools", "neutrons")
-   xml_filename = "{{ project_name.lower().replace(' ', '-').replace('_', '-') }}.xml"
+   xml_filename = "nova-tutorial.xml"
+
    
    # Change them to:
    dest_dir = os.path.join(temp_dir, "tools", "neutrons", "tutorials")
    xml_filename = "YOUR_USERNAME-nova-tutorial.xml"
    
    # Then find this line:
-   container_path = "ndip/tool-sources/{{ project_name.lower().replace(' ', '-').replace('_', '-') }}"
+   container_path = "ndip/tool-sources/nova-tutorial"
    
    # Change it to:
    container_path = "ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial"
@@ -214,17 +215,17 @@ Since this is a tutorial, we need to modify a few files to properly configure ou
 
    ```xml
    <!-- Find this line: -->
-   <tool id="{{ project_name.lower().replace(' ', '-').replace('_', '-') }}" name="{{ project_name }}" version="@TOOL_VERSION@" profile="22.01">
+   <tool id="nova-tutorial" name="Nova Tutorial" version="@TOOL_VERSION@" profile="22.01">
    
    <!-- Change it to: -->
-   <tool id="nova-YOUR_USERNAME-tutorial" name="Nova YOUR_USERNAME Tutorial" version="@TOOL_VERSION@" profile="22.01">
+   <tool id="YOUR_USERNAME-nova-tutorial" name="Nova YOUR_USERNAME Tutorial" version="@TOOL_VERSION@" profile="22.01">
    ```
 
    And update the repository link in the help section:
 
    ```xml
    <!-- Find this line: -->
-   For more information, see the repository: https://code.ornl.gov/ndip/tool-sources/{{ project_name.lower().replace(' ', '-').replace('_', '-') }}
+   For more information, see the repository: https://code.ornl.gov/ndip/tool-sources/nova-tutorial
    
    <!-- Change it to: -->
    For more information, see the repository: https://code.ornl.gov/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial
@@ -235,7 +236,6 @@ Since this is a tutorial, we need to modify a few files to properly configure ou
 After making these changes, you can initialize your Git repository and push it to the correct location in the NDIP GitLab:
 
 ```bash
-cd nova_tutorial
 poetry run init-repo
 ```
 
@@ -282,6 +282,7 @@ poetry run push-xml
 ```
 
 This script will:
+
 1. Clone the Galaxy tools repository
 2. Copy your tool XML file to the correct location (now configured as `tools/neutrons/tutorials/YOUR_USERNAME-nova-tutorial.xml`)
 3. Commit the changes
