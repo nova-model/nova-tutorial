@@ -240,6 +240,7 @@ poetry run init-repo
 ```
 
 This script will:
+
 1. Initialize a Git repository (if not already done)
 2. Set up the remote to point to the configured repository URL
 3. Add all project files to the repository
