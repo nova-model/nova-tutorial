@@ -180,7 +180,7 @@ Since this is a tutorial, we need to modify a few files to properly configure ou
 
 #### Modify Repository Path
 
-1. Open `src/nova_tutorial/scripts/git_utils.py` in your editor and modify the line setting the repository path:
+1. Open `scripts/git_utils.py` in your editor and modify the line setting the repository path:
 
    ```python
    # Find this line:
@@ -192,7 +192,7 @@ Since this is a tutorial, we need to modify a few files to properly configure ou
    
    Replace `YOUR_USERNAME` with your actual username (all lowercase).
 
-2. Open `src/nova_tutorial/scripts/xml_utils.py` and update the following:
+2. Open `scripts/xml_utils.py` and update the following:
 
    ```python
    # Find these lines:
