@@ -60,7 +60,32 @@ The NOVA framework requires you to set environment variables for your NDIP URL a
     **Important:** For security reasons, it is recommended to avoid hardcoding your API key directly in your code. Using environment variables is a more secure and flexible approach.
 
 
-## 4. Verify Your Setup
+## 4. Create and Add SSH Key to GitLab
+
+For detailed instructions, refer to the [official GitLab SSH documentation](https://docs.gitlab.com/user/ssh/#generate-an-ssh-key-pair).
+
+To contribute code to GitLab repositories, you'll need to set up SSH authentication:
+
+1. **Generate an SSH key pair** if you don't already have one:
+   ```bash
+   ssh-keygen -t ed25519 -C "your_email@example.com"
+   ```
+
+2. **Add your SSH key to the ssh-agent**:
+   ```bash
+   eval "$(ssh-agent -s)"
+   ssh-add ~/.ssh/id_ed25519
+   ```
+
+3. **Add your public key to your GitLab account**:
+   - Copy your public key to clipboard:
+     ```bash
+     cat ~/.ssh/id_ed25519.pub
+     ```
+   - Go to GitLab > Preferences > SSH Keys
+   - Paste your key and add a descriptive title
+
+## 5. Verify Your Setup
 
 To ensure your setup is correct, run the following command in your terminal within the `nova_tutorial` directory:
 
