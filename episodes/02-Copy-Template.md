@@ -36,7 +36,7 @@ The setup section detailed the prerequisites required for the tutorial. One of t
 To clone the template application, run the following command:
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git nova_tutorial
+copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template-tutorial.git nova_tutorial
 ```
 
 This command will download the template to a directory called `nova_tutorial`. Copier will prompt you with a series of questions. Please answer the questions as follows:
@@ -174,66 +174,9 @@ The template includes a basic GitLab CI configuration file (`.gitlab-ci.yml`).  
 
 Now that we have our template application set up, we need to integrate it with the NDIP platform. The template includes built-in utilities to streamline this process, handling the GitLab repository setup and Galaxy tool XML management.
 
-### Manual Configuration for Tutorial
-
-Since this is a tutorial, we need to modify a few files to properly configure our repository path. In a real project, you would use your own team's project name.
-
-#### Modify Repository Path
-
-1. Open `scripts/git_utils.py` in your editor and modify the line setting the repository path:
-
-   ```python
-   # Find this line:
-   remote_url += "nova-tutorial"
-
-   # Change it to:
-   remote_url += "tutorial/YOUR_USERNAME-nova-tutorial"
-   ```
-   
-   Replace `YOUR_USERNAME` with your actual username (all lowercase).
-
-2. Open `scripts/xml_utils.py` and update the following:
-
-   ```python
-   # Find these lines:
-   dest_dir = os.path.join(temp_dir, "tools", "neutrons")
-   xml_filename = "nova-tutorial.xml"
-
-   
-   # Change them to:
-   dest_dir = os.path.join(temp_dir, "tools", "neutrons", "tutorials")
-   xml_filename = "YOUR_USERNAME-nova-tutorial.xml"
-   
-   # Then find this line:
-   container_path = "ndip/tool-sources/nova-tutorial"
-   
-   # Change it to:
-   container_path = "ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial"
-   ```
-
-3. Open `xml/tool.xml` and modify the tool ID:
-
-   ```xml
-   <!-- Find this line: -->
-   <tool id="nova-tutorial" name="Nova Tutorial" version="@TOOL_VERSION@" profile="22.01">
-   
-   <!-- Change it to: -->
-   <tool id="YOUR_USERNAME-nova-tutorial" name="Nova YOUR_USERNAME Tutorial" version="@TOOL_VERSION@" profile="22.01">
-   ```
-
-   And update the repository link in the help section:
-
-   ```xml
-   <!-- Find this line: -->
-   For more information, see the repository: https://code.ornl.gov/ndip/tool-sources/nova-tutorial
-   
-   <!-- Change it to: -->
-   For more information, see the repository: https://code.ornl.gov/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial
-   ```
-
 ### Initialize Your Project Repository
 
-After making these changes, you can initialize your Git repository and push it to the correct location in the NDIP GitLab:
+You can initialize your Git repository and push it to the correct location in the NDIP GitLab:
 
 ```bash
 poetry run init-repo
@@ -279,7 +222,7 @@ After the manual changes we made in the previous step, your tool XML will be cor
 To deploy your tool to the NDIP platform, you need to add the XML file to the galaxy-tools repository. The template includes a utility for this:
 
 ```bash
-poetry run push-xml
+poetry run deploy-tool
 ```
 
 This script will:

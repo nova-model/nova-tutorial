@@ -60,32 +60,25 @@ The NOVA framework requires you to set environment variables for your NDIP URL a
     **Important:** For security reasons, it is recommended to avoid hardcoding your API key directly in your code. Using environment variables is a more secure and flexible approach.
 
 
-## 4. Create and Add SSH Key to GitLab
+## 5. Create a GitLab Personal Access Token
 
-For detailed instructions, refer to the [official GitLab SSH documentation](https://docs.gitlab.com/user/ssh/#generate-an-ssh-key-pair).
+::::::::::::::::::::::::::::::::::::::::: callout
 
-To contribute code to GitLab repositories, you'll need to set up SSH authentication:
+If you currently use an ssh key for gitlab, you will still need to create a personal access token for the tutorial.
 
-1. **Generate an SSH key pair** if you don't already have one:
-   ```bash
-   ssh-keygen -t ed25519 -C "your_email@example.com"
-   ```
+::::::::::::::::::::::::::::::::::::::::::::::::::
+To interact with repositories on code.ornl.gov, you'll need to create a personal access token:
 
-2. **Add your SSH key to the ssh-agent**:
-   ```bash
-   eval "$(ssh-agent -s)"
-   ssh-add ~/.ssh/id_ed25519
-   ```
+1. Navigate to [https://code.ornl.gov](https://code.ornl.gov) and log in with your credentials
+2. In the left sidebar, select your avatar.
+3. Select Edit Profile
+4. On the left sidebar, select Access tokens
+5. In Token name, enter a name for the token (such as Nova Tutorial)
+6. Provide the desired scopes (at minimum, select "read repository", "write repository", and api)
+7. Click Create personal access token.
+8. **Important** Copy and save your token to your computer immediately. You will no longer have access to it after leaving the page.
 
-3. **Add your public key to your GitLab account**:
-   - Copy your public key to clipboard:
-     ```bash
-     cat ~/.ssh/id_ed25519.pub
-     ```
-   - Go to GitLab > Preferences > SSH Keys
-   - Paste your key and add a descriptive title
-
-## 5. Verify Your Setup
+## 6. Verify Your Setup
 
 To ensure your setup is correct, run the following command in your terminal within the `nova_tutorial` directory:
 
