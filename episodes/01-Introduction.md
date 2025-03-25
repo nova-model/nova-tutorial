@@ -93,6 +93,12 @@ poetry install      # Install dependencies for this episode
 poetry run app      # Run the application for this episode
 ```
 
+::::::::::::::::::::::::::::::::::::::::: callout
+
+If you are using the analysis cluster for the tutorial, then please note that `poetry run app` will by default attempt to bind to port 8080 and will fail if the port is already in use. This can happen if others are on the same node as you running the same commands. If this happens, you can change the port the application binds to with `poetry run app --port {myport}`.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
 This structure ensures that each code example is isolated and runnable, making it easier for you to follow along with the tutorial and experiment with the code.
 
 ## References

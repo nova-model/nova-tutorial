@@ -19,6 +19,20 @@ Before proceeding, ensure you have met the following prerequisites:
 *   **Git:** You must have git installed on your system.
 *   **Familiarity with the Command Line:** You will need to be comfortable using the command line or terminal.
 
+::::::::::::::::::::::::::::::::::::::::: callout
+
+You can use the analysis cluster for this tutorial. This is recommended if you use Windows or otherwise can't meet the above prerequisites on your laptop. By default, the `python` command on the cluster will use 3.9, so please explicitly reference `python3.11` where needed.
+
+You can create a virtual environment suitable for the tutorial on the cluster with:
+
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install copier poetry
+```
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
 ## 2. Getting your Galaxy API Key
 
 In order to run the code examples in this tutorial, an API Key is required. An API key is obtained from the NDIP instance directly. 
