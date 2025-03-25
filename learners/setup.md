@@ -21,7 +21,7 @@ Before proceeding, ensure you have met the following prerequisites:
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
-You can use the analysis cluster for this tutorial. This is recommended if you use Windows or otherwise can't meet the above prerequisites on your laptop. By default, the `python` command on the cluster will use 3.9, so please explicitly reference `python3.11` where needed.
+You can use the analysis cluster for this tutorial. This is recommended if you use Windows or otherwise can\'t meet the above prerequisites on your laptop. By default, the `python` command on the cluster will use 3.9, so please explicitly reference `python3.11` where needed.
 
 You can create a virtual environment suitable for the tutorial on the cluster with:
 
