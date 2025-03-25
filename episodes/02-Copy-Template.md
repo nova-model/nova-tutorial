@@ -182,6 +182,10 @@ You can initialize your Git repository and push it to the correct location in th
 poetry run init-repo
 ```
 
+::::::::::::::::::::::::::::::::::::::::: callout
+If prompted for a username and password by GitLab, then please use your three-character ID as the username and the Personal Access Token you set up earlier as the password.
+::::::::::::::::::::::::::::::::::::::::::::::::
+
 This script will:
 
 1. Initialize a Git repository (if not already done)
@@ -196,7 +200,7 @@ Once your code is pushed to GitLab, the included CI/CD pipeline will automatical
 
 1. Running tests to verify your code works correctly
 2. Building a Docker image containing your application
-3. Pushing the image to the NDIP container registry (at `code.ornl.gov:4567/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`)
+3. Pushing the image to the Harbor container registry (at `savannah.ornl.gov/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`)
 
 The Docker image tag is derived from your project's version in `pyproject.toml`. Each time you update the version and push, a new container will be built automatically.
 
