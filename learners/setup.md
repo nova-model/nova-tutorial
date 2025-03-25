@@ -35,7 +35,7 @@ pip install copier poetry
 
 ## 2. Getting your Galaxy API Key
 
-In order to run the code examples in this tutorial, an API Key is required. An API key is obtained from the NDIP instance directly. 
+In order to run the code examples in this tutorial, an API Key is required. An API key is obtained from the NDIP instance directly.
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
@@ -74,7 +74,7 @@ The NOVA framework requires you to set environment variables for your NDIP URL a
     **Important:** For security reasons, it is recommended to avoid hardcoding your API key directly in your code. Using environment variables is a more secure and flexible approach.
 
 
-## 5. Create a GitLab Personal Access Token
+## 4. Create a GitLab Personal Access Token
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
@@ -92,7 +92,7 @@ To interact with repositories on code.ornl.gov, you'll need to create a personal
 7. Click Create personal access token.
 8. **Important** Copy and save your token to your computer immediately. You will no longer have access to it after leaving the page.
 
-## 6. Verify Your Setup
+## 5. Verify Your Setup
 
 To ensure your setup is correct, run the following command in your terminal within the `nova_tutorial` directory:
 
