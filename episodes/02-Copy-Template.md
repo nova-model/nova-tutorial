@@ -36,7 +36,7 @@ The setup section detailed the prerequisites required for the tutorial. One of t
 To clone the template application, run the following command:
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git nova_tutorial
+copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template-tutorial.git nova_tutorial
 ```
 
 This command will download the template to a directory called `nova_tutorial`. Copier will prompt you with a series of questions. Please answer the questions as follows:
@@ -170,6 +170,101 @@ The template includes a basic GitLab CI configuration file (`.gitlab-ci.yml`).  
 :::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
+## Deploying Your Tool to NDIP
+
+Now that we have our template application set up, we need to integrate it with the NDIP platform. The template includes built-in utilities to streamline this process, handling the GitLab repository setup and Galaxy tool XML management.
+
+### Initialize Your Project Repository
+
+You can initialize your Git repository and push it to the correct location in the NDIP GitLab:
+
+```bash
+poetry run init-repo
+```
+
+::::::::::::::::::::::::::::::::::::::::: callout
+If prompted for a username and password by GitLab, then please use your three-character ID as the username and the Personal Access Token you set up earlier as the password.
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+This script will:
+
+1. Initialize a Git repository (if not already done)
+2. Set up the remote to point to the configured repository URL
+3. Add all project files to the repository
+4. Create an initial commit (if needed)
+5. Push the code to the GitLab repository
+
+### Continuous Integration and Container Building
+
+Once your code is pushed to GitLab, the included CI/CD pipeline will automatically build a Docker container for your application. The CI configuration is already set up in the `.gitlab-ci.yml` file and includes:
+
+1. Running tests to verify your code works correctly
+2. Building a Docker image containing your application
+3. Pushing the image to the Harbor container registry (at `savannah.ornl.gov/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`)
+
+The Docker image tag is derived from your project's version in `pyproject.toml`. Each time you update the version and push, a new container will be built automatically.
+
+### Tool XML File
+
+The template has already generated a Galaxy tool XML file for your project. You can find this file at:
+
+```
+xml/tool.xml
+```
+
+This file defines how your tool appears and functions within the NDIP platform. It includes:
+
+- A unique tool ID (now manually configured for the tutorial)
+- The correct container reference pointing to your GitLab repository
+- Command to run your application inside the container
+- Help and description text for users
+
+After the manual changes we made in the previous step, your tool XML will be correctly configured for the tutorial environment.
+
+### Pushing the Tool XML to Galaxy Tools Repository
+
+To deploy your tool to the NDIP platform, you need to add the XML file to the galaxy-tools repository. The template includes a utility for this:
+
+```bash
+poetry run deploy-tool
+```
+
+This script will:
+
+1. Clone the Galaxy tools repository
+2. Copy your tool XML file to the correct location (now configured as `tools/neutrons/tutorials/YOUR_USERNAME-nova-tutorial.xml`)
+3. Commit the changes
+4. Push to the `prototype` branch of the galaxy-tools repository
+
+Once your XML file is pushed to the prototype branch, an automated CI job will deploy your tool to the calvera-test instance. You can then access your tool through the NDIP web interface at https://calvera-test.ornl.gov.
+
+::::::::::::::::::::::::::::::::::::::::: callout
+The tool XML utility has been enhanced to check for the existence of your Docker image before proceeding with the push. This helps prevent deployment errors by ensuring your container has been built first.
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+### Understanding Your Tool's Integration
+
+Let's understand the key components that make your tool work in NDIP:
+
+1. **Repository Structure**:
+   - Your code is hosted at `https://code.ornl.gov/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`
+   - The Docker container is built automatically by CI and stored at `code.ornl.gov:4567/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`
+
+2. **Tool XML File**:
+   - Defines your tool for Galaxy/NDIP
+   - References your container so NDIP knows which image to run
+   - Configures the command to run your application
+   - Is stored in the galaxy-tools repository at `tools/neutrons/tutorials/YOUR_USERNAME-nova-tutorial.xml`
+
+3. **Deployment Process**:
+   - When you push code to your repository → CI builds a new container
+   - When you run `push-xml` → The utility checks if your container exists and pushes your tool XML to the galaxy-tools prototype branch
+   - After XML is merged → Your tool appears in the NDIP interface
+
+::::::::::::::::::::::::::::::::::::::::: callout
+In a production environment, when your tool is ready for users, you would create a merge request from the prototype branch to the dev branch. The NDIP team reviews these changes, merges them, and your tool will be deployed to the production instance during the next deployment.
+::::::::::::::::::::::::::::::::::::::::::::::::
+
 ## References
 
 *   **Nova Documentation**: https://nova-application-development.readthedocs.io/en/latest/
@@ -180,7 +275,10 @@ The template includes a basic GitLab CI configuration file (`.gitlab-ci.yml`).  
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - Nova provides a template application to help get started developing your application.
-- Use the copier tool to set clone the template application.
+- Use the copier tool to clone the template application.
 - Poetry is a project management tool used to install dependencies and manage virtual environments.
 - The template application includes everything you need to get started such as basic CI, dockerfile, and tests.
+- Docker containers package your application and all its dependencies for deployment.
+- Galaxy tool XML files define how your tool appears and functions in NDIP.
+- Tools are deployed by adding their XML files to the galaxy-tools repository's prototype branch.
 ::::::::::::::::::::::::::::::::::::::::::::::::::

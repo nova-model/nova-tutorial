@@ -10,17 +10,32 @@ This section guides you through setting up your development environment to follo
 Before proceeding, ensure you have met the following prerequisites:
 
 *   **Basic Python Knowledge:** A basic understanding of Python programming concepts is required.
-*   **Python Installation:** You must have Python 3.8 or higher installed on your system.  Verify your Python version by running `python --version` or `python3 --version` in your terminal.
+*   **Python Installation:** You must have Python 3.10 or higher installed on your system.  Verify your Python version by running `python --version` or `python3 --version` in your terminal.
 *   **Python's `copier` Library:** We will be using this library to generate a starting application from a template. Install it using `pip install copier`.
 *   **Poetry:** The code samples provided in this tutorial leverage Poetry for dependency management.  If you don't have Poetry installed, follow the instructions on the official Poetry website: [https://python-poetry.org/docs/#installation](https://python-poetry.org/docs/#installation).
 *   **NDIP Access:** You should have access to a working NDIP system. (Specific details about NDIP access will need to be provided by the instructor.)  Ensure you have the necessary credentials (API key and NDIP URL) to connect to NDIP. These will be set as environment variables, as described later.
 *   **NOVA Libraries:**  While Poetry will manage these dependencies for you, it's helpful to be aware of the core NOVA libraries: `nova-galaxy`, `nova-trame`, and `nova-mvvm`.  You can find documentation for these libraries on ReadTheDocs (links provided in the "References" section).
 *   **A Text Editor or IDE:** You will need a text editor or IDE (such as VS Code, Sublime Text, or Atom) for writing code.
+*   **Git:** You must have git installed on your system.
 *   **Familiarity with the Command Line:** You will need to be comfortable using the command line or terminal.
+
+::::::::::::::::::::::::::::::::::::::::: callout
+
+You can use the analysis cluster for this tutorial. This is recommended if you use Windows or otherwise can\'t meet the above prerequisites on your laptop. By default, the `python` command on the cluster will use 3.9, so please explicitly reference `python3.11` where needed.
+
+You can create a virtual environment suitable for the tutorial on the cluster with:
+
+```bash
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install copier poetry
+```
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## 2. Getting your Galaxy API Key
 
-In order to run the code examples in this tutorial, an API Key is required. An API key is obtained from the NDIP instance directly. 
+In order to run the code examples in this tutorial, an API Key is required. An API key is obtained from the NDIP instance directly.
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
@@ -59,7 +74,25 @@ The NOVA framework requires you to set environment variables for your NDIP URL a
     **Important:** For security reasons, it is recommended to avoid hardcoding your API key directly in your code. Using environment variables is a more secure and flexible approach.
 
 
-## 4. Verify Your Setup
+## 4. Create a GitLab Personal Access Token
+
+::::::::::::::::::::::::::::::::::::::::: callout
+
+If you currently use an ssh key for gitlab, you will still need to create a personal access token for the tutorial.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+To interact with repositories on code.ornl.gov, you'll need to create a personal access token:
+
+1. Navigate to [https://code.ornl.gov](https://code.ornl.gov) and log in with your credentials
+2. In the left sidebar, select your avatar.
+3. Select Edit Profile
+4. On the left sidebar, select Access tokens
+5. In Token name, enter a name for the token (such as Nova Tutorial)
+6. Provide the desired scopes (at minimum, select "read repository", "write repository", and api)
+7. Click Create personal access token.
+8. **Important** Copy and save your token to your computer immediately. You will no longer have access to it after leaving the page.
+
+## 5. Verify Your Setup
 
 To ensure your setup is correct, run the following command in your terminal within the `nova_tutorial` directory:
 

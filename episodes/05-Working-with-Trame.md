@@ -78,6 +78,22 @@ Layouts are responsible for arraging your content in a consistent manner. In Tra
 **1. `src/nova_tutorial/app/views/main.py` (Modify):**
 
 ```python
+import logging
+
+from nova.mvvm.trame_binding import TrameBinding
+from nova.trame import ThemedApp
+from nova.trame.view import layouts
+from trame.app import get_server
+from trame.widgets import vuetify3 as vuetify
+
+from ..mvvm_factory import create_viewmodels
+from ..view_models.main import MainViewModel
+from .tab_content_panel import TabContentPanel
+from .tabs_panel import TabsPanel
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 class MainApp(ThemedApp):
     """Main application view class. Calls rendering of nested UI elements."""
 
@@ -184,9 +200,32 @@ class SampleTab1:
         self.create_ui()
 
     def create_ui(self) -> None:
-        RemoteFileInput(v_model="file", base_paths=["/HFIR", "/SNS"])
+        RemoteFileInput(v_model="config.file", base_paths=["/HFIR", "/SNS"])
         InputField(v_model="config.username")
 ```
+
+**6. `src/nova_tutorial/app/models/main_model.py` (Modify):**
+
+Add a `file` field to the `MainModel` to store the selected file path.  We use `Optional[str]` because initially, no file will be selected.
+
+```python
+from pydantic import BaseModel, Field
+from .fractal import Fractal
+
+
+class MainModel(BaseModel):
+    username: str = Field(
+        default="test_name",
+        min_length=1,
+        title="User Name",
+        description="Please provide the name of the user",
+        examples=["user"],
+    )
+    password: str = Field(default="test_password", title="User Password")
+    file: str = Field(default="", title="Select a File")
+    fractal: Fractal = Field(default_factory=Fractal)
+```
+
 
 :::::::::::::::::::::::::::::::: callout
 
@@ -252,7 +291,7 @@ By combining these layout components, you can create complex and responsive UI l
 
 As an example, we can use the layout classes to center the "Run Fractal" button.
 
-**6. `src/nova_tutorial/app/views/main.py` (Modify):**
+**7. `src/nova_tutorial/app/views/main.py` (Modify):**
 
 ```python
 from nova.trame.view import layouts
@@ -266,6 +305,14 @@ from nova.trame.view import layouts
                         click=self.view_model.run_fractal # calls the run_fractal_tool method
                     )
 ```
+
+:::::::::::::::::::::::::::::::::::::::: callout
+
+In the above example, we use the `classes` parameter to `HBoxLayout` to add the `my-2` CSS class to the element. This parameter can be used on any Trame component to customize your interface's appearance without having to write CSS.
+
+The `my-2` class is provided by [Vuetify](https://vuetifyjs.com/) and gives the element vertical margin (space above and below the element). https://vuetifyjs.com/en/styles/spacing documents this class and other classes related to spacing. There are also many other pages on the Vuetify docs describing classes that together give you a wide range of options for customizing your interface.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 For a more detailed explanation of how to work with our layout and theme, please refer to the [`nova-trame documentation`](https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/working_with_trame.html).
 

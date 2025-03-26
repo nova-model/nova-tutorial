@@ -10,5 +10,5 @@ class SampleTab1:
         self.create_ui()
 
     def create_ui(self) -> None:
-        RemoteFileInput(v_model="file", base_paths=["/HFIR", "/SNS"])
+        RemoteFileInput(v_model="config.file", base_paths=["/HFIR", "/SNS"])
         InputField(v_model="config.username")
