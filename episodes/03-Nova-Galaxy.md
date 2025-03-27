@@ -201,11 +201,19 @@ The Outputs can be used by the rest of your application, saved, or simply discar
 At times, it may be desirable to execute a tool or workflow without waiting on the result. The class Tool method run has an optional `wait` parameter. The default is true so that the tool is run in a blocking manner. However, by setting the parameter to false, the tool will be run asynchronously in a non-blocking manner. It is beyond the scope of this episode, but if you were to attempt modify the example to run the tool asynchronously, your code might look something like this.
 
 ```python
-            tool.run(data_store, params, wait=False)
+        params1 = Parameters()
+        params1.add_input(name="option", "mandelbrot")
+        tool1.run(data_store, params1, wait=False)
 
-    def check_for_output(self, tool):
-        if(tool.get_results()):
-            output.get_dataset("output").download("image.png")
+        params2 = Parameters()
+        params2.add_input(name="option", "julia")
+        tool2.run(data_store, params2, wait=False)
+
+        # wait on both tools to finish
+        while(!tool1.get_results() || !tool2.get_results())
+            await sleep(1)
+
+        # do stuff
 ```
 
 Note, when run in this manner, the output of tool.run() will be `None`. In order to retrieve results, you can use `tool.get_results()`. If the tool has not finished execution, this will also return `None`. As soon as results are available, the method will provide the results, exactly like the blocking execution.

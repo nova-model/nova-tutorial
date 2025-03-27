@@ -213,6 +213,7 @@ This is the UI for our Fractal interaction.  It includes a button that calls the
 ```python
 from trame.widgets import vuetify3 as vuetify
 
+from nova.trame.view.components import InputField
 from nova_tutorial.app.view_models.main import MainViewModel
 
 class FractalTab:
@@ -221,7 +222,6 @@ class FractalTab:
         self.create_ui()
 
     def create_ui(self) -> None:
-        InputField(v_model="config.fractal.fractal_type")
         vuetify.VBtn(
             "Run Fractal",
             click=self.view_model.run_fractal
