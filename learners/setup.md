@@ -1,23 +1,26 @@
 ---
 title: Setup
 ---
+# Verify Prerequisites
+*   **Basic Python Knowledge:** A basic understanding of Python programming concepts is required.
+*   **A Text Editor or IDE:** You will need a text editor or IDE (such as VS Code, Sublime Text, or Atom) for writing code.
+*   **Familiarity with the Command Line:** You will need to be comfortable using the command line or terminal.
+
 # Setup
 
 This section guides you through setting up your development environment to follow along with the NOVA tutorial. It builds upon the prerequisites outlined earlier and provides specific instructions to ensure you have the necessary tools and libraries installed and configured.
 
-## 1. Verify Prerequisites
+## 1. Mac and Linux
 
-Before proceeding, ensure you have met the following prerequisites:
+*   **Python Installation:** You must have Python 3.11 or higher installed on your system.  Verify your Python version by running `python --version` or `python3 --version` in your terminal. If python is already installed, it should be available on linux systems via your package manager. On macOS, download the installer from [https://www.python.org/downloads/](https://www.python.org/downloads/).
+*   **Python's `copier` Library:** We will be using this library to generate a starting application from a template. Install it using pip (ex. `pip install copier`).
+*   **Poetry:** The code samples provided in this tutorial leverage Poetry for dependency management. Run the command `poetry` to see if you already have Poetry installed. If you don't have Poetry installed, follow the instructions on the official Poetry website: [https://python-poetry.org/docs/#installation](https://python-poetry.org/docs/#installation).
+*   **Git:** You must have git installed on your system. Try running `git version` command in your terminal to see if it is already installed. If not, please visit the git downloads page for installation instructions. [https://git-scm.com/downloads](https://git-scm.com/downloads)
 
-*   **Basic Python Knowledge:** A basic understanding of Python programming concepts is required.
-*   **Python Installation:** You must have Python 3.10 or higher installed on your system.  Verify your Python version by running `python --version` or `python3 --version` in your terminal.
-*   **Python's `copier` Library:** We will be using this library to generate a starting application from a template. Install it using `pip install copier`.
-*   **Poetry:** The code samples provided in this tutorial leverage Poetry for dependency management.  If you don't have Poetry installed, follow the instructions on the official Poetry website: [https://python-poetry.org/docs/#installation](https://python-poetry.org/docs/#installation).
-*   **NDIP Access:** You should have access to a working NDIP system. (Specific details about NDIP access will need to be provided by the instructor.)  Ensure you have the necessary credentials (API key and NDIP URL) to connect to NDIP. These will be set as environment variables, as described later.
-*   **NOVA Libraries:**  While Poetry will manage these dependencies for you, it's helpful to be aware of the core NOVA libraries: `nova-galaxy`, `nova-trame`, and `nova-mvvm`.  You can find documentation for these libraries on ReadTheDocs (links provided in the "References" section).
-*   **A Text Editor or IDE:** You will need a text editor or IDE (such as VS Code, Sublime Text, or Atom) for writing code.
-*   **Git:** You must have git installed on your system.
-*   **Familiarity with the Command Line:** You will need to be comfortable using the command line or terminal.
+## 2. Windows
+
+For windows systems, it is recommended that you use the analysis cluster for this tutorial.
+
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
@@ -33,7 +36,7 @@ pip install copier poetry
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## 2. Getting your Galaxy API Key
+## 3. Getting your Galaxy API Key
 
 In order to run the code examples in this tutorial, an API Key is required. An API key is obtained from the NDIP instance directly.
 
@@ -51,7 +54,7 @@ The steps to retrieve your API Key are:
 4. Select "Manage API Key"
 5. You should now be on the "Manage API Key" page where you can view/copy the API Key.
 
-## 3. Configure Environment Variables
+## 4. Configure Environment Variables
 
 The NOVA framework requires you to set environment variables for your NDIP URL and API key. These variables are used to authenticate with the NDIP platform.
 
@@ -74,7 +77,7 @@ The NOVA framework requires you to set environment variables for your NDIP URL a
     **Important:** For security reasons, it is recommended to avoid hardcoding your API key directly in your code. Using environment variables is a more secure and flexible approach.
 
 
-## 4. Create a GitLab Personal Access Token
+## 5. Create a GitLab Personal Access Token
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
@@ -92,7 +95,7 @@ To interact with repositories on code.ornl.gov, you'll need to create a personal
 7. Click Create personal access token.
 8. **Important** Copy and save your token to your computer immediately. You will no longer have access to it after leaving the page.
 
-## 5. Verify Your Setup
+## 6. Verify Your Setup
 
 To ensure your setup is correct, run the following command in your terminal within the `nova_tutorial` directory:
 
