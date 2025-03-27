@@ -91,7 +91,7 @@ The pandas install is only necessary for loading example data from Plotly, which
 
 Now, we can create a view that displays a Plotly figure.
 
-**1. `PlotlyView` View Class (`src/viz_examples/views/plotly.py`) (Create):**
+**1. `PlotlyView` View Class (`src/viz_examples/app/views/plotly.py`) (Create):**
 
 *   **Imports**:  Pay special attention to the plotly import. This module contains a Trame widget that will allow us to quickly add a Plotly chart to our view.
 
@@ -218,7 +218,7 @@ class PlotlyConfig(BaseModel):
 
 First, let's add replace the sample tabs from the template with the following:
 
-**3. `src/app/viz_examples/app/views/tab_content_panel.py` (Modify):**
+**3. `src/viz_examples/app/views/tab_content_panel.py` (Modify):**
 
 *   **Import `PlotlyView`**
 
@@ -242,7 +242,7 @@ And add the corresponding import:
 
 We also need to update the tabs to show an option for the Plotly view.
 
-**4. `src/viz_examples/views/tabs_panel.py` (Modify):**
+**4. `src/viz_examples/app/views/tabs_panel.py` (Modify):**
 
 ```python
     def create_ui(self) -> None:
@@ -252,7 +252,7 @@ We also need to update the tabs to show an option for the Plotly view.
 
 Finally, we'll need to update the view model to bind our new classes.
 
-**5. `src/viz_examples/view_models/main.py` (Modify):**
+**5. `src/viz_examples/app/view_models/main.py` (Modify):**
 
 *   **Import `PlotlyConfig`**
 
@@ -297,7 +297,7 @@ PyVista contains built-in Trame support, but we still need to install the Trame 
 
 Now we can set up our view.
 
-**6. `PyVistaView` View Class (`src/viz_examples/views/pyvista.py`):**
+**6. `PyVistaView` View Class (`src/viz_examples/app/views/pyvista.py`):**
 
 *   **Imports:**  `plotter_ui` contains the Trame widget for PyVista.
 
@@ -355,7 +355,7 @@ class PyVistaView:
             self.view_model.update_pyvista_volume(self.plotter)
 ```
 
-**7. `PyVistaConfig` Model Class (`src/viz_examples/models/pyvista.py`):**
+**7. `PyVistaConfig` Model Class (`src/viz_examples/app/models/pyvista.py`):**
 
 *   **Imports:**  `download_knee_full` yields a 3D dataset that is suitable for volume rendering. You can find more datasets in PyVista\'s [Dataset Gallery](https://docs.pyvista.org/api/examples/dataset_gallery).
 
@@ -403,7 +403,7 @@ PyVista\'s volume rendering engine isn\'t currently suitable for large data. If 
 
 This is very similar to the Plotly setup.
 
-**8. `src/viz_examples/views/tab_content_panel.py` (Modify):**
+**8. `src/viz_examples/app/views/tab_content_panel.py` (Modify):**
 
 *   **Import `PyVistaView`**
 
@@ -425,7 +425,7 @@ from ..views.pyvista import PyVistaView
                             PyVistaView(self.view_model)
 ```
 
-**9. `src/viz_examples/views/tabs_panel.py` (Modify):**
+**9. `src/viz_examples/app/views/tabs_panel.py` (Modify):**
 
 ```python
     def create_ui(self) -> None:
@@ -434,7 +434,7 @@ from ..views.pyvista import PyVistaView
             vuetify.VTab("PyVista", value=2)
 ```
 
-**10. `src/viz_examples/view_models/main.py` (Modify):**
+**10. `src/viz_examples/app/view_models/main.py` (Modify):**
 
 *   **Import `PyVistaConfig`**
 
@@ -483,7 +483,7 @@ PyVista isn't compatible with VTK 9.4, yet. If you are not using PyVista, there 
 
 Once more, let's setup a view and model.
 
-**11. `VTKView` View Class (`src/viz_examples/views/vtk.py`):**
+**11. `VTKView` View Class (`src/viz_examples/app/views/vtk.py`):**
 
 *   **Imports:**  The `vtkRenderingVolumeOpenGL2` import is necessary despite being unreferenced.
 
@@ -544,7 +544,7 @@ class VTKView:
         self.render_window.Render()
 ```
 
-**12. `VTKConfig` Model Class (`src/viz_examples/models/vtk.py`):**
+**12. `VTKConfig` Model Class (`src/viz_examples/app/models/vtk.py`):**
 
 *   **Imports:**  We are only using PyVista to get an example dataset. There are two references to it as we use `KNEE_DATA` to compute min/max bounds for the data and `KNEE_DATAFILE` to pass the data file into a VTK reader. The FixedPointVolumeRayCastMapper is CPU-based, but other mappers are available if you need GPU support.
 
@@ -676,7 +676,7 @@ class VTKConfig:
 
 This is very similar to the Plotly and PyVista setup.
 
-**13. `src/viz_examples/views/tab_content_panel.py` (Modify):**
+**13. `src/viz_examples/app/views/tab_content_panel.py` (Modify):**
 
 *   **Import `VTKView`**
 
@@ -700,7 +700,7 @@ from ..views.vtk import VTKView
                             VTKView(self.view_model)
 ```
 
-**14. `src/viz_examples/views/tabs_panel.py` (Modify):**
+**14. `src/viz_examples/app/views/tabs_panel.py` (Modify):**
 
 ```python
     def create_ui(self) -> None:
@@ -710,7 +710,7 @@ from ..views.vtk import VTKView
             vuetify.VTab("VTK", value=3)
 ```
 
-**15. `src/viz_examples/view_models/main.py` (Modify):**
+**15. `src/viz_examples/app/view_models/main.py` (Modify):**
 
 *   **Import `VTKConfig`**
 

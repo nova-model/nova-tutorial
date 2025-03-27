@@ -349,6 +349,10 @@ We will need to add a data binding for `running`, as well. We choose to place th
 **8. `src/nova_tutorial/app/view_models/main.py` (Modify):**
 
 ```python
+from asyncio import create_task, sleep
+from threading import Thread
+    # ... (rest of the file) ...
+
     def __init__(self, model: MainModel, binding: BindingInterface):
         self.model = model
         self.running = False
