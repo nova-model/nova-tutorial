@@ -38,7 +38,7 @@ The complete code for this episode is available in the `code/episode_7` director
 Let\'s start by setting up a new application from the template. When answering the `copier` questions, make sure you select "no" for installing Mantid and set up a Trame-based, multi-tab view based on MVVM.
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git viz_tutorial
+copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template-tutorial.git viz_tutorial
 ```
 
 *   **What is your project name?**

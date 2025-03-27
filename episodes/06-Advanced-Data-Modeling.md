@@ -65,7 +65,7 @@ Let\'s start by setting up a new application from the template.
 To clone the template application, run the following command:
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git advanced_pydantic
+copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template-tutorial.git advanced_pydantic
 ```
 
 This command will download the template to a directory called `advanced_pydantic`. Copier will prompt you with a series of questions. Please answer the questions as follows:
