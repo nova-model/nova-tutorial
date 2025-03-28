@@ -24,7 +24,7 @@ exercises: 0
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-# 6. Advanced Data Validation with Pydantic: Ensuring Data Integrity
+## 6. Advanced Data Validation with Pydantic: Ensuring Data Integrity
 
 In this section, we will explore Pydantic, a powerful Python library for data validation and settings management. We\'ll delve into the benefits of data validation, how Pydantic works, and best practices for using it effectively within the NOVA framework and the MVVM architecture.
 
