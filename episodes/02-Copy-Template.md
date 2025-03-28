@@ -10,6 +10,7 @@ exercises: 3
 - Understand the basic project structure created by the template.
 - Identify key files in the project (e.g., `pyproject.toml`).
 - Install project dependencies using `poetry`.
+- Deploy the template application to NDIP
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -248,7 +249,7 @@ Let's understand the key components that make your tool work in NDIP:
 
 1. **Repository Structure**:
    - Your code is hosted at `https://code.ornl.gov/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`
-   - The Docker container is built automatically by CI and stored at `code.ornl.gov:4567/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`
+   - The Docker container is built automatically by CI and stored at `savannah.ornl.gov/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`
 
 2. **Tool XML File**:
    - Defines your tool for Galaxy/NDIP
@@ -258,7 +259,7 @@ Let's understand the key components that make your tool work in NDIP:
 
 3. **Deployment Process**:
    - When you push code to your repository → CI builds a new container
-   - When you run `push-xml` → The utility checks if your container exists and pushes your tool XML to the galaxy-tools prototype branch
+   - When you run `deploy-tool` → The utility checks if your container exists and pushes your tool XML to the galaxy-tools prototype branch
    - After XML is merged → Your tool appears in the NDIP interface
 
 ::::::::::::::::::::::::::::::::::::::::: callout
