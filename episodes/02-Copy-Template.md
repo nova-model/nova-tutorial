@@ -233,7 +233,7 @@ poetry run deploy-tool
 This script will:
 
 1. Clone the Galaxy tools repository
-2. Copy your tool XML file to the correct location (now configured as `tools/neutrons/tutorials/YOUR_USERNAME-nova-tutorial.xml`)
+2. Copy your tool XML file to the correct location (for the tutorial this is configured as `tools/neutrons/tutorials/YOUR_USERNAME-nova-tutorial.xml`)
 3. Commit the changes
 4. Push to the `prototype` branch of the galaxy-tools repository
 
@@ -255,7 +255,7 @@ Let's understand the key components that make your tool work in NDIP:
    - Defines your tool for Galaxy/NDIP
    - References your container so NDIP knows which image to run
    - Configures the command to run your application
-   - Is stored in the galaxy-tools repository at `tools/neutrons/tutorials/YOUR_USERNAME-nova-tutorial.xml`
+   - Is stored on the prototype branch in the galaxy-tools repository at [https://code.ornl.gov/ndip/galaxy-tools/-/tree/prototype/tools/neutrons/tutorials](https://code.ornl.gov/ndip/galaxy-tools/-/tree/prototype/tools/neutrons/tutorials). The xml file will have a name in the format of YOUR_USERNAME-nova-tutorial.xml
 
 3. **Deployment Process**:
    - When you push code to your repository → CI builds a new container
