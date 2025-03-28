@@ -25,7 +25,7 @@ exercises: 2
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## 4. User Interface Best Practices: The MVVM Design Pattern
+## User Interface Best Practices: The MVVM Design Pattern
 
 In this section, we will introduce the Model-View-ViewModel (MVVM) design pattern, a powerful architectural approach for structuring applications, particularly those with user interfaces. We\'ll explore the core principles of MVVM, the roles of each component, and how the NOVA framework simplifies its implementation, making your code more organized, testable, and maintainable.
 

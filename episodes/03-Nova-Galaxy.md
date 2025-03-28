@@ -23,7 +23,7 @@ exercises: 3
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-## 3. Programming with NDIP
+## Programming with NDIP
 
 In this episode, we will start using the `nova-galaxy` library to interact with the NDIP platform and run a neutron analysis tool. First, ensure you have set your `GALAXY_URL` and `GALAXY_API_KEY` as environment variables, as explained in the Summary and Setup Episode.  We also need to add `nova-galaxy` as a project dependency.
 

@@ -3,7 +3,7 @@ title: "Development Cycle and Next Steps"
 teaching: 20
 exercises: 0
 ---
-## 8. Development Cycle and Next Steps
+## Development Cycle and Next Steps
 
 In this section, we will look at other resources you may want to integrate with your application.
 
