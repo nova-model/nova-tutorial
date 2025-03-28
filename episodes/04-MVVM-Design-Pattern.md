@@ -349,6 +349,21 @@ If you don't want Trame to launch a tab by default, you can instead run ```poetr
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
+## Pushing the Updated Tool to NDIP
+
+Now that we have updated our Fractal tool and integrated it into the NOVA application using the MVVM pattern, the next step is to push these changes to NDIP. This step ensures that the tool on NDIP reflects the latest version of the tool and is available for others.
+
+Here are the steps to push your changes and deploy the tool:
+
+1. **Bump the version:** Open the `pyproject.toml` file in the root of your project. Increment the `version` number to `0.2.0` in the `[tool.poetry]` section. Save the file.
+2. **Stage your changes:** Use `git add .` to stage all changes that have made to the application.
+3. **Commit your changes:** Create a commit with a descriptive message: `git commit -m "Update Fractal tool with MVVM, bump to version 0.2.0"`.
+4. **Push to the repository:** Push your committed changes to the remote repository with `git push`.
+5. **Wait for CI/CD:** The push will trigger a CI/CD pipeline in gitlab. Wait for the pipeline to complete which includes building the container image for your tool. You can monitor the pipeline status in the Gitlab interface.
+6. **Deploy the tool:** Once the pipeline is successful, run the deployment command from your project's root directory: `poetry run deploy-tool`.
+
+This process ensures that your updated tool is built, containerized, and made available through NDIP.
+
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Trigger Pydantic Validation Error (Programmatic)**
 
