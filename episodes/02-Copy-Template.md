@@ -10,6 +10,7 @@ exercises: 3
 - Understand the basic project structure created by the template.
 - Identify key files in the project (e.g., `pyproject.toml`).
 - Install project dependencies using `poetry`.
+- Deploy the template application to NDIP
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -21,7 +22,7 @@ exercises: 3
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-# 2. Getting Started with a Template Application
+## Getting Started with a Template Application
 
 
 As mentioned in the introduction, all code examples in this tutorial are based on a template application. In this episode, we will create this starting point by cloning a template using the `copier` library. This template provides a basic project structure and pre-configured files that will help us get started quickly with our NOVA project, saving us from setting up everything from scratch.
@@ -232,7 +233,7 @@ poetry run deploy-tool
 This script will:
 
 1. Clone the Galaxy tools repository
-2. Copy your tool XML file to the correct location (now configured as `tools/neutrons/tutorials/YOUR_USERNAME-nova-tutorial.xml`)
+2. Copy your tool XML file to the correct location (for the tutorial this is configured as `tools/neutrons/tutorials/YOUR_USERNAME-nova-tutorial.xml`)
 3. Commit the changes
 4. Push to the `prototype` branch of the galaxy-tools repository
 
@@ -248,17 +249,17 @@ Let's understand the key components that make your tool work in NDIP:
 
 1. **Repository Structure**:
    - Your code is hosted at `https://code.ornl.gov/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`
-   - The Docker container is built automatically by CI and stored at `code.ornl.gov:4567/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`
+   - The Docker container is built automatically by CI and stored at `savannah.ornl.gov/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`
 
 2. **Tool XML File**:
    - Defines your tool for Galaxy/NDIP
    - References your container so NDIP knows which image to run
    - Configures the command to run your application
-   - Is stored in the galaxy-tools repository at `tools/neutrons/tutorials/YOUR_USERNAME-nova-tutorial.xml`
+   - Is stored on the prototype branch in the galaxy-tools repository at [https://code.ornl.gov/ndip/galaxy-tools/-/tree/prototype/tools/neutrons/tutorials](https://code.ornl.gov/ndip/galaxy-tools/-/tree/prototype/tools/neutrons/tutorials). The xml file will have a name in the format of YOUR_USERNAME-nova-tutorial.xml
 
 3. **Deployment Process**:
    - When you push code to your repository → CI builds a new container
-   - When you run `push-xml` → The utility checks if your container exists and pushes your tool XML to the galaxy-tools prototype branch
+   - When you run `deploy-tool` → The utility checks if your container exists and pushes your tool XML to the galaxy-tools prototype branch
    - After XML is merged → Your tool appears in the NDIP interface
 
 ::::::::::::::::::::::::::::::::::::::::: callout

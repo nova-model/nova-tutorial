@@ -23,7 +23,7 @@ exercises: 0
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-# 1. Introduction to NOVA and NDIP
+## Introduction to NOVA and NDIP
 
 Welcome to the NOVA tutorial! This guide will walk you through the process of creating applications for the analysis and visualization of neutron scattering data using the NOVA framework. You will learn how to create scripts that interact with the existing tools deployed on the Neutrons Data Interpretation Platform (NDIP), and interactive web applications that can be deployed to NDIP to create simple user interfaces or complex visualizations. All these leverage the NOVA libraries to simplify interaction with the Neutron Data Interpretation Platform (NDIP).
 
