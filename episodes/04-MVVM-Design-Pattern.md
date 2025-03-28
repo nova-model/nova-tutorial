@@ -356,7 +356,7 @@ Now that we have updated our Fractal tool and integrated it into the NOVA applic
 Here are the steps to push your changes and deploy the tool:
 
 1. **Bump the version:** Open the `pyproject.toml` file in the root of your project. Increment the `version` number to `0.2.0` in the `[tool.poetry]` section. Save the file.
-2. **Stage your changes:** Use `git add .` to stage all changes that have made to the application.
+2. **Stage your changes:** Use `git add .` to stage all changes that have been made to the application.
 3. **Commit your changes:** Create a commit with a descriptive message: `git commit -m "Update Fractal tool with MVVM, bump to version 0.2.0"`.
 4. **Push to the repository:** Push your committed changes to the remote repository with `git push`.
 5. **Wait for CI/CD:** The push will trigger a CI/CD pipeline in gitlab. Wait for the pipeline to complete which includes building the container image for your tool. You can monitor the pipeline status in the Gitlab interface.
