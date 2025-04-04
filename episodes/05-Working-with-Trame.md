@@ -172,15 +172,22 @@ Let\'s change the fractal type field to a dropdown and add a label to it.
 **3. `src/nova_tutorial/app/models/fractal.py` (Modify):**
 
 ```python
+from enum import Enum
+
+class FractalTypeOptions(str, Enum):
+    mandelbrot = "mandelbrot"
+    julia = "julia"
+    random = "random"
+    markus = "markus"
+
 class Fractal(BaseModel):
-    fractal_type_options: list[str] = ["mandelbrot", "julia", "random", "markus"]
-    fractal_type: str = Field(default="mandelbrot")
+    fractal_type: FractalTypeOptions = Field(default=FractalTypeOptions.mandelbrot)
 ```
 
 **4. `src/nova_tutorial/app/views/fractal_tab.py` (Modify):**
 
 ```python
-        InputField(v_model="config.fractal.fractal_type", items="config.fractal.fractal_type_options", type="select")
+        InputField(v_model="config.fractal.fractal_type", type="select")
 ```
 
 ### `RemoteFileInput`
@@ -339,7 +346,7 @@ Now that we understand the basics of working with Trame, let\'s make the view fo
         self.create_ui()
 
     def create_ui(self) -> None:
-        InputField(v_model="config.fractal.fractal_type", classes="mb-2", items="config.fractal.fractal_type_options", type="select")
+        InputField(v_model="config.fractal.fractal_type", classes="mb-2", type="select")
         vuetify.VProgressCircular(v_if="running", indeterminate=True)
         vuetify.VImg(v_else=True, src=("config.fractal.image_data",), height="400", width="400")
 ```

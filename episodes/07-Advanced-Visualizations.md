@@ -127,13 +127,12 @@ class PlotlyView:
 ```python
     def create_ui(self) -> None:
         with GridLayout(columns=4, classes="mb-2"):
-            InputField(v_model="plotly_config.plot_type", items="plotly_config.plot_type_options", type="select")
-            InputField(v_model="plotly_config.x_axis", items="plotly_config.axis_options", type="select")
-            InputField(v_model="plotly_config.y_axis", items="plotly_config.axis_options", type="select")
+            InputField(v_model="plotly_config.plot_type", type="select")
+            InputField(v_model="plotly_config.x_axis", type="select")
+            InputField(v_model="plotly_config.y_axis", type="select")
             InputField(
                 v_model="plotly_config.z_axis",
                 disabled=("plotly_config.is_not_heatmap",),
-                items="plotly_config.axis_options",
                 type="select",
             )
 ```
@@ -158,6 +157,8 @@ As with our previous examples, there is a corresponding model.
 ```python
 """Configuration for the Plotly example."""
 
+from enum import Enum
+
 import plotly.graph_objects as go
 from plotly.data import iris
 from pydantic import BaseModel, Field, computed_field
@@ -168,20 +169,28 @@ IRIS_DATA = iris()
 *   **Pydantic definition**:  Here we define the controls for our view.
 
 ```python
+class AxisOptions(str, Enum):
+    sepal_length = "sepal_length"
+    sepal_width = "sepal_width"
+    petal_length = "petal_length"
+    petal_width = "petal_width"
+
+class PlotTypeOptions(str, Enum):
+    heatmap = "Heatmap"
+    scatter = "Scatterplot"
+
 class PlotlyConfig(BaseModel):
     """Configuration class for the Plotly example."""
 
-    axis_options: list[str] = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
-    x_axis: str = Field(default="sepal_length", title="X Axis")
-    y_axis: str = Field(default="sepal_width", title="Y Axis")
-    z_axis: str = Field(default="petal_length", title="Color")
-    plot_type: str = Field(default="scatter", title="Plot Type")
-    plot_type_options: list[str] = ["heatmap", "scatter"]
+    x_axis: AxisOptions = Field(default=AxisOptions.sepal_length, title="X Axis")
+    y_axis: AxisOptions = Field(default=AxisOptions.sepal_width, title="Y Axis")
+    z_axis: AxisOptions = Field(default=AxisOptions.petal_length, title="Color")
+    plot_type: PlotTypeOptions = Field(default=PlotTypeOptions.scatter, title="Plot Type")
 
     @computed_field  # type: ignore
     @property
     def is_not_heatmap(self) -> bool:
-        return self.plot_type != "heatmap"
+        return self.plot_type != PlotTypeOptions.heatmap
 ```
 
 *   **Plotly Figure Setup**:  Finally, we define the Plotly figure based on the user\'s selection. go.Heatmap and go.Scatter define Plotly `traces`, which represent individual components of the figure.
@@ -189,13 +198,13 @@ class PlotlyConfig(BaseModel):
 ```python
     def get_figure(self) -> go.Figure:
         match self.plot_type:
-            case "heatmap":
+            case PlotTypeOptions.heatmap:
                 plot_data = go.Heatmap(
                     x=IRIS_DATA[self.x_axis].tolist(),
                     y=IRIS_DATA[self.y_axis].tolist(),
                     z=IRIS_DATA[self.z_axis].tolist()
                 )
-            case "scatter":
+            case PlotTypeOptions.scatter:
                 plot_data = go.Scatter(
                     x=IRIS_DATA[self.x_axis].tolist(),
                     y=IRIS_DATA[self.y_axis].tolist(),
@@ -341,10 +350,10 @@ class PyVistaView:
         vuetify.VCardTitle("PyVista")
         with GridLayout(columns=5, classes="mb-2", valign="center"):
             InputField(
-                v_model="pyvista_config.colormap", column_span=2, items="pyvista_config.colormap_options", type="select"
+                v_model="pyvista_config.colormap", column_span=2, type="select"
             )
             InputField(
-                v_model="pyvista_config.opacity", column_span=2, items="pyvista_config.opacity_options", type="select"
+                v_model="pyvista_config.opacity", column_span=2, type="select"
             )
             vuetify.VBtn("Render", click=self.update)
         with HBoxLayout(halign="center", height="50vh"):
@@ -362,6 +371,8 @@ class PyVistaView:
 ```python
 """Configuration for the PyVista example."""
 
+from enum import Enum
+
 from pydantic import BaseModel, Field
 from pyvista import Plotter, examples
 
@@ -371,13 +382,22 @@ KNEE_DATA = examples.download_knee_full()
 *   **Pydantic Configuration:**  The `Fields` defined here will be passed to [`Plotter.add_volume`](https://docs.pyvista.org/api/plotting/_autosummary/pyvista.plotter.add_volume).
 
 ```python
+class ColormapOptions(str, Enum):
+    viridis = "viridis"
+    autumn = "autumn"
+    coolwarm = "coolwarm"
+    twilight = "twilight"
+    jet = "jet"
+
+class OpacityOptions(str, Enum):
+    linear = "linear"
+    sigmoid = "sigmoid"
+
 class PyVistaConfig(BaseModel):
     """Configuration class for the PyVista example."""
 
-    colormap_options: list[str] = ["viridis", "autumn", "coolwarm", "twilight", "jet"]
-    opacity_options: list[str] = ["linear", "sigmoid"]
-    colormap: str = Field(default="viridis", title="Color Transfer Function")
-    opacity: str = Field(default="linear", title="Opacity Transfer Function")
+    colormap: ColormapOptions = Field(default=ColormapOptions.viridis, title="Color Transfer Function")
+    opacity: OpacityOptions = Field(default=OpacityOptions.linear, title="Opacity Transfer Function")
 ```
 
 *   **Rendering:**  `add_volume` will return an actor. In practice, you may get better performance by manipulating that actor instead of doing a full re-render.

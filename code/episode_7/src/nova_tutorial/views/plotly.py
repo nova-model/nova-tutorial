@@ -21,15 +21,10 @@ class PlotlyView:
 
     def create_ui(self) -> None:
         with GridLayout(columns=4, classes="mb-2"):
-            InputField(v_model="plotly_config.plot_type", items="plotly_config.plot_type_options", type="select")
-            InputField(v_model="plotly_config.x_axis", items="plotly_config.axis_options", type="select")
-            InputField(v_model="plotly_config.y_axis", items="plotly_config.axis_options", type="select")
-            InputField(
-                v_model="plotly_config.z_axis",
-                disabled=("plotly_config.is_not_heatmap",),
-                items="plotly_config.axis_options",
-                type="select",
-            )
+            InputField(v_model="plotly_config.plot_type", type="select")
+            InputField(v_model="plotly_config.x_axis", type="select")
+            InputField(v_model="plotly_config.y_axis", type="select")
+            InputField(v_model="plotly_config.z_axis", disabled=("plotly_config.is_not_heatmap",), type="select")
 
         with HBoxLayout(halign="center", height="50vh"):
             self.figure = plotly.Figure()
