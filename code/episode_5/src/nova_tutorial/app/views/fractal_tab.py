@@ -11,11 +11,6 @@ class FractalTab:
         self.create_ui()
 
     def create_ui(self) -> None:
-        InputField(
-            v_model="config.fractal.fractal_type",
-            classes="mb-2",
-            items="config.fractal.fractal_type_options",
-            type="select",
-        )
+        InputField(v_model="config.fractal.fractal_type", classes="mb-2", type="select")
         vuetify.VProgressCircular(v_if="running", indeterminate=True)
         vuetify.VImg(v_else=True, src=("config.fractal.image_data",), height="400", width="400")

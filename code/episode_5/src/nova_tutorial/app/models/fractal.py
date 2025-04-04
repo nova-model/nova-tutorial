@@ -1,13 +1,20 @@
 import os
 from base64 import b64encode
+from enum import Enum
 
 from pydantic import BaseModel, Field
 from nova.galaxy import Connection, Parameters, Tool
 
 
+class FractalTypeOptions(str, Enum):
+    mandelbrot = "mandelbrot"
+    julia = "julia"
+    random = "random"
+    markus = "markus"
+
+
 class Fractal(BaseModel):
-    fractal_type_options: list[str] = ["mandelbrot", "julia", "random", "markus"]
-    fractal_type: str = Field(default="mandelbrot")
+    fractal_type: FractalTypeOptions = Field(default=FractalTypeOptions.mandelbrot)
     galaxy_url: str = Field(default_factory=lambda: os.getenv("GALAXY_URL"), description="NDIP Galaxy URL")
     galaxy_key: str = Field(default_factory=lambda: os.getenv("GALAXY_API_KEY"), description="NDIP Galaxy API Key")
     image_data: str = Field(default="", description="Base64 encoded PNG")

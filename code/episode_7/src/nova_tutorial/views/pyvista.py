@@ -29,12 +29,8 @@ class PyVistaView:
     def create_ui(self) -> None:
         vuetify.VCardTitle("PyVista")
         with GridLayout(columns=5, classes="mb-2", valign="center"):
-            InputField(
-                v_model="pyvista_config.colormap", column_span=2, items="pyvista_config.colormap_options", type="select"
-            )
-            InputField(
-                v_model="pyvista_config.opacity", column_span=2, items="pyvista_config.opacity_options", type="select"
-            )
+            InputField(v_model="pyvista_config.colormap", column_span=2, type="select")
+            InputField(v_model="pyvista_config.opacity", column_span=2, type="select")
             vuetify.VBtn("Render", click=self.update)
         with HBoxLayout(halign="center", height="50vh"):
             plotter_ui(self.plotter)
