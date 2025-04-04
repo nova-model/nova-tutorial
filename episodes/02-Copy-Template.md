@@ -113,6 +113,29 @@ The template creates a basic project structure to help get you started quickly. 
 
 In the following sections, we will start adding code to this structure to build our NDIP job submission tool.
 
+## Updating the Template
+
+After obtaining the template, you may need to update it. This is usually due to one of the following:
+
+1. You need to change an answer to a question asked during template setup.
+2. Our team has changed the template and you want to pull in the new content.
+
+In both cases, you can update the template with:
+
+```bash
+copier update
+```
+
+`copier` will ask you the questions from the initial setup again, and if you change your answers the template will be updated to reflect your new answers. If you don't need to change any answers, then you can run the following to keep all of your existing answers:
+
+```bash
+copier update -A
+```
+
+:::callout
+`copier` uses `git` to resolve conflicts between the template and your changes, so if you've heavily modified the template after the initial setup then you may run into merge conflicts during the update.
+:::
+
 :::::::::::::::::::::::::::::::::::::::  challenge
 
 ## **Run the Initial Tests**
