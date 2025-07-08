@@ -243,6 +243,11 @@ This file defines how your tool appears and functions within the NDIP platform. 
 - Command to run your application inside the container
 - Help and description text for users
 
+::::::::::::::::::::::::: callout
+You will find a field called `nova_category` in the XML file. This determines which category the tool will be placed in on https://nova.ornl.gov/. It will be auto-populated
+by copier. If you want to manually edit it, the available options can be found here: https://code.ornl.gov/ndip/project-templates/nova-application-template/-/blob/main/copier.yml?ref_type=heads#L35-44
+:::::::::::::::::::::::::::::::::
+
 After the manual changes we made in the previous step, your tool XML will be correctly configured for the tutorial environment.
 
 ### Pushing the Tool XML to Galaxy Tools Repository
