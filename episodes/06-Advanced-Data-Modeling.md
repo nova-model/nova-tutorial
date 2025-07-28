@@ -65,10 +65,13 @@ Let\'s start by setting up a new application from the template.
 To clone the template application, run the following command:
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template-tutorial.git advanced_pydantic
+copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git advanced_pydantic
 ```
 
 This command will download the template to a directory called `advanced_pydantic`. Copier will prompt you with a series of questions. Please answer the questions as follows:
+
+*  **What kind of application are you creating?**
+    > Enter `Command-Line Tool`
 
 *   **What is your project name?**
 
@@ -282,10 +285,14 @@ Now, let\'s create a simple Trame-based GUI application.
 To clone the template application, run the following command:
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template-tutorial.git pydantic_mvvm
+copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git pydantic_mvvm
 ```
 
 This command will download the template to a directory called `pydantic_mvvm`. Copier will prompt you with a series of questions. Please answer the questions as follows:
+
+
+*  **What kind of application are you creating?**
+    > Enter `Nova Application`
 
 *   **What is your project name?**
 
@@ -308,14 +315,6 @@ This command will download the template to a directory called `pydantic_mvvm`. C
     > Select `Trame`
 
 *   **Do you want a template with multiple tabs?**
-
-    > Enter `n`
-
-*   **Publish to PyPI?**
-
-    > Enter `n`
-
-*   **Publish documentation to readthedocs.io?**
 
     > Enter `n`
 

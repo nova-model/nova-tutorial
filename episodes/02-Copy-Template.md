@@ -37,11 +37,14 @@ The setup section detailed the prerequisites required for the tutorial. One of t
 To clone the template application, run the following command:
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template-tutorial.git nova_tutorial
+copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git nova_tutorial
 ```
 
 This command will download the template to a directory called `nova_tutorial`. Copier will prompt you with a series of questions. Please answer the questions as follows:
 
+*  **What kind of application are you creating?**
+    > Enter `Tutorial`
+  
 *   **What is your project name?**
 
     > Enter `Nova Tutorial`
@@ -65,14 +68,6 @@ This command will download the template to a directory called `nova_tutorial`. C
 *   **Do you want a template with multiple tabs?
 
     > Enter `yes`
-
-*   **Publish to PyPI?**
-
-    > Enter `no`
-
-*   **Publish documentation to readthedocs.io?**
-
-    > Enter `no`
 
 After answering these questions, `copier` will clone the template repository and create your project within the `nova_tutorial` directory.
 

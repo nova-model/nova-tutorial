@@ -38,12 +38,18 @@ The complete code for this episode is available in the `code/episode_7` director
 Let\'s start by setting up a new application from the template. When answering the `copier` questions, make sure you select "no" for installing Mantid and set up a Trame-based, multi-tab view based on MVVM.
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template-tutorial.git viz_tutorial
+copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git viz_tutorial
 ```
+
+*  **What kind of application are you creating?**
+    > Enter `Nova Application`
 
 *   **What is your project name?**
 
     > Enter `Viz Examples`
+
+*   **Which category will your tool belong to?**
+    > Enter `Generic`
 
 *   **What is your Python package name (use Python naming conventions)?**
 
@@ -64,14 +70,6 @@ copier copy https://code.ornl.gov/ndip/project-templates/nova-application-templa
 *   **Do you want a template with multiple tabs?
 
     > Enter `yes`
-
-*   **Publish to PyPI?**
-
-    > Enter `no`
-
-*   **Publish documentation to readthedocs.io?**
-
-    > Enter `no`
 
 ```bash
 cd viz_tutorial
