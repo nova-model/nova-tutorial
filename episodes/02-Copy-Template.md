@@ -250,7 +250,7 @@ After the manual changes we made in the previous step, your tool XML will be cor
 To deploy your tool to the NDIP platform, you need to add the XML file to the galaxy-tools repository. The template includes a utility for this:
 
 ```bash
-poetry run deploy-tool
+poetry run deploy-prototype
 ```
 
 This script will:
@@ -282,11 +282,11 @@ Let's understand the key components that make your tool work in NDIP:
 
 3. **Deployment Process**:
    - When you push code to your repository → CI builds a new container
-   - When you run `deploy-tool` → The utility checks if your container exists and pushes your tool XML to the galaxy-tools prototype branch
+   - When you run `deploy-prototype` → The utility checks if your container exists and pushes your tool XML to the galaxy-tools prototype branch
    - After XML is merged → Your tool appears in the NDIP interface
 
 ::::::::::::::::::::::::::::::::::::::::: callout
-In a production environment, when your tool is ready for users, you would create a merge request from the prototype branch to the dev branch. The NDIP team reviews these changes, merges them, and your tool will be deployed to the production instance during the next deployment.
+In a production environment, when your tool is ready for users, you would run the deploy-production tool. This will create a merge request to the dev branch. The NDIP team reviews these changes, merges them, and your tool will be deployed to the production instance during the next deployment.
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## References
