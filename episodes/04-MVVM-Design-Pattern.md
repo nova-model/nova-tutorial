@@ -360,7 +360,7 @@ Here are the steps to push your changes and deploy the tool:
 3. **Commit your changes:** Create a commit with a descriptive message: `git commit -m "Update Fractal tool with MVVM, bump to version 0.2.0"`.
 4. **Push to the repository:** Push your committed changes to the remote repository with `git push`.
 5. **Wait for CI/CD:** The push will trigger a CI/CD pipeline in gitlab. Wait for the pipeline to complete which includes building the container image for your tool. You can monitor the pipeline status in the Gitlab interface.
-6. **Deploy the tool:** Once the pipeline is successful, run the deployment command from your project's root directory: `poetry run deploy-tool`.
+6. **Deploy the tool:** Once the pipeline is successful, run the deployment command from your project's root directory: `poetry run deploy-prototype`.
 
 This process ensures that your updated tool is built, containerized, and made available through NDIP.
 
