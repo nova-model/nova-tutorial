@@ -1,12 +1,13 @@
 """Module for the Tab Content panel."""
 
-from trame.widgets import vuetify3 as vuetify
+from nova.trame.view.layouts import VBoxLayout
 from trame_server import Server
 
-from ..view_models.main import MainViewModel
+from ..view_models.main_view_model import MainViewModel
+from .fractal_tab import FractalTab
 from .sample_tab_1 import SampleTab1
 from .sample_tab_2 import SampleTab2
-from .fractal_tab import FractalTab  # Import the FractalTab
+
 
 class TabContentPanel:
     """View class to render content for a selected tab."""
@@ -18,14 +19,9 @@ class TabContentPanel:
         self.create_ui()
 
     def create_ui(self) -> None:
-        with vuetify.VForm(ref="form") as self.f:
-            with vuetify.VContainer(classes="pa-0", fluid=True):
-                with vuetify.VCard():
-                    with vuetify.VWindow(v_model="active_tab"):
-                        with vuetify.VWindowItem(value=1):
-                            FractalTab(self.view_model)  # Add FractalTab
-                        with vuetify.VWindowItem(value=2):
-                            SampleTab1()
-                        with vuetify.VWindowItem(value=3):
-                            SampleTab2()
-
+        with VBoxLayout(v_show="view_state.active_tab == 0", stretch=True):
+            FractalTab(self.view_model)  # Add FractalTab
+        with VBoxLayout(v_show="view_state.active_tab == 1", stretch=True):
+            SampleTab1()
+        with VBoxLayout(v_show="view_state.active_tab == 2", stretch=True):
+            SampleTab2()

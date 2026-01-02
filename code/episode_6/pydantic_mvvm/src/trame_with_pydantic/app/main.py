@@ -5,7 +5,7 @@ import sys
 
 def main() -> None:
     kwargs = {}
-    from .views.main import MainApp
+    from .views.main_view import MainApp
 
     app = MainApp()
     for arg in sys.argv[2:]:

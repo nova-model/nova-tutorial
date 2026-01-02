@@ -6,33 +6,33 @@ from pydantic import BaseModel, Field
 from nova.galaxy import Connection, Parameters, Tool
 
 
-class Fractal(BaseModel):
+class FractalData(BaseModel):
     fractal_type: Literal["mandelbrot", "julia", "random", "markus"] = Field(default="mandelbrot")
-    galaxy_url: str = Field(default_factory=lambda: os.getenv("GALAXY_URL"), description="NDIP Galaxy URL")
-    galaxy_key: str = Field(default_factory=lambda: os.getenv("GALAXY_API_KEY"), description="NDIP Galaxy API Key")
+    galaxy_url: str = Field(default=os.getenv("GALAXY_URL", ""), description="NDIP Galaxy URL")
+    galaxy_key: str = Field(default=os.getenv("GALAXY_API_KEY", ""), description="NDIP Galaxy API Key")
     image_data: str = Field(default="", description="Base64 encoded PNG")
 
+
+class Fractal:
+    def __init__(self):
+        self.data = FractalData(fractal_type="mandelbrot")
+
     def set_fractal_type(self, fractal_type: str):
-        self.fractal_type = fractal_type
+        self.data.fractal_type = fractal_type
 
     def run_fractal_tool(self):
-        """Runs the fractal tool with the current fractal type."""
-        if not self.galaxy_url or not self.galaxy_key:
-            raise Exception(
-                "You must specify GALAXY_URL and GALAXY_API_KEY as environment variables."
-            )
-
-        conn = Connection(galaxy_url=self.galaxy_url, galaxy_key=self.galaxy_key)
+        conn = Connection(galaxy_url=self.data.galaxy_url, galaxy_key=self.data.galaxy_key)
         tool = Tool(id="neutrons_fractal")
         params = Parameters()
+        params.add_input(name="option", value=self.data.fractal_type)
 
         with conn.connect() as galaxy_connection:
             data_store = galaxy_connection.create_data_store(name="fractal_store")
             data_store.persist()
-            output = tool.run(data_store, params)
-            output.get_dataset("output").download("tmp.png")
+            print("Executing fractal tool. This might take a few minutes.")
+            output = tool.run(data_store, params, wait=True)
+            output.get_dataset("output").download("image.png")
 
-            with open("tmp.png", "rb") as image_file:
-                self.image_data = f"data:image/png;base64,{b64encode(image_file.read()).decode()}"
-
+            with open("image.png", "rb") as image_file:
+                self.data.image_data = f"data:image/png;base64,{b64encode(image_file.read()).decode()}"
         print("Fractal tool finished successfully.")

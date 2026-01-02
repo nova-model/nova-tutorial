@@ -9,7 +9,7 @@ exercises: 3
 - Clone the NOVA template application using `copier`.
 - Understand the basic project structure created by the template.
 - Identify key files in the project (e.g., `pyproject.toml`).
-- Install project dependencies using `poetry`.
+- Install project dependencies using `pixi`.
 - Deploy the template application to NDIP
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -18,7 +18,7 @@ exercises: 3
 
 - How do I quickly set up a starting point for a NOVA project?
 - What files and directories are included in the NOVA template application?
-- How does `poetry` manage project dependencies and virtual environments?
+- How does `pixi` manage project dependencies and virtual environments?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -37,14 +37,15 @@ The setup section detailed the prerequisites required for the tutorial. One of t
 To clone the template application, run the following command:
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git nova_tutorial
+copier copy https://github.com/nova-sdk/nova-application-template nova_tutorial
 ```
 
 This command will download the template to a directory called `nova_tutorial`. Copier will prompt you with a series of questions. Please answer the questions as follows:
 
-*  **What kind of application are you creating?**
-    > Enter `Tutorial`
-  
+*   **What kind of application are you creating?**
+
+    > Select `Tutorial`
+
 *   **What is your project name?**
 
     > Enter `Nova Tutorial`
@@ -53,29 +54,19 @@ This command will download the template to a directory called `nova_tutorial`. C
 
     > Press enter to accept the default.
 
-*   **Do you want to install Mantid for your project?**
+*   **What category will your tool belong to?**
 
-    > Enter `no`
+    > Select `Generic`
 
-*   ** Are you developing a GUI application using MVVM pattern?**
-
-    > Enter `yes`
-
-*   ** Which library will you use?**
+*   **Which GUI library will you use?**
 
     > Select `Trame`
 
-*   **Do you want a template with multiple tabs?
+*   **Do you want a template with multiple tabs?**
 
     > Enter `yes`
 
 After answering these questions, `copier` will clone the template repository and create your project within the `nova_tutorial` directory.
-
-::::::::::::::::::::::::::::::::::::::::: callout
-
-If your application requires Mantid, you can enter Yes and Mantid will be added to your dockerfile. However, for local development you will still need to properly set up your conda environment.
-
-::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Install Project Dependencies
 
@@ -86,10 +77,10 @@ If your application requires Mantid, you can enter Yes and Mantid will be added 
     cd nova_tutorial
     ```
 
-3.  **Install Dependencies with Poetry:**  Use Poetry to install the project dependencies defined in the `pyproject.toml` file:
+3.  **Install Dependencies with Pixi:**  Use Pixi to install the project dependencies defined in the `pyproject.toml` file:
 
     ```bash
-    poetry install
+    pixi install
     ```
 
     This command will create a virtual environment for your project and install all required libraries, including the NOVA libraries and Trame.
@@ -198,7 +189,8 @@ Now that we have our template application set up, we need to integrate it with t
 You can initialize your Git repository and push it to the correct location in the NDIP GitLab:
 
 ```bash
-poetry run init-repo
+pixi run init-repo
+pixi run pre-commit install
 ```
 
 ::::::::::::::::::::::::::::::::::::::::: callout
@@ -212,6 +204,7 @@ This script will:
 3. Add all project files to the repository
 4. Create an initial commit (if needed)
 5. Push the code to the GitLab repository
+6. Set up the pre-commit hooks to lint your code before future pushes
 
 ### Continuous Integration and Container Building
 
@@ -222,6 +215,10 @@ Once your code is pushed to GitLab, the included CI/CD pipeline will automatical
 3. Pushing the image to the Harbor container registry (at `savannah.ornl.gov/ndip/tool-sources/tutorial/YOUR_USERNAME-nova-tutorial`)
 
 The Docker image tag is derived from your project's version in `pyproject.toml`. Each time you update the version and push, a new container will be built automatically.
+
+::::::::::::::::::::::::::::::::::::::::: callout
+Note that production images are not automatically built and pushed to Harbor. When ready to push to production, you should first manually trigger the `build-prod-image` stage in the CI. 
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 ### Tool XML File
 
@@ -250,7 +247,7 @@ After the manual changes we made in the previous step, your tool XML will be cor
 To deploy your tool to the NDIP platform, you need to add the XML file to the galaxy-tools repository. The template includes a utility for this:
 
 ```bash
-poetry run deploy-prototype
+pixi run deploy-prototype
 ```
 
 This script will:
@@ -260,7 +257,7 @@ This script will:
 3. Commit the changes
 4. Push to the `prototype` branch of the galaxy-tools repository
 
-Once your XML file is pushed to the prototype branch, an automated CI job will deploy your tool to the calvera-test instance. You can then access your tool through the NDIP web interface at https://calvera-test.ornl.gov.
+Once your XML file is pushed to the prototype branch, an automated CI job will deploy your tool to the ndip-test instance. You can then access your tool through the NDIP web interface at https://ndip-test.ornl.gov.
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 The tool XML utility has been enhanced to check for the existence of your Docker image before proceeding with the push. This helps prevent deployment errors by ensuring your container has been built first.
@@ -286,21 +283,21 @@ Let's understand the key components that make your tool work in NDIP:
    - After XML is merged → Your tool appears in the NDIP interface
 
 ::::::::::::::::::::::::::::::::::::::::: callout
-In a production environment, when your tool is ready for users, you would run the deploy-production tool. This will create a merge request to the dev branch. The NDIP team reviews these changes, merges them, and your tool will be deployed to the production instance during the next deployment.
+In a production environment, when your tool is ready for users, you would run `pixi run deploy-production`. This will create a merge request to the dev branch. The NDIP team reviews these changes, merges them, and your tool will be deployed to the production instance during the next deployment.
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## References
 
-*   **Nova Documentation**: https://nova-application-development.readthedocs.io/en/latest/
+*   **NOVA Documentation**: https://nova-application-development.readthedocs.io/en/latest/
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
-*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
+*   **NDIP documentation**: https://ndip-test.ornl.gov/docs/
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - Nova provides a template application to help get started developing your application.
 - Use the copier tool to clone the template application.
-- Poetry is a project management tool used to install dependencies and manage virtual environments.
+- Pixi is a project management tool used to install dependencies and manage virtual environments.
 - The template application includes everything you need to get started such as basic CI, dockerfile, and tests.
 - Docker containers package your application and all its dependencies for deployment.
 - Galaxy tool XML files define how your tool appears and functions in NDIP.

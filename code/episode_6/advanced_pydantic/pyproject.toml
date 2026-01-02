@@ -1,4 +1,4 @@
-[tool.poetry]
+[project]
 name = "advanced-pydantic"
 version = "0.1.0"
 description = "Advanced Pydantic Project"
@@ -6,18 +6,51 @@ authors = []
 readme = "README.md"
 license = "MIT"
 keywords = ["NDIP", "NOVA", "python"]
+requires-python = ">=3.10,<3.14"
 
-packages = [
-  { include = "advanced_pydantic", from = "src" }
-]
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["linux-64", "osx-64"]
+
+[tool.pixi.environments]
+default = {features = ["dev"], solve-group = "default"}
+production = {features = [], solve-group = "default"}
+
+[tool.pixi.dependencies]
+
+[tool.pixi.pypi-dependencies]
+advanced-pydantic = { path = ".", editable = true }
+hatch = "*"
+gitpython = ">=3.1.40,<4"
+python-gitlab = ">=5.6.0,<6"
+nova-trame = "*"
+trame-datagrid = ">=0.2.2"
 
 
-[tool.poetry.dependencies]
-python = "^3.10"
+[tool.pixi.feature.dev.pypi-dependencies]
+mypy = ">=1.10.0"
+pre-commit = ">=2.20.0"
+coverage = ">=6.4.3"
+pytest = "*"
+ruff = ">=0.6.2"
+copier=">=9.3"
+sphinx = "*"
+sphinx-rtd-theme = "*"
+sphinxcontrib-napoleon ="*"
+tomli = "*"
+
+[tool.pixi.tasks]
+app = "python -m src.advanced_pydantic.app"
+init-repo = "python -m scripts.git_utils"
+deploy-production = "python -m scripts.xml_utils"
+deploy-prototype = "python -m scripts.xml_utils_prototype"
+
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/advanced_pydantic"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -25,6 +58,7 @@ python_files = ["test*.py"]
 norecursedirs = [".git", "tmp*", "_tmp*", "__pycache__"]
 
 [tool.ruff]
+extend-exclude = [".pixi"]
 line-length = 120
 
 [tool.ruff.lint]
@@ -49,8 +83,6 @@ ignore = [
 [tool.ruff.lint.extend-per-file-ignores]
 '__init__.py' = ['D104'] # Missing docstring in public package
 
-
-
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
 
@@ -71,18 +103,3 @@ omit = [
 [tool.coverage.run]
 command_line = "-m pytest --junit-xml=reports/junit.xml"
 data_file = "reports/.coverage"
-
-[tool.poetry.dev-dependencies]
-mypy = ">=1.10.0"
-pre-commit = ">=2.20.0"
-coverage = ">=6.4.3"
-pytest = "*"
-ruff = ">=0.6.2"
-copier=">=9.3"
-sphinx = "*"
-sphinx-rtd-theme = "*"
-sphinxcontrib-napoleon ="*"
-tomli = "*"
-
-[tool.poetry.scripts]
-app = "advanced_pydantic:main"

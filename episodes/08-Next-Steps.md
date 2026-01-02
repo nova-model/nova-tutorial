@@ -55,7 +55,7 @@ These topics are beyond the scope of this introductory tutorial, but the NDIP te
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
-*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
+*   **NDIP documentation**: https://ndip-test.ornl.gov/docs/
 
 By following this tutorial, you've learned how to create and deploy a NOVA application to the NDIP platform. You can now build on this foundation to create more complex scientific applications that can be easily shared with the wider scientific community.
 

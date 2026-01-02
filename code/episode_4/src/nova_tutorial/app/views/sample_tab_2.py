@@ -1,6 +1,7 @@
 """Module for the Sample Tab 2."""
 
 from nova.trame.view.components import InputField
+from nova.trame.view.layouts import VBoxLayout
 
 
 class SampleTab2:
@@ -10,4 +11,5 @@ class SampleTab2:
         self.create_ui()
 
     def create_ui(self) -> None:
-        InputField(v_model="config.password")
+        with VBoxLayout():
+            InputField(v_model="config.password")

@@ -1,6 +1,7 @@
 """Module for the Sample Tab 1."""
 
 from nova.trame.view.components import InputField, RemoteFileInput
+from nova.trame.view.layouts import VBoxLayout
 
 
 class SampleTab1:
@@ -10,5 +11,6 @@ class SampleTab1:
         self.create_ui()
 
     def create_ui(self) -> None:
-        RemoteFileInput(v_model="config.file", base_paths=["/HFIR", "/SNS"])
-        InputField(v_model="config.username")
+        with VBoxLayout():
+            RemoteFileInput(v_model="config.file", base_paths=["/HFIR", "/SNS"])
+            InputField(v_model="config.username")
