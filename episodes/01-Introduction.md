@@ -77,11 +77,11 @@ It is also possible to download a zipped copy of the repository directly from th
 
 All of the code examples used in this tutorial are available in the `code` directory of the tutorial repository. These examples are built upon the template application that you will clone in the next episode. The code is organized by episode, with each episode having its own subdirectory (e.g., `code/episode_2`, `code/episode_3`, etc.).
 
-Each episode\'s subdirectory contains a complete, self-contained Python project that can be run independently using Poetry. This allows you to easily explore the code examples, run them, and modify them as you go through the tutorial.
+Each episode\'s subdirectory contains a complete, self-contained Python project that can be run independently using Pixi. This allows you to easily explore the code examples, run them, and modify them as you go through the tutorial.
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
-Poetry is a tool for dependency management and packaging in Python. It allows you to declare the libraries your project depends on, and it will manage the installation and updating of those dependencies. Poetry also helps you create reproducible builds by locking the versions of your dependencies. It also makes it easier to publish and share your Python projects.
+Pixi is a tool for dependency management and packaging in Python. It allows you to declare the libraries your project depends on, and it will manage the installation and updating of those dependencies. Pixi also helps you create reproducible builds by locking the versions of your dependencies. It also makes it easier to publish and share your Python projects.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -89,13 +89,13 @@ To run the code for a specific episode, navigate to the episode\'s directory in 
 
 ```bash
 cd code/episode_X  # Replace X with the episode number
-poetry install      # Install dependencies for this episode
-poetry run app      # Run the application for this episode
+pixi install       # Install dependencies for this episode
+pixi run app       # Run the application for this episode
 ```
 
 ::::::::::::::::::::::::::::::::::::::::: callout
 
-If you are using the analysis cluster for the tutorial, then please note that `poetry run app` will by default attempt to bind to port 8080 and will fail if the port is already in use. This can happen if others are on the same node as you running the same commands. If this happens, you can change the port the application binds to with `poetry run app --port {myport}`.
+If you are using the analysis cluster for the tutorial, then please note that `pixi run app` will by default attempt to bind to port 8080 and will fail if the port is already in use. This can happen if others are on the same node as you running the same commands. If this happens, you can change the port the application binds to with `pixi run app --port {myport}`.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -103,11 +103,11 @@ This structure ensures that each code example is isolated and runnable, making i
 
 ## References
 
-*   **Nova Documentation**: https://nova-application-development.readthedocs.io/en/latest/
+*   **NOVA Documentation**: https://nova-application-development.readthedocs.io/en/latest/
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
-*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
+*   **NDIP documentation**: https://ndip-test.ornl.gov/docs/
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - NDIP is a workflow management system used for analsyis and interpretation of neutron scattering data.

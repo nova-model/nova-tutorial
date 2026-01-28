@@ -1,10 +1,11 @@
 """Module for the main model."""
 
 from pydantic import BaseModel, Field
+
 from .fractal import Fractal
 
 
-class MainModel(BaseModel):
+class Config(BaseModel):
     """
     A model class.
 
@@ -22,4 +23,9 @@ class MainModel(BaseModel):
         examples=["user"],
     )
     password: str = Field(default="test_password", title="User Password")
-    fractal: Fractal = Field(default_factory=Fractal)
+
+
+class MainModel:
+    def __init__(self):
+        self.config = Config()
+        self.fractal = Fractal()

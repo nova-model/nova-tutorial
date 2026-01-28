@@ -1,9 +1,9 @@
 """Module for the Tab Content panel."""
 
-from trame.widgets import vuetify3 as vuetify
+from nova.trame.view.layouts import VBoxLayout
 from trame_server import Server
 
-from ..view_models.main import MainViewModel
+from ..view_models.main_view_model import MainViewModel
 from .sample_tab_1 import SampleTab1
 from .sample_tab_2 import SampleTab2
 
@@ -18,11 +18,7 @@ class TabContentPanel:
         self.create_ui()
 
     def create_ui(self) -> None:
-        with vuetify.VForm(ref="form") as self.f:
-            with vuetify.VContainer(classes="pa-0", fluid=True):
-                with vuetify.VCard():
-                    with vuetify.VWindow(v_model="active_tab"):
-                        with vuetify.VWindowItem(value=1):
-                            SampleTab1()
-                        with vuetify.VWindowItem(value=2):
-                            SampleTab2()
+        with VBoxLayout(v_show="view_state.active_tab == 0", stretch=True):
+            SampleTab1()
+        with VBoxLayout(v_show="view_state.active_tab == 1", stretch=True):
+            SampleTab2()

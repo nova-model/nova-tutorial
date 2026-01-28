@@ -29,7 +29,8 @@ In this episode, we will start using the `nova-galaxy` library to interact with 
 
 :::::::::::::::::::::::::::::::::::::::  callout
 
-From the command line, type `poetry add nova-galaxy@^0.7.0`. This command will add the nova-galaxy library to the pyproject.toml file as a project dependency. Then run `poetry install` to update your project dependencies.
+From the command line, type `pixi add --pypi nova-galaxy`. This command will add the nova-galaxy library to the pyproject.toml file as a project dependency and install it into the environment.
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::  callout
@@ -95,7 +96,7 @@ This section describes the output from the tool. The Fractal tool results in a s
     </outputs>
 ```
 
-A comprehensive list of tools, and links to their XML, can be found in Calvera's documentation on the [tools](https://calvera.ornl.gov/docs/tools/) page.
+A comprehensive list of tools, and links to their XML, can be found in NDIP's documentation on the [tools](https://ndip.ornl.gov/docs/tools/) page.
 
 ## Setting up the Fractal tool
 
@@ -134,7 +135,7 @@ class Fractal:
         params.add_input(name="option", value=self.fractal_type)
 ```
 
-Note that we create a `Tool` object with the `id="neutrons_fractal"`. This tells `nova-galaxy` which NDIP tool we want to run. The obvious question at this point is how do we know the id of the tool and what parameters it expects? We can look at the tool\'s launch page in calvera for some hints but ultimately we have to look at the tool\'s [xml file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads).
+Note that we create a `Tool` object with the `id="neutrons_fractal"`. This tells `nova-galaxy` which NDIP tool we want to run. The obvious question at this point is how do we know the id of the tool and what parameters it expects? We can look at the tool\'s launch page in NDIP for some hints but ultimately we have to look at the tool\'s [xml file](https://code.ornl.gov/ndip/galaxy-tools/-/blob/dev/tools/neutrons/test_tools/fractal.xml?ref_type=heads).
 
 *   **Connect and Run the Tool**:  The `with conn.connect() as galaxy_connection:` block establishes a connection to NDIP and ensures proper handling of the connection:
 
@@ -143,8 +144,8 @@ Note that we create a `Tool` object with the `id="neutrons_fractal"`. This tells
             data_store = galaxy_connection.create_data_store(name="fractal_store")
             data_store.persist()
             print("Executing fractal tool. This might take a few minutes.")
-            output = tool.run(data_store, params)
-            output.get_dataset("output").download("tmp.png")
+            output = tool.run(data_store, params, wait=True)
+            output.get_dataset("output").download("image.png")
         print("Fractal tool finished successfully.")
 ```
 
@@ -172,7 +173,7 @@ def main() -> None:
 To run the code, use the following command in the top level of your `nova_tutorial` project:
 
 ```bash
-poetry run app
+pixi run app
 ```
 
 You should see `Fractal tool finished successfully.` printed to the console.
@@ -247,7 +248,7 @@ In both cases, an error is received from the ndip-galaxy library. When changing 
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
-*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
+*   **NDIP documentation**: https://ndip-test.ornl.gov/docs/
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - Nova-Galaxy can be used to create powerful python scripts which leverage the functionality of NDIP.

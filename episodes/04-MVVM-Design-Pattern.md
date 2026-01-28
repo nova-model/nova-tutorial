@@ -166,7 +166,7 @@ The template creates a well-organized project structure following best practices
 
 *   `nova_tutorial/README.md`:  A Markdown file providing a description of your project, instructions for setup and usage, and any other relevant information.
 
-*   `pyproject.toml`:  A configuration file for Poetry, the dependency management and packaging tool used by NOVA.  It specifies project dependencies, build settings, and other metadata.
+*   `pyproject.toml`:  A configuration file for Pixi, the dependency management and packaging tool used by NOVA.  It specifies project dependencies, build settings, and other metadata.
 
 ## Implementing MVVM with `nova-mvvm` and Pydantic
 
@@ -197,7 +197,7 @@ def main() -> None:
     app.server.start(**kwargs)
 ```
 
-*   **Adding a Placeholder Method to the ViewModel (`src/nova_tutorial/app/view_models/main.py`) (Modify):**
+*   **Adding a Placeholder Method to the ViewModel (`src/nova_tutorial/app/view_models/main_view_model.py`) (Modify):**
 
 Add a `run_fractal` method to the `MainViewModel`.  For now, it just prints a message to the console. This confirms that the button click is connected to the ViewModel.
 
@@ -214,7 +214,7 @@ This is the UI for our Fractal interaction.  It includes a button that calls the
 from trame.widgets import vuetify3 as vuetify
 
 from nova.trame.view.components import InputField
-from nova_tutorial.app.view_models.main import MainViewModel
+from nova_tutorial.app.view_models.main_view_model import MainViewModel
 
 class FractalTab:
     def __init__(self, view_model: MainViewModel) -> None:
@@ -233,10 +233,11 @@ class FractalTab:
 Add the "Fractal" tab to the tab bar.
 
 ```python
-        with vuetify.VTabs(v_model=("active_tab", 0), classes="pl-5"):
-            vuetify.VTab("Fractal", value=1)  # Add Fractal Tab
-            vuetify.VTab("Sample Tab 1", value=2)
-            vuetify.VTab("Sample Tab 2", value=3)
+    with client.DeepReactive("view_state"):
+        with vuetify.VTabs(v_model="view_state.active_tab", classes="pl-5"):
+            vuetify.VTab("Fractal", value=0)  # Add Fractal Tab
+            vuetify.VTab("Sample Tab 1", value=1)
+            vuetify.VTab("Sample Tab 2", value=2)
 ```
 
 *   **Modify the tab panel content (`src/nova_tutorial/app/views/tab_content_panel.py`) (Modify):**
@@ -246,19 +247,18 @@ Display the `FractalTab` content when the "Fractal" tab is selected.
 ```python
 from .fractal_tab import FractalTab  # Import the FractalTab
 
-    # ... (rest of the file) ...
-                    with vuetify.VWindow(v_model="active_tab"):
-                        with vuetify.VWindowItem(value=1):
-                            FractalTab(self.view_model)  # Add FractalTab
-                        with vuetify.VWindowItem(value=2):
-                            SampleTab1()
-                        with vuetify.VWindowItem(value=3):
-                            SampleTab2()
+    def create_ui(self) -> None:
+        with VBoxLayout(v_show="view_state.active_tab == 0", stretch=True):
+            FractalTab(self.view_model)  # Add FractalTab
+        with VBoxLayout(v_show="view_state.active_tab == 1", stretch=True):
+            SampleTab1()
+        with VBoxLayout(v_show="view_state.active_tab == 2", stretch=True):
+            SampleTab2()
 ```
 
 **Demonstration (Initial UI and ViewModel Connection):**
 
-Run the application: `poetry run app`
+Run the application: `pixi run app`
 
 You should see a new "Fractal" tab in the application.  Click the "Run Fractal" button.  You should see "run_fractal method called!" printed in your terminal. This demonstrates that the button click in the View is successfully triggering the `run_fractal` method in the ViewModel, even though the method doesn't do anything substantial yet. This establishes the basic MVVM wiring.
 
@@ -282,21 +282,24 @@ from nova.galaxy import Connection, Parameters, Tool
 *   **Update class variables:** Use Pydantic's `Field` for type hinting and validation.  Add the `image_data` field.
 
 ```python
-class Fractal(BaseModel):
+class FractalData(BaseModel):
     fractal_type: Literal["mandelbrot", "julia", "random", "markus"] = Field(default="mandelbrot")
-    galaxy_url: str = Field(default_factory=lambda: os.getenv("GALAXY_URL"), description="NDIP Galaxy URL")
-    galaxy_key: str = Field(default_factory=lambda: os.getenv("GALAXY_API_KEY"), description="NDIP Galaxy API Key")
+    galaxy_url: str = Field(default=os.getenv("GALAXY_URL", ""), description="NDIP Galaxy URL")
+    galaxy_key: str = Field(default=os.getenv("GALAXY_API_KEY", ""), description="NDIP Galaxy API Key")
     image_data: str = Field(default="", description="Base64 encoded PNG")
 
+class Fractal:
+    # ...
     def set_fractal_type(self, fractal_type: str):
         self.fractal_type = fractal_type
+    # ...
 ```
 
 *  **Decode the data:** Update how the image is decoded.
 ```python
-            output.get_dataset("output").download("tmp.png")
+            output.get_dataset("output").download("image.png")
 
-            with open("tmp.png", "rb") as image_file:
+            with open("image.png", "rb") as image_file:
                 self.image_data = f"data:image/png;base64,{b64encode(image_file.read()).decode()}"
 ```
 
@@ -305,12 +308,37 @@ class Fractal(BaseModel):
 Import and include the `Fractal` model as a field in the `MainModel`.
 
 ```python
+from pydantic import BaseModel, Field
 from .fractal import Fractal  # Import Fractal
 
-class MainModel(BaseModel):
-    # ... (other fields) ...
+class Config(BaseModel):
+    # ... (previous MainModel) ...
     password: str = Field(default="test_password", title="User Password")
-    fractal: Fractal = Field(default_factory=Fractal) #Add Fractal Model
+
+
+class MainModel:
+    def __init__(self) -> None:
+        self.config = Config()
+        self.fractal = Fractal()
+```
+
+* **Add Full Functionality to the View Model (`src/nova_tutorial/app/view_models/main_view_model.py`) (Modify)**
+Update the code in the run_fractal method.
+
+```python
+    def __init__(self) -> None:
+        # ...
+        self.config_bind = binding.new_bind(self.model.config, callback_after_update=self.change_callback)
+        self.fractal_bind = binding.new_bind(self.model.fractal.data, callback_after_update=self.change_callback)
+        # ...
+    
+    def run_fractal(self) -> None:
+        self.model.fractal.run_fractal_tool()
+        self.update_view()
+
+    def update_view(self) -> None:
+        self.config_bind.update_in_view(self.model.config)
+        self.fractal_bind.update_in_view(self.model.fractal.data)
 ```
 
 *   **Connect the UI elements in FractalTab (`src/nova_tutorial/app/views/fractal_tab.py`) (Modify):**
@@ -320,32 +348,28 @@ Update the create UI section to use InputField and the image.
 from nova.trame.view.components import InputField
 
     # ...(rest of file)...
+    def __init__(self) -> None:
+        self.view_model = view_model
+        self.view_model.fractal_bind.connect("fractal")
+        self.create_ui()
+
     def create_ui(self) -> None:
-        InputField(v_model="config.fractal.fractal_type")
-        vuetify.VBtn(
-            "Run Fractal",
-            click=self.view_model.run_fractal
-        )
-        vuetify.VImg(src=("config.fractal.image_data",), height="400", width="400")
-```
-
-* **Add Full Functionality to the View Model (`src/nova_tutorial/app/view_models/main.py`) (Modify)**
-Update the code in the run_fractal method.
-
-```python
-    def run_fractal(self) -> None:
-        self.model.fractal.run_fractal_tool()
-        self.update_view()
+        with VBoxLayout():
+            InputField(v_model="fractal.fractal_type")
+        with VBoxLayout(classes="mb-2", halign="left"):
+            vuetify.VBtn("Run Fractal", click=self.view_model.run_fractal)
+        with VBoxLayout(stretch=True):
+            vuetify.VImg(src=("fractal.image_data",), classes="h-100 w-100")
 ```
 
 **Final Demonstration (Full Application):**
 
-Run the application: `poetry run app`
+Run the application: `pixi run app`
 
 Now, when you click "Run Fractal," the Fractal tool will execute in Galaxy, and the resulting image will be displayed in the UI.  You can also change the `fractal_type` using the input field. This demonstrates the complete MVVM flow, with data binding, Pydantic validation, and the interaction between the View, ViewModel, and Model.
 
 ::::::::::::::::::::::::::::::::::::::::: callout
-If you don't want Trame to launch a tab by default, you can instead run ```poetry run app --server```.
+If you don't want Trame to launch a tab by default, you can instead run ```pixi run app --server```.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -355,12 +379,12 @@ Now that we have updated our Fractal tool and integrated it into the NOVA applic
 
 Here are the steps to push your changes and deploy the tool:
 
-1. **Bump the version:** Open the `pyproject.toml` file in the root of your project. Increment the `version` number to `0.2.0` in the `[tool.poetry]` section. Save the file.
+1. **Bump the version:** Open the `pyproject.toml` file in the root of your project. Increment the `version` number to `0.2.0` in the `[project]` section. Save the file.
 2. **Stage your changes:** Use `git add .` to stage all changes that have been made to the application.
 3. **Commit your changes:** Create a commit with a descriptive message: `git commit -m "Update Fractal tool with MVVM, bump to version 0.2.0"`.
 4. **Push to the repository:** Push your committed changes to the remote repository with `git push`.
 5. **Wait for CI/CD:** The push will trigger a CI/CD pipeline in gitlab. Wait for the pipeline to complete which includes building the container image for your tool. You can monitor the pipeline status in the Gitlab interface.
-6. **Deploy the tool:** Once the pipeline is successful, run the deployment command from your project's root directory: `poetry run deploy-prototype`.
+6. **Deploy the tool:** Once the pipeline is successful, run the deployment command from your project's root directory: `pixi run deploy-prototype`.
 
 This process ensures that your updated tool is built, containerized, and made available through NDIP.
 
@@ -378,7 +402,7 @@ This process ensures that your updated tool is built, containerized, and made av
         print("Current message:", self._message) # Print message
 ```
 
-*   Run the application (`poetry run app`). Observe the console output. Verify that:
+*   Run the application (`pixi run app`). Observe the console output. Verify that:
 *   The message "Attempted to set fractal type programmatically to: invalid-fractal-type" is printed.
 *   The "Current fractal type (after attempt):" is still "mandelbrot" indicating the invalid update was rejected.
 *   The "Current message:" now contains a "Validation Error" message from Pydantic.
@@ -388,8 +412,8 @@ This process ensures that your updated tool is built, containerized, and made av
 :::::::::::::::::::::::::::::::::::::::  challenge
 **Inspect ViewModel State**
 
-*   In `src/nova_tutorial/app/view_models/main.py`, add `print` statements within the `MainViewModel.__init__` method to print the initial values of `self.fractal`, `self.fractal.galaxy_url`, and `self.fractal.fractal_type`.
-*   Run the application (`poetry run app`). Observe the output in the console. Verify that the initial values are printed as expected.
+*   In `src/nova_tutorial/app/view_models/main_view_model.py`, add `print` statements within the `MainViewModel.__init__` method to print the initial values of `self.fractal`, `self.fractal.galaxy_url`, and `self.fractal.fractal_type`.
+*   Run the application (`pixi run app`). Observe the output in the console. Verify that the initial values are printed as expected.
 *   Now, modify the `MainViewModel.__init__` method to change the initial value of `self.fractal.fractal_type` to "julia". Run the application again and confirm that the printed message has changed.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -400,7 +424,7 @@ This process ensures that your updated tool is built, containerized, and made av
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
-*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
+*   **NDIP documentation**: https://ndip-test.ornl.gov/docs/
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - MVVM stands for Model, View, View-Model.

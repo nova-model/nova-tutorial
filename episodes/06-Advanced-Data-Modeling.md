@@ -65,7 +65,7 @@ Let\'s start by setting up a new application from the template.
 To clone the template application, run the following command:
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git advanced_pydantic
+copier copy https://github.com/nova-sdk/nova-application-template advanced_pydantic
 ```
 
 This command will download the template to a directory called `advanced_pydantic`. Copier will prompt you with a series of questions. Please answer the questions as follows:
@@ -85,7 +85,7 @@ After that, go into the created folder and install project dependencies:
 
 ```bash
 cd advanced_pydantic
-poetry install
+pixi install
 ```
 
 
@@ -93,7 +93,7 @@ poetry install
 
 Pydantic uses Python type hints to define data models. When you create an instance of a Pydantic model, Pydantic automatically validates the input data against the defined types and constraints.
 
-1. Create a User Model (`src/advanced_pydantic/main.py`) (Modify):
+1. Create a User Model (`src/advanced_pydantic/app/main.py`) (Modify):
 
 ```python
 from pydantic import BaseModel, Field
@@ -107,7 +107,7 @@ In this example, we define a `User` model with two fields: `id` and `name`. We u
 
 When you create an instance of the `User` model, Pydantic automatically validates the input data.
 
-2. Create an instance of a User (`src/advanced_pydantic/main.py`) (Modify):
+2. Create an instance of a User (`src/advanced_pydantic/app/main.py`) (Modify):
 
 ```python
 from pydantic import ValidationError
@@ -122,7 +122,7 @@ def main() -> None:
 
 and run it with 
 ```bash
-poetry run app
+pixi run app
 ```
 
 
@@ -133,7 +133,7 @@ If the input data is invalid, Pydantic raises a `ValidationError` exception with
 
 When working with structured data, it\'s common to have nested objects. For example, a User model from the above example might have multiple Address entries. In Pydantic, we can achieve this by creating nested models.
 
-1. Creating the Address Model (`src/advanced_pydantic/main.py`) (Modify).
+1. Creating the Address Model (`src/advanced_pydantic/app/main.py`) (Modify).
 
 The Address model represents a simple address with three fields:
 
@@ -153,7 +153,7 @@ class Address(BaseModel):
     type: Literal["home", "work"] = Field()
 ```
 
-2. Using the Address Model as a Nested Field (`src/advanced_pydantic/main.py`) (Modify).
+2. Using the Address Model as a Nested Field (`src/advanced_pydantic/app/main.py`) (Modify).
 
 Update the User model so that it now contains:
 
@@ -170,7 +170,7 @@ class User(BaseModel):
     addresses: List[Address] = Field(min_length=1)
 ```
 
-3. Test the model (`src/advanced_pydantic/main.py`) (Modify).
+3. Test the model (`src/advanced_pydantic/app/main.py`) (Modify).
 
 ```python    
 def main() -> None:
@@ -194,7 +194,7 @@ def main() -> None:
 
 and run it with 
 ```bash
-poetry run app
+pixi run app
 ```
 
 ::::::::::::::::::::::::::::::::::::::::: callout
@@ -207,7 +207,7 @@ Sometimes, simple validation like checking the minimum length is not enough. In 
 
 For example, let\'s say we have a User model where only even IDs are allowed. We can enforce this constraint using the `@field_validator decorator`.
 
-4. Using the `@field_validator decorator` (`src/advanced_pydantic/main.py`) (Modify):
+4. Using the `@field_validator decorator` (`src/advanced_pydantic/app/main.py`) (Modify):
 
 ```python
 from pydantic import BaseModel, Field, field_validator
@@ -248,7 +248,7 @@ In some cases, you may need to validate the entire model, not just individual fi
 
 For example, let\'s say we have a User model where the name and id must meet specific conditions together. For instance, we only allow users with even IDs to have names that start with a capital letter. We can enforce this logic using a @model_validator.
 
-5. Using the `@model_validator decorator` (`src/advanced_pydantic/main.py`) (Modify):
+5. Using the `@model_validator decorator` (`src/advanced_pydantic/app/main.py`) (Modify):
 
 ```python
 from pydantic import BaseModel, Field, model_validator
@@ -285,44 +285,28 @@ Now, let\'s create a simple Trame-based GUI application.
 To clone the template application, run the following command:
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git pydantic_mvvm
+copier copy https://github.com/nova-sdk/nova-application-template pydantic_mvvm
 ```
 
 This command will download the template to a directory called `pydantic_mvvm`. Copier will prompt you with a series of questions. Please answer the questions as follows:
 
+*   **What kind of application are you creating?**
 
-*  **What kind of application are you creating?**
-    > Enter `Nova Application`
+    > Select `Nova Application`
 
 *   **What is your project name?**
 
     > Enter `Trame with Pydantic`
 
-*   **What is your Python package name (use Python naming conventions)?**
+*   **All other questions**
 
     > Press enter to accept the default.
-
-*   **Do you want to install Mantid for your project?**
-
-    > Enter `n`
-
-*   **Are you developing a GUI application using MVVM pattern?**
-
-    > Enter `y`
-
-*   **Which library will you use?**
-
-    > Select `Trame`
-
-*   **Do you want a template with multiple tabs?**
-
-    > Enter `n`
 
 After that, go into the created folder and install project dependencies:
 
 ```bash
 cd pydantic_mvvm
-poetry install
+pixi install
 ```
 
 
@@ -339,7 +323,7 @@ class SettingsModel(BaseModel):
     port: int = Field(default=8080, gt=0, lt=65536, title="Port Number", description="The port to listen on.", examples=["12345"])
 ```
 
-2. Create a binding for the model (`src/trame_with_pydantic/app/view_models/main.py`) (Modify):
+2. Create a binding for the model (`src/trame_with_pydantic/app/view_models/main_view_model.py`) (Modify):
 
 In your ViewModel, create a binding for this Model and clean up the code created by the template engine, we don't need it for this example):
 
@@ -355,7 +339,7 @@ class MainViewModel:
         self.settings_bind = binding.new_bind(self.settings)        
 ```
 
-3. In your view, remove all other fields and add the following InputField (`src/trame_with_pydantic/app/views/main.py`) (Modify):
+3. In your view, remove all other fields and add the following InputField (`src/trame_with_pydantic/app/views/main_view.py`) (Modify):
 
 ```python
 
@@ -366,7 +350,7 @@ class MainViewModel:
 
 ...
     with layout.content:
-        with vuetify.VRow(align="center", classes="mt-4"):
+        with GridLayout(columns=2, gap="0.25em"):
             InputField(v_model="settings.port")
 ```
 
@@ -380,20 +364,13 @@ In that fashion, the `InputField` seamlessly pulls information from your code\'s
 
 Sometimes, you may want to respond to UI validation errors beyond just marking a field as invalid (which happens automatically). In such cases, you can add a callback to the `new_bind` function.
 
-4. Using callbacks with `new_bind` (`src/trame_with_pydantic/app/view_models/main.py`) (modify):
+4. Using callbacks with `new_bind` (`src/trame_with_pydantic/app/view_models/main_view_model.py`) (modify):
 
 ```python
 class MainViewModel:
     def __init__(self, _, binding: BindingInterface):
         ...
-        self.settings_bind = binding.new_bind(self.settings, callback_after_update=self.process_settings_change)
-
-    def process_settings_change(self, results: Dict[str, Any]) -> None:
-        if results["error"]:
-            print(f"error in fields {results['errored']}, model not changed")
-        else:
-            print(f"model fields updated: {results['updated']}")
-
+        self.settings_bind = binding.new_bind(self.settings, callback_after_update=self.change_callback)
 ```
 
 The function will receive a dictionary containing lists of updated or invalid fields. Note that if a validation error occurs, the model will not be updated, leading to a discrepancy between the values displayed in the UI and those in the model.
@@ -427,4 +404,4 @@ In the GUI application, set the port to the default value if a user enters an in
 *   **nova-galaxy documentation**: https://nova-application-development.readthedocs.io/projects/nova-galaxy/en/latest/
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
-*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
+*   **NDIP documentation**: https://ndip-test.ornl.gov/docs/

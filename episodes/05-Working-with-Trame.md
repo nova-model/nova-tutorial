@@ -75,14 +75,13 @@ Layouts are responsible for arraging your content in a consistent manner. In Tra
 
 `nova-trame` provides a basic layout and theme that you can access via the `ThemedApp` class. The template app will setup your main view class to inherit from `ThemedApp` already, but to see how it works let\'s try moving the button to run the fractal tool from the fractal tab into `post_content` slot in the layout.
 
-**1. `src/nova_tutorial/app/views/main.py` (Modify):**
+**1. `src/nova_tutorial/app/views/main_view.py` (Modify):**
 
 ```python
 import logging
 
 from nova.mvvm.trame_binding import TrameBinding
 from nova.trame import ThemedApp
-from nova.trame.view import layouts
 from trame.app import get_server
 from trame.widgets import vuetify3 as vuetify
 
@@ -106,6 +105,7 @@ class MainApp(ThemedApp):
         self.create_ui()
 
     def create_ui(self) -> None:
+        self.set_theme("CompactTheme")
         self.state.trame__title = "Fractal Tool GUI"
 
         with super().create_ui() as layout:
@@ -129,8 +129,10 @@ class MainApp(ThemedApp):
 
 ```python
     def create_ui(self) -> None:
-        InputField(v_model="config.fractal.fractal_type")
-        vuetify.VImg(src=("config.fractal.image_data",), height="400", width="400")
+        with VBoxLayout():
+            InputField(v_model="fractal.fractal_type")
+        with VBoxLayout(stretch=True):
+            vuetify.VImg(src=("fractal.image_data",), classes="h-100 w-100")
 ```
 
 :::::::::::::::::::::::::: callout
@@ -180,14 +182,14 @@ class FractalTypeOptions(str, Enum):
     random = "random"
     markus = "markus"
 
-class Fractal(BaseModel):
-    fractal_type: FractalTypeOptions = Field(default=FractalTypeOptions.mandelbrot)
+class FractalData(BaseModel):
+    fractal_type: FractalTypeOptions = Field(default=FractalTypeOptions.mandelbrot, title="Fractal Type")
 ```
 
 **4. `src/nova_tutorial/app/views/fractal_tab.py` (Modify):**
 
 ```python
-        InputField(v_model="config.fractal.fractal_type", type="select")
+        InputField(v_model="fractal.fractal_type", type="select")
 ```
 
 ### `RemoteFileInput`
@@ -207,8 +209,9 @@ class SampleTab1:
         self.create_ui()
 
     def create_ui(self) -> None:
-        RemoteFileInput(v_model="config.file", base_paths=["/HFIR", "/SNS"])
-        InputField(v_model="config.username")
+        with VBoxLayout():
+            RemoteFileInput(v_model="config.file", base_paths=["/HFIR", "/SNS"])
+            InputField(v_model="config.username")
 ```
 
 **6. `src/nova_tutorial/app/models/main_model.py` (Modify):**
@@ -220,7 +223,7 @@ from pydantic import BaseModel, Field
 from .fractal import Fractal
 
 
-class MainModel(BaseModel):
+class Config(BaseModel):
     username: str = Field(
         default="test_name",
         min_length=1,
@@ -298,15 +301,15 @@ By combining these layout components, you can create complex and responsive UI l
 
 As an example, we can use the layout classes to center the "Run Fractal" button.
 
-**7. `src/nova_tutorial/app/views/main.py` (Modify):**
+**7. `src/nova_tutorial/app/views/main_view.py` (Modify):**
 
 ```python
-from nova.trame.view import layouts
+from nova.trame.view.layouts import HBoxLayout
 
 ...
 
             with layout.post_content:
-                with layouts.HBoxLayout(classes="my-2", halign="center"):
+                with HBoxLayout(classes="my-2", halign="center"):
                     vuetify.VBtn(
                         "Run Fractal",
                         click=self.view_model.run_fractal # calls the run_fractal_tool method
@@ -328,7 +331,7 @@ For a more detailed explanation of how to work with our layout and theme, please
 To run the code, use the following command in the top level of your `nova_tutorial` project:
 
 ```bash
-poetry run app
+pixi run app
 ```
 
 You should now see the simple UI. When you click the "Sample Tab 1" and "Sample Tab 2" tabs, you should now see the updated content with the new UI components.
@@ -342,65 +345,64 @@ Now that we understand the basics of working with Trame, let\'s make the view fo
 ```python
     def __init__(self, view_model: MainViewModel) -> None:
         self.view_model = view_model
-        self.view_model.running_bind.connect("running")
+        self.view_model.fractal_bind.connect("fractal")
         self.create_ui()
 
     def create_ui(self) -> None:
-        InputField(v_model="config.fractal.fractal_type", classes="mb-2", type="select")
-        vuetify.VProgressCircular(v_if="running", indeterminate=True)
-        vuetify.VImg(v_else=True, src=("config.fractal.image_data",), height="400", width="400")
+        with VBoxLayout():
+            InputField(v_model="fractal.fractal_type", type="select")
+        with VBoxLayout(halign="center", valign="center", stretch=True):
+            vuetify.VProgressCircular(v_if="view_state.running", indeterminate=True)
+            vuetify.VImg(v_else=True, src=("fractal.image_data",), classes="h-100 w-100")
 ```
 
 We will need to add a data binding for `running`, as well. We choose to place this directly in the view model as this is not relevant to running the fractal tool on NDIP.
 
-**8. `src/nova_tutorial/app/view_models/main.py` (Modify):**
+**8. `src/nova_tutorial/app/view_models/main_view_model.py` (Modify):**
 
 ```python
-from asyncio import create_task, sleep
-from threading import Thread
-    # ... (rest of the file) ...
+class ViewState(BaseModel):
+    """View state for the application."""
 
+    active_tab: str = Field(default="0")
+    running: bool = Field(default=False)
+
+
+class MainViewModel:
     def __init__(self, model: MainModel, binding: BindingInterface):
         self.model = model
-        self.running = False
-
-        # here we create a bind that connects ViewModel with View. It returns a communicator object,
-        # that allows to update View from ViewModel (by calling update_view).
-        # self.model will be updated automatically on changes of connected fields in View,
-        # but one also can provide a callback function if they want to react to those events
-        # and/or process errors.
-        self.config_bind = binding.new_bind(self.model, callback_after_update=self.change_callback)
-        self.running_bind = binding.new_bind()
-
-    def update_view(self) -> None:
-        self.config_bind.update_in_view(self.model)
-        self.running_bind.update_in_view(self.running)
+        self.binding = binding
+        # ...
 ```
 
-Finally, we manipulate our new view state based on the current status of the tool. Because the fractal tool takes a long time to complete, we offload it to a background thread. If we do not do this, then Trame will not update the view until the tool has finished running, which defeats the purpose of this change.
+Next, we manipulate our new view state based on the current status of the tool. Because the fractal tool takes a long time to complete, we offload it to a background thread. If we do not do this, then Trame will not update the view until the tool has finished running, which defeats the purpose of this change.
 
 ```python
+    def update_view(self) -> None:
+        self.config_bind.update_in_view(self.model.config)
+        self.fractal_bind.update_in_view(self.model.fractal.data)
+        self.view_state_bind.update_in_view(self.view_state)
+
     def run_fractal(self) -> None:
-        self.running = True
+        self.view_state.running = True
         self.update_view()
 
-        # update_view won't take effect until this method returns a value, so we must offload this long-running task to
-        # a background thread for our conditional rendering to work.
-        fractal_tool_thread = Thread(target=self.run_fractal_in_background, daemon=True)
-        fractal_tool_thread.start()
+        worker = self.binding.new_worker(self.model.fractal.run_fractal_tool)
+        worker.connect_finished(self.on_fractal_finished)
+        worker.start()
 
-        # We also need to know when the tool is done running so that we can
-        create_task(self.monitor_fractal())
-
-    def run_fractal_in_background(self) -> None:
-        self.model.fractal.run_fractal_tool()
-        self.running = False
-
-    async def monitor_fractal(self) -> None:
-        while self.running:
-            await sleep(0.1)
+    def on_fractal_finished(self) -> None:
+        self.view_state.running = False
         self.update_view()
 ```
+
+**9. `src/nova_tutorial/app/models/fractal.py` (Modify):**
+
+```python
+    def run_fractal_tool(self, progress: Callable):
+```
+
+Finally, when we call run_fractal_tool through a worker it will be passed a method that it can call during execution to send updates back to the view. We won't use this right now, but we do need to modify the function to avoid an error when the worker is started.
 
 ::::::::::::::::::::::::::::::::: callout
 With any Trame or `nova-trame` component, you can use the `v_if`, `v_else_if`, and `v_else` arguments to only show the component in the interface when a condition is true. The condition can be a reference to your model, similar to the `v_model` argument, or it can be a full JavaScript expression for complex use cases.
@@ -432,7 +434,7 @@ Experiment with customizing the appearance of the Vuetify components using the v
 *   **nova-trame documentation**: https://nova-application-development.readthedocs.io/projects/nova-trame/en/stable/
 *   **nova-mvvm documentation**: https://nova-application-development.readthedocs.io/projects/mvvm-lib/en/latest/
 *   **Vuetify Documentation**: https://vuetifyjs.com/en/
-*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
+*   **NDIP documentation**: https://NDIP-test.ornl.gov/docs/
 
 ```
 

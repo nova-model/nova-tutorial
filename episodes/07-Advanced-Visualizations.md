@@ -38,11 +38,12 @@ The complete code for this episode is available in the `code/episode_7` director
 Let\'s start by setting up a new application from the template. When answering the `copier` questions, make sure you select "no" for installing Mantid and set up a Trame-based, multi-tab view based on MVVM.
 
 ```bash
-copier copy https://code.ornl.gov/ndip/project-templates/nova-application-template.git viz_tutorial
+copier copy https://github.com/nova-sdk/nova-application-template viz_tutorial
 ```
 
-*  **What kind of application are you creating?**
-    > Enter `Nova Application`
+*   **What kind of application are you creating?**
+
+    > Select `Nova Application`
 
 *   **What is your project name?**
 
@@ -55,26 +56,22 @@ copier copy https://code.ornl.gov/ndip/project-templates/nova-application-templa
 
     > Press enter to accept the default.
 
-*   **Do you want to install Mantid for your project?**
+*   **Which category will your tool belong to?**
 
-    > Enter `no`
+    > Select any option
 
-*   ** Are you developing a GUI application using MVVM pattern?**
-
-    > Enter `yes`
-
-*   ** Which library will you use?**
+*   **Which GUI library will you use?**
 
     > Select `Trame`
 
-*   **Do you want a template with multiple tabs?
+*   **Do you want a template with multiple tabs?**
 
     > Enter `yes`
 
 ```bash
 cd viz_tutorial
-poetry install
-poetry run app
+pixi install
+pixi run app
 ```
 
 ## Plotly (2D)
@@ -82,7 +79,7 @@ poetry run app
 Trame provides a library called [trame-plotly](https://github.com/Kitware/trame-plotly) for connecting Trame and [Plotly](https://plotly.com/python/). You can install it with:
 
 ```bash
-poetry add pandas plotly trame-plotly
+pixi add --pypi pandas plotly trame-plotly
 ```
 
 The pandas install is only necessary for loading example data from Plotly, which we'll be doing in this tutorial.
@@ -101,7 +98,7 @@ from nova.trame.view.components import InputField
 from nova.trame.view.layouts import GridLayout, HBoxLayout
 from trame.widgets import plotly
 
-from ..view_models.main import MainViewModel
+from ..view_models.main_view_model import MainViewModel
 ```
 
 *   **Class Definition**:  The view model connections allow us to connect the controls we will define in create_ui() to the server and update the Plotly chart after a control is changed.
@@ -116,8 +113,7 @@ class PlotlyView:
         self.view_model.plotly_figure_bind.connect(self.update_figure)
 
         self.create_ui()
-
-        self.view_model.update_plotly_figure()
+        self.update_figure()
 ```
 
 *   **Controls**:  These controls will dynamically update the Plotly chart.
@@ -138,7 +134,7 @@ class PlotlyView:
 *   **Chart Definition**:  Here, we use the imported Trame widget for Plotly to define the chart. This widget includes an `update` method that allows us to change the content after the initial rendering.
 
 ```python
-        with HBoxLayout(halign="center", height="50vh"):
+        with HBoxLayout(stretch=True):
             self.figure = plotly.Figure()
 
     def update_figure(self, figure: go.Figure) -> None:
@@ -237,12 +233,8 @@ from ..views.plotly import PlotlyView
 
 ```python
     def create_ui(self) -> None:
-        with vuetify.VForm(ref="form") as self.f:
-            with vuetify.VContainer(classes="pa-0", fluid=True):
-                with vuetify.VCard():
-                    with vuetify.VWindow(v_model="active_tab"):
-                        with vuetify.VWindowItem(value=1):
-                            PlotlyView(self.view_model)
+        with VBoxLayout(v_show="view_state.active_tab == 0", stretch=True):
+            PlotlyView(self.view_model)
 ```
 
 And add the corresponding import:
@@ -253,13 +245,14 @@ We also need to update the tabs to show an option for the Plotly view.
 
 ```python
     def create_ui(self) -> None:
-        with vuetify.VTabs(v_model=("active_tab", 0), classes="pl-5"):
-            vuetify.VTab("Plotly", value=1)
+        with client.DeepReactive("view_state"):
+            with vuetify.VTabs(v_model="view_state.active_tab", classes="pl-5"):
+                vuetify.VTab("Plotly", value=0)
 ```
 
 Finally, we'll need to update the view model to bind our new classes.
 
-**5. `src/viz_examples/app/view_models/main.py` (Modify):**
+**5. `src/viz_examples/app/view_models/main_view_model.py` (Modify):**
 
 *   **Import `PlotlyConfig`**
 
@@ -297,7 +290,7 @@ Now, if you run the application you should see the following in the Plotly tab:
 One of Trame\'s core features is that it has direct integration with VTK for building 3D visualizations. Learning VTK from scratch is non-trivial, however, so we recommend that you work with PyVista. PyVista serves as a more developer-friendly wrapper around VTK, allowing you to build your visualizations with a simpler, more intuitive API. To get started, you will need to install the Python package.
 
 ```bash
-poetry add pyvista trame-vtk
+pixi add --pypi pyvista trame-vtk
 ```
 
 PyVista contains built-in Trame support, but we still need to install the Trame widget for VTK that PyVista will use internally.
@@ -319,7 +312,7 @@ from nova.trame.view.layouts import GridLayout, HBoxLayout
 from pyvista.trame.ui import plotter_ui
 from trame.widgets import vuetify3 as vuetify
 
-from ..view_models.main import MainViewModel
+from ..view_models.main_view_model import MainViewModel
 ```
 
 *   **Class Definition:**  The `Plotter` object is PyVista\'s main entry point. It will allow you to add meshes and volumes with the properties you\'ve specified.
@@ -347,14 +340,10 @@ class PyVistaView:
     def create_ui(self) -> None:
         vuetify.VCardTitle("PyVista")
         with GridLayout(columns=5, classes="mb-2", valign="center"):
-            InputField(
-                v_model="pyvista_config.colormap", column_span=2, type="select"
-            )
-            InputField(
-                v_model="pyvista_config.opacity", column_span=2, type="select"
-            )
+            InputField(v_model="pyvista_config.colormap", column_span=2, type="select")
+            InputField(v_model="pyvista_config.opacity", column_span=2, type="select")
             vuetify.VBtn("Render", click=self.update)
-        with HBoxLayout(halign="center", height="50vh"):
+        with HBoxLayout(stretch=True):
             plotter_ui(self.plotter)
 
     def update(self, _: Any = None) -> None:
@@ -426,33 +415,30 @@ This is very similar to the Plotly setup.
 *   **Import `PyVistaView`**
 
 ```python
-from ..views.pyvista import PyVistaView
+from .pyvista import PyVistaView
 ```
 
 *   **Update `create_ui`**
 
 ```python
     def create_ui(self) -> None:
-        with vuetify.VForm(ref="form") as self.f:
-            with vuetify.VContainer(classes="pa-0", fluid=True):
-                with vuetify.VCard():
-                    with vuetify.VWindow(v_model="active_tab"):
-                        with vuetify.VWindowItem(value=1):
-                            PlotlyView(self.view_model)
-                        with vuetify.VWindowItem(value=2):
-                            PyVistaView(self.view_model)
+        with VBoxLayout(v_show="view_state.active_tab == 0", stretch=True):
+            PlotlyView(self.view_model)
+        with VBoxLayout(v_show="view_state.active_tab == 1", stretch=True):
+            PyVistaView(self.view_model)
 ```
 
 **9. `src/viz_examples/app/views/tabs_panel.py` (Modify):**
 
 ```python
     def create_ui(self) -> None:
-        with vuetify.VTabs(v_model=("active_tab", 0), classes="pl-5"):
-            vuetify.VTab("Plotly", value=1)
-            vuetify.VTab("PyVista", value=2)
+        with client.DeepReactive("view_state"):
+            with vuetify.VTabs(v_model="view_state.active_tab", classes="pl-5"):
+                vuetify.VTab("Plotly", value=0)
+                vuetify.VTab("PyVista", value=1)
 ```
 
-**10. `src/viz_examples/app/view_models/main.py` (Modify):**
+**10. `src/viz_examples/app/view_models/main_view_model.py` (Modify):**
 
 *   **Import `PyVistaConfig`**
 
@@ -492,12 +478,8 @@ Now, if you run the application you should see the following in the PyVista tab:
 If you have prior experience with VTK then you may prefer to work with it directly. You can get started with it by installing the Python VTK bindings and the Trame widget for VTK.
 
 ```bash
-poetry add trame-vtk vtk==9.3.1
+pixi add --pypi trame-vtk vtk
 ```
-
-::::::::::::::::::::::::: callout
-PyVista isn't compatible with VTK 9.4, yet. If you are not using PyVista, there is no need to specify the VTK version like this.
-:::::::::::::::::::::::::::::::::
 
 Once more, let's setup a view and model.
 
@@ -514,7 +496,7 @@ from trame.widgets import vtk as vtkw
 from trame.widgets import vuetify3 as vuetify
 from vtkmodules.vtkRenderingCore import vtkRenderer, vtkRenderWindow, vtkRenderWindowInteractor, vtkVolume
 
-from ..view_models.main import MainViewModel
+from ..view_models.main_view_model import MainViewModel
 ```
 
 *   **Initialization:**  Here we define the boiler plate for the interactive VTK window. As with PyVista, setting off-screen rendering to on is necessary when working with Trame.
@@ -550,8 +532,7 @@ class VTKView:
 ```python
     def create_ui(self) -> None:
         vuetify.VCardTitle("VTK")
-
-        with HBoxLayout(halign="center", height="50vh"):
+        with HBoxLayout(stretch=True):
             self.view = vtkw.VtkRemoteView(self.render_window, interactive_ratio=1)
 
     def render(self) -> None:
@@ -706,29 +687,26 @@ from ..views.vtk import VTKView
 
 ```python
     def create_ui(self) -> None:
-        with vuetify.VForm(ref="form") as self.f:
-            with vuetify.VContainer(classes="pa-0", fluid=True):
-                with vuetify.VCard():
-                    with vuetify.VWindow(v_model="active_tab"):
-                        with vuetify.VWindowItem(value=1):
-                            PlotlyView(self.view_model)
-                        with vuetify.VWindowItem(value=2):
-                            PyVistaView(self.view_model)
-                        with vuetify.VWindowItem(value=3):
-                            VTKView(self.view_model)
+        with VBoxLayout(v_show="view_state.active_tab == 0", stretch=True):
+            PlotlyView(self.view_model)
+        with VBoxLayout(v_show="view_state.active_tab == 1", stretch=True):
+            PyVistaView(self.view_model)
+        with VBoxLayout(v_show="view_state.active_tab == 2", stretch=True):
+            VTKView(self.view_model)
 ```
 
 **14. `src/viz_examples/app/views/tabs_panel.py` (Modify):**
 
 ```python
     def create_ui(self) -> None:
-        with vuetify.VTabs(v_model=("active_tab", 0), classes="pl-5"):
-            vuetify.VTab("Plotly", value=1)
-            vuetify.VTab("PyVista", value=2)
-            vuetify.VTab("VTK", value=3)
+        with client.DeepReactive("view_state"):
+            with vuetify.VTabs(v_model="view_state.active_tab", classes="pl-5"):
+                vuetify.VTab("Plotly", value=0)
+                vuetify.VTab("PyVista", value=1)
+                vuetify.VTab("VTK", value=2)
 ```
 
-**15. `src/viz_examples/app/view_models/main.py` (Modify):**
+**15. `src/viz_examples/app/view_models/main_view_model.py` (Modify):**
 
 *   **Import `VTKConfig`**
 
@@ -788,7 +766,7 @@ We didn\'t look at `VTKConfig.init_lut` or `VTKConfig.init_pwf` during the tutor
 *   **Trame/PyVista Integration Tutorial**: https://tutorial.pyvista.org/tutorial/09_trame/index.html
 *   **VTK Python Documentation**: https://docs.vtk.org/en/latest/api/python.html
 *   **Trame Tutorial**: https://kitware.github.io/trame/guide/tutorial/
-*   **Calvera documentation**: https://calvera-test.ornl.gov/docs/
+*   **NDIP documentation**: https://ndip-test.ornl.gov/docs/
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 - Trame integrates well with Plotly for building 2D charts.
