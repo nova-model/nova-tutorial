@@ -83,7 +83,17 @@ After answering these questions, `copier` will clone the template repository and
     pixi install
     ```
 
-    This command will create a virtual environment for your project and install all required libraries, including the NOVA libraries and Trame.
+This command will create a virtual environment for your project and install all required libraries, including the NOVA libraries and Trame.
+
+:::callout
+You may encounter an `invalid peer certificate: UnknownIssuer` error when running `pixi install` behind a firewall. If encountered, we
+recommend configuring Pixi to use your machine's native TLS certificates to address it. You can do so by configuring
+https://pixi.prefix.dev/dev/reference/pixi_configuration/#tls-root-certs. As an example, you can create `$HOME/.pixi/config.toml` with:
+
+```toml
+tls-root-certs = "native"
+```
+:::
 
 ## Project Structure
 
